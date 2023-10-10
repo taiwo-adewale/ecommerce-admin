@@ -1,16 +1,11 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
 import { ReduxProvider } from "@/redux/provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/lib/theme-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+import "@/app/globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
-export const metadata: Metadata = {
-  title: "Ecommerce Admin",
-  description: "Ecommer admin template",
-};
+// pages have to be rendered dynamically because supabase server component client uses cookies
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,
@@ -18,11 +13,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <ReduxProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+
+            <Toaster />
           </ThemeProvider>
         </ReduxProvider>
       </body>
