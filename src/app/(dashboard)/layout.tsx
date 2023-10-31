@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import Navbar from "@/components/Navbar";
+import Header from "@/components/Header";
 import isAuth from "@/helpers/isAuth";
 
 export default async function RootLayout({
@@ -18,7 +18,7 @@ export default async function RootLayout({
 
   return (
     <div>
-      <Navbar />
+      <Header />
       {children}
     </div>
   );
