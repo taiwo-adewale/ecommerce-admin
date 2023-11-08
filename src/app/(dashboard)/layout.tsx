@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import Header from "@/components/Header";
+import Header from "@/components/shared/Header";
 import isAuth from "@/helpers/isAuth";
 
 export default async function RootLayout({
