@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-import Header from "@/components/shared/Header";
+import Header from "@/containers/header";
+import Sidebar from "@/containers/sidebar";
 import isAuth from "@/helpers/isAuth";
 
 export default async function RootLayout({
@@ -17,9 +18,14 @@ export default async function RootLayout({
   }
 
   return (
-    <div>
-      <Header />
-      {children}
+    <div className="flex h-screen overflow-hidden">
+      <Sidebar />
+
+      <div className="w-full relative overflow-y-auto">
+        <Header />
+
+        <main>{children}</main>
+      </div>
     </div>
   );
 }
