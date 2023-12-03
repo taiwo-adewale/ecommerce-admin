@@ -98,7 +98,7 @@ export default function PasswordUpdateForm() {
   return (
     <FormTemplate image={updatePasswordImg}>
       <div className="w-full">
-        <Typography variant="h3" component="h2" className="mb-4">
+        <Typography variant="h2" className="mb-4">
           Update Password
         </Typography>
 

@@ -88,7 +88,7 @@ export default function LoginForm() {
   return (
     <FormTemplate image={loginImg}>
       <div className="w-full">
-        <Typography variant="h3" component="h2" className="mb-8">
+        <Typography variant="h2" className="mb-8">
           Login
         </Typography>
 

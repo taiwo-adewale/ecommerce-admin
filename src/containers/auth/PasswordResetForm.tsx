@@ -84,7 +84,7 @@ export default function PasswordResetForm() {
   return (
     <FormTemplate image={forgotPasswordImg}>
       <div className="w-full">
-        <Typography variant="h3" component="h2" className="mb-4">
+        <Typography variant="h2" className="mb-4">
           Forgot Password?
         </Typography>
 

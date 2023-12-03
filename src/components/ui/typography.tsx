@@ -13,10 +13,10 @@ const Typography = ({
   children,
 }: TypographyProps) => {
   const classNameVariants = {
-    h1: "text-3xl md:text-4xl font-semibold",
-    h2: "text-2xl md:text-3xl font-semibold",
-    h3: "text-xl md:text-2xl font-semibold",
-    h4: "text-lg md:text-xl font-semibold",
+    h1: "text-2xl md:text-3xl font-semibold",
+    h2: "text-xl md:text-2xl font-semibold",
+    h3: "text-lg md:text-xl font-semibold",
+    h4: "text-base md:text-lg font-semibold",
     p: "text-sm md:text-base",
     span: "",
     a: "text-sm md:text-base text-primary underline-offset-4 hover:underline transition-colors",

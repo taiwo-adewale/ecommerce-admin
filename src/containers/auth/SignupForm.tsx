@@ -91,7 +91,7 @@ export default function SignupForm() {
   return (
     <FormTemplate image={signupImg}>
       <div className="w-full">
-        <Typography variant="h3" component="h2" className="mb-8">
+        <Typography variant="h2" className="mb-8">
           Create an Account
         </Typography>
 

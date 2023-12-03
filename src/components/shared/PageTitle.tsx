@@ -6,7 +6,7 @@ type Props = {
 
 export default function PageTitle({ children }: Props) {
   return (
-    <Typography variant="h4" component="h1">
+    <Typography variant="h3" component="h1">
       {children}
     </Typography>
   );
