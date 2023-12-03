@@ -5,7 +5,7 @@ import { useDispatch } from "@/redux/utils";
 import { deleteNotification } from "@/redux/features/notification-slice";
 import { Notification } from "@/types/notifications";
 import { Badge } from "@/components/ui/badge";
-import { TypographyP } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 
 type Props = {
   notification: Notification;
@@ -54,16 +54,19 @@ export default function NotificationItem({ notification }: Props) {
         />
 
         <div className="flex flex-col">
-          <TypographyP className="text-[0.8125rem] md:text-[0.8125rem] line-clamp-2 sm:line-clamp-1 mb-2 sm:mb-1.5 font-light">
+          <Typography
+            component="p"
+            className="text-[0.8125rem] md:text-[0.8125rem] line-clamp-2 sm:line-clamp-1 mb-2 sm:mb-1.5"
+          >
             {notificationDetails.title}
-          </TypographyP>
+          </Typography>
 
           <div className="flex flex-col-reverse items-start sm:items-center sm:flex-row gap-x-2 gap-y-2">
             {notificationDetails.badge}
 
-            <TypographyP className="text-xs md:text-xs">
+            <Typography component="p" className="text-xs md:text-xs">
               {notification.timestamp}
-            </TypographyP>
+            </Typography>
           </div>
         </div>
       </div>

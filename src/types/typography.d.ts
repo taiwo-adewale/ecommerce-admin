@@ -1,35 +1,23 @@
-// Interface for specifying props for typographic elements.
-interface TypographyProps {
-  // The HTML element type to be used for rendering the typographic element.
-  // It is optional and can be one of the following values:
-  // "h1", "h2", "h3", "h4", "p", "span", "a", "blockquote".
-  as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "a" | "blockquote";
-}
+type TypographyVariants = "h1" | "h2" | "h3" | "h4" | "p" | "span";
 
-// Interface for specifying props for headings while allowing customization of HTML element type.
-export interface HeadingProps
-  extends React.HTMLAttributes<HTMLHeadingElement>,
-    TypographyProps {}
+type BaseTypographyProps = {
+  variant?: TypographyVariants;
+  component?: TypographyVariants;
+  className?: string;
+  children: React.ReactNode;
 
-// Interface for specifying props for paragraphs while allowing customization of HTML element type.
-export interface ParagraphProps
-  extends React.HTMLAttributes<HTMLParagraphElement>,
-    TypographyProps {}
+  href?: undefined;
+  target?: undefined;
+};
 
-// Interface for specifying props for spans while allowing customization of HTML element type.
-export interface SpanProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    TypographyProps {}
-
-// Interface for specifying props for anchor elements while allowing customization of HTML element type.
-export interface AnchorProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    TypographyProps {
-  // The hyperlink URL (required).
+type AnchorTypographyProps = {
+  variant: "a";
+  className?: string;
+  children: React.ReactNode;
   href: string;
-}
+  target?: "_blank" | "_self";
 
-// Interface for specifying props for blockquote elements while allowing customization of HTML element type.
-export interface QuoteProps
-  extends React.BlockquoteHTMLAttributes<HTMLQuoteElement>,
-    TypographyProps {}
+  component?: undefined;
+};
+
+export type TypographyProps = BaseTypographyProps | AnchorTypographyProps;

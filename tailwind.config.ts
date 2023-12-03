@@ -1,3 +1,11 @@
+const logoWidth = "110px";
+const sidebarWidth = "260px";
+
+const widths = {
+  logo: logoWidth,
+  sidebar: sidebarWidth,
+};
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -52,6 +60,9 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      width: widths,
+      maxWidth: widths,
+      minWidth: widths,
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

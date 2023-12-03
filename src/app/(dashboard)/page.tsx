@@ -1,7 +1,5 @@
-import getUser from "@/helpers/getUser";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const user = await getUser();
-
-  return <main>{/* <pre>{JSON.stringify(user, null, 3)}</pre> */}</main>;
+  return redirect("/dashboard");
 }

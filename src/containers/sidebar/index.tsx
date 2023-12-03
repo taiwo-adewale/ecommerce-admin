@@ -6,23 +6,29 @@ import { closeSidebar } from "@/redux/features/app-slice";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import SidebarContent from "@/containers/sidebar/SidebarContent";
 import useGetWindowWidth from "@/hooks/useGetWindowWidth";
+import useGetMountStatus from "@/hooks/useGetMountStatus";
 
-export default function SidebarDesktop() {
+export default function Sidebar() {
   const dispatch = useDispatch();
   const { sidebarOpen } = useSelector((state) => state.app);
   const windowWidth = useGetWindowWidth();
+  const mounted = useGetMountStatus();
 
   const handleCloseSidebar = () => {
     dispatch(closeSidebar());
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   /* toggle sidebar button for large screens */
-  if (windowWidth >= 1024) {
+  if (windowWidth && windowWidth >= 1024) {
     return (
       <aside
         className={cn(
-          "hidden lg:block  bg-popover h-screen overflow-y-auto overflow-x-hidden flex-shrink-0 transition-all duration-500 shadow-md relative z-40",
-          sidebarOpen ? "w-[350px]" : "w-0"
+          "hidden lg:block bg-popover h-screen overflow-hidden flex-shrink-0 transition-all duration-500 shadow-md relative z-40",
+          sidebarOpen ? "w-sidebar" : "w-0"
         )}
       >
         <SidebarContent />
@@ -35,7 +41,7 @@ export default function SidebarDesktop() {
     <Sheet open={sidebarOpen}>
       <SheetContent
         side="left"
-        className="w-full !max-w-[350px] bg-popover"
+        className="w-full !max-w-sidebar bg-popover p-0"
         overlayOnClickFn={handleCloseSidebar}
       >
         <SidebarContent />

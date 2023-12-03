@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { TypographySpan } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 
 type Props = {
   value: number;
@@ -15,7 +15,7 @@ const NotificationsBadge = ({ value }: Props) => {
           : "left-[8%] top-[4%] w-5 h-5"
       )}
     >
-      <TypographySpan className="text-[0.5rem] md:text-[0.5rem] mt-0.5">
+      <Typography className="text-[0.5rem] md:text-[0.5rem] mt-0.5">
         {value < 100 ? (
           value
         ) : (
@@ -23,7 +23,7 @@ const NotificationsBadge = ({ value }: Props) => {
             99<sup>+</sup>
           </>
         )}
-      </TypographySpan>
+      </Typography>
     </div>
   );
 };

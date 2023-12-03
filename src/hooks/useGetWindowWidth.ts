@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 
 import useDebounce from "@/hooks/useDebounce";
 
-export default function useGetWindowWidth() {
+/**
+ * Hook to retrieve and manage the debounced window width.
+ * @returns The debounced window width value or null if window object is undefined.
+ */
+export default function useGetWindowWidth(): number | null {
   // Initialize state with current window width.
   // Check for window object because next js runs first on server and window is not defined on the server.
-  // 1200 is just a random value and doesn't have any function than to prevent errors
   const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
+    typeof window !== "undefined" ? window.innerWidth : null
   );
 
   // Using the debounce hook to manage the debounced window width value

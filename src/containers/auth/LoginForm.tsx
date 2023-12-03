@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TypographyH2, TypographyLink } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -88,9 +88,9 @@ export default function LoginForm() {
   return (
     <FormTemplate image={loginImg}>
       <div className="w-full">
-        <TypographyH2 className="mb-8" as="h3">
+        <Typography variant="h3" component="h2" className="mb-8">
           Login
-        </TypographyH2>
+        </Typography>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -132,12 +132,16 @@ export default function LoginForm() {
         <Providers />
 
         <div className="flex flex-wrap justify-between gap-4 w-full">
-          <TypographyLink href="/forgot-password" className="md:!text-sm">
+          <Typography
+            variant="a"
+            href="/forgot-password"
+            className="md:!text-sm"
+          >
             Forgot password?
-          </TypographyLink>
-          <TypographyLink href="/signup" className="md:!text-sm">
+          </Typography>
+          <Typography variant="a" href="/signup" className="md:!text-sm">
             Create an account
-          </TypographyLink>
+          </Typography>
         </div>
       </div>
     </FormTemplate>

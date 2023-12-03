@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import Header from "@/containers/header";
 import Sidebar from "@/containers/sidebar";
+import Container from "@/components/ui/container";
 import isAuth from "@/helpers/isAuth";
 
 export default async function RootLayout({
@@ -24,7 +25,9 @@ export default async function RootLayout({
       <div className="w-full relative overflow-y-auto">
         <Header />
 
-        <main>{children}</main>
+        <main className="pt-6 pb-8">
+          <Container>{children}</Container>
+        </main>
       </div>
     </div>
   );

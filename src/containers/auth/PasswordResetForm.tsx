@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TypographyH2, TypographyLink } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -84,9 +84,9 @@ export default function PasswordResetForm() {
   return (
     <FormTemplate image={forgotPasswordImg}>
       <div className="w-full">
-        <TypographyH2 className="mb-4" as="h3">
+        <Typography variant="h3" component="h2" className="mb-4">
           Forgot Password?
-        </TypographyH2>
+        </Typography>
 
         <Form {...form}>
           <form
@@ -127,9 +127,9 @@ export default function PasswordResetForm() {
         </Form>
 
         <div>
-          <TypographyLink href="/login" className="md:!text-sm">
+          <Typography variant="a" href="/login" className="md:!text-sm">
             Already have an account? Login
-          </TypographyLink>
+          </Typography>
         </div>
       </div>
     </FormTemplate>

@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TypographyH2 } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -98,9 +98,9 @@ export default function PasswordUpdateForm() {
   return (
     <FormTemplate image={updatePasswordImg}>
       <div className="w-full">
-        <TypographyH2 className="mb-4" as="h3">
+        <Typography variant="h3" component="h2" className="mb-4">
           Update Password
-        </TypographyH2>
+        </Typography>
 
         <Form {...form}>
           <form

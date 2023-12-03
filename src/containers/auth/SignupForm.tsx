@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TypographyH2, TypographyLink } from "@/components/ui/typography";
+import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -91,9 +91,9 @@ export default function SignupForm() {
   return (
     <FormTemplate image={signupImg}>
       <div className="w-full">
-        <TypographyH2 className="mb-8" as="h3">
+        <Typography variant="h3" component="h2" className="mb-8">
           Create an Account
-        </TypographyH2>
+        </Typography>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -133,12 +133,13 @@ export default function SignupForm() {
 
                     <FormLabel className="!m-0">
                       I agree to the{" "}
-                      <TypographyLink
+                      <Typography
+                        variant="a"
                         href="#"
                         className="md:!text-sm font-medium"
                       >
                         privacy policy
-                      </TypographyLink>
+                      </Typography>
                     </FormLabel>
                   </div>
 
@@ -163,9 +164,9 @@ export default function SignupForm() {
         <Providers authType="Signup" />
 
         <div>
-          <TypographyLink href="/login" className="md:!text-sm">
+          <Typography variant="a" href="/login" className="md:!text-sm">
             Already have an account? Login
-          </TypographyLink>
+          </Typography>
         </div>
       </div>
     </FormTemplate>
