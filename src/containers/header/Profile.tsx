@@ -30,7 +30,7 @@ export default function Profile() {
         >
           <DropdownMenuItem asChild>
             <Link
-              href="/"
+              href="/dashboard"
               className="w-full justify-start py-3.5 pl-3 pr-8 tracking-wide !cursor-pointer"
             >
               <LayoutGrid className="mr-3 h-5 w-5" /> Dashboard
