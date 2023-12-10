@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
   // Attempt to reset the password for the provided email using Supabase's resetPasswordForEmail method.
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/update-password", // Redirect URL when the "reset password" link is clicked on the email
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`, // Redirect URL when the "reset password" link is clicked on the email
   });
 
   // If there is an error during the password reset, return a JSON response with the error message and a 401 status.
