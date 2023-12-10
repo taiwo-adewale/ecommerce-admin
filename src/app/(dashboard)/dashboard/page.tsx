@@ -1,9 +1,11 @@
-import PageTitle from "@/components/shared/PageTitle";
+import DashboardOverview from "@/containers/dashboard/Overview";
+import RecentOrders from "@/containers/dashboard/RecentOrders";
 
 export default async function Dashboard() {
   return (
-    <main>
-      <PageTitle>Dashboard Overview</PageTitle>
-    </main>
+    <>
+      <DashboardOverview />
+      <RecentOrders />
+    </>
   );
 }

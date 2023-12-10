@@ -6,7 +6,7 @@ import Profile from "@/containers/header/Profile";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 left-0 w-full bg-popover py-4 shadow-md">
+    <header className="sticky top-0 left-0 w-full bg-popover py-4 shadow-md z-40">
       <Container>
         <div className="flex justify-between">
           <NavMenuToggle />

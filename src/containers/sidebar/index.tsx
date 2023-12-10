@@ -27,7 +27,7 @@ export default function Sidebar() {
     return (
       <aside
         className={cn(
-          "hidden lg:block bg-popover h-screen overflow-hidden flex-shrink-0 transition-all duration-500 shadow-md relative z-40",
+          "hidden lg:block bg-popover h-[100dvh] overflow-hidden flex-shrink-0 transition-all duration-500 shadow-md relative z-40",
           sidebarOpen ? "w-sidebar" : "w-0"
         )}
       >

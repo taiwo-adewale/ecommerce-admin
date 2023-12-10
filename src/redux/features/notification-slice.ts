@@ -2,61 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { Notification } from "@/types/notifications";
 
-import testImg from "public/test/notification-img.jpg";
-import testImg2 from "public/test/notification-img-2.jpg";
+// dummy notifications
+import { testNotifications } from "@/test-files/notifications";
 
 type InitialState = {
   notifications: Notification[];
 };
 
-// these are dummy notifications until the real list is gotten from the database
 const initialState: InitialState = {
-  notifications: [
-    {
-      id: "jedjdfjk",
-      imageUrl: testImg.src,
-      item: "Logitech Keyboard",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "stock-out",
-    },
-    {
-      id: "jedjdfjk",
-      imageUrl: testImg.src,
-      item: "Logitech Keyboard",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "stock-out",
-    },
-    {
-      id: "jedjdfjkdsds",
-      imageUrl: testImg2.src,
-      name: "Charles Lore",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "new-order",
-      price: 300,
-    },
-    {
-      id: "jedfbdsge",
-      imageUrl: testImg.src,
-      item: "Hisense Smart TV",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "stock-out",
-    },
-    {
-      id: "jnwerewwer",
-      imageUrl: testImg2.src,
-      item: "iPhone XR",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "stock-out",
-    },
-    {
-      id: "jreaeggffg",
-      imageUrl: testImg.src,
-      name: "Luffy Uzumaki",
-      timestamp: "Dec 12 2021 - 12:40PM",
-      type: "new-order",
-      price: 300,
-    },
-  ],
+  notifications: testNotifications,
 };
 
 export const notifications = createSlice({

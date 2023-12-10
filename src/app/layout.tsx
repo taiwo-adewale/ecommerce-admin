@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/lib/theme-provider";
 
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // pages have to be rendered dynamically because supabase server component client uses cookies
 export const dynamic = "force-dynamic";
@@ -17,7 +18,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <ReduxProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
 
             <Toaster />
           </ThemeProvider>

@@ -22,7 +22,7 @@ export default function NavMenuToggle() {
   };
 
   /* toggle sidebar button for large screens */
-  if (windowWidth >= 1024) {
+  if (windowWidth && windowWidth >= 1024) {
     return (
       <Button variant="ghost" size="icon" onClick={handleToggleSidebar}>
         <Menu />
