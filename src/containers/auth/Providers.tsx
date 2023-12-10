@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Button } from "@/components/ui/button";
+import { siteUrl } from "@/constants/siteUrl";
 
 type AuthProvider = "github" | "google";
 
@@ -20,7 +21,7 @@ export default function Providers({ authType = "Login" }: Props) {
     supabase.auth.signInWithOAuth({
       provider: authProvider,
       options: {
-        redirectTo: `${location.origin}/auth/callback`, // Redirect URL after authentication
+        redirectTo: `${siteUrl}/auth/callback`, // Redirect URL after authentication
       },
     });
   };

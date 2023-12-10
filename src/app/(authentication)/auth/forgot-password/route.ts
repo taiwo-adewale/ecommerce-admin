@@ -4,6 +4,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 
 import { passwordResetFormSchema } from "@/containers/auth/schemas";
 import validateFormData from "@/helpers/validateFormData";
+import { siteUrl } from "@/constants/siteUrl";
 
 // Required for cookies. Next JS will throw an error at build time if this isn't present
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
 
   // Attempt to reset the password for the provided email using Supabase's resetPasswordForEmail method.
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`, // Redirect URL when the "reset password" link is clicked on the email
+    redirectTo: `${siteUrl}/update-password`, // Redirect URL when the "reset password" link is clicked on the email
   });
 
   // If there is an error during the password reset, return a JSON response with the error message and a 401 status.

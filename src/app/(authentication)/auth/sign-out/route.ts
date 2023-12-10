@@ -2,6 +2,8 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+import { siteUrl } from "@/constants/siteUrl";
+
 // Required for cookies. Next JS will throw an error at build time if this isn't present
 export const dynamic = "force-dynamic";
 
@@ -15,7 +17,7 @@ export async function POST(request: Request) {
   await supabase.auth.signOut();
 
   // Redirect the user to the login page.
-  return NextResponse.redirect(`${requestUrl.origin}/login`, {
+  return NextResponse.redirect(`${siteUrl}/login`, {
     // a 301 status is required to redirect from a POST to a GET route
     status: 301,
   });
