@@ -14,7 +14,7 @@ export default function SidebarContent() {
     <div className="pb-[5rem] h-full">
       <div className="py-6 flex flex-col overflow-y-auto h-full">
         <h2 className="font-bold text-2xl mx-6 flex gap-2 items-center">
-          <BsFillHandbagFill className="w-6 h-6 text-primary mb-1.5 flex-shrink-0" />
+          <BsFillHandbagFill className="size-6 text-primary mb-1.5 flex-shrink-0" />
           <span>Admin</span>
         </h2>
 
@@ -24,7 +24,7 @@ export default function SidebarContent() {
               <Link
                 href={navItem.url}
                 className={cn(
-                  "relative px-6 py-4 flex items-center gap-x-2.5 text-popover-foreground [&_svg]:w-6  [&_svg]:h-6 [&_svg]:flex-shrink-0 font-medium",
+                  "relative px-6 py-4 flex items-center gap-x-2.5 text-popover-foreground [&_svg]:size-6 [&_svg]:flex-shrink-0 font-medium",
                   pathname === navItem.url &&
                     "after:content-[''] after:absolute after:top-0 after:left-0 after:h-full after:w-1 after:bg-primary after:rounded-r-lg"
                 )}
@@ -42,7 +42,7 @@ export default function SidebarContent() {
             type="submit"
             className="w-full py-3 text-base whitespace-nowrap"
           >
-            <LogOut className="w-6 h-6 mr-3 flex-shrink-0" />
+            <LogOut className="size-6 mr-3 flex-shrink-0" />
             Log out
           </Button>
         </form>

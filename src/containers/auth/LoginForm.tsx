@@ -31,7 +31,7 @@ import loginImg from "public/assets/login.jpg";
 export default function LoginForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [success, setSuccess] = useState(false);
 
   // Initialize the form using react-hook-form and zodResolver for schema-based validation.
   const form = useForm<z.infer<typeof loginFormSchema>>({

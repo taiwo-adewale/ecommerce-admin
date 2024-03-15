@@ -19,7 +19,7 @@ export default async function RootLayout({
   }
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
+    <div className="flex h-dvh overflow-hidden">
       <Sidebar />
 
       <div className="w-full relative overflow-y-auto">

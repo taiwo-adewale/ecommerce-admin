@@ -33,7 +33,7 @@ export default function Providers({ authType = "Login" }: Props) {
         variant="secondary"
         className="w-full !min-h-[3.5rem]"
       >
-        <FaGithub className="mr-3 w-4 h-4" />
+        <FaGithub className="mr-3 size-4" />
         {authType} With Github
       </Button>
 
@@ -42,7 +42,7 @@ export default function Providers({ authType = "Login" }: Props) {
         variant="secondary"
         className="w-full !min-h-[3.5rem]"
       >
-        <FcGoogle className="mr-3 w-4 h-4" />
+        <FcGoogle className="mr-3 size-4" />
         {authType} With Google
       </Button>
     </div>

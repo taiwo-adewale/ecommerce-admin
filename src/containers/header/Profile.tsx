@@ -33,7 +33,7 @@ export default function Profile() {
               href="/dashboard"
               className="w-full justify-start py-3.5 pl-3 pr-8 tracking-wide !cursor-pointer"
             >
-              <LayoutGrid className="mr-3 h-5 w-5" /> Dashboard
+              <LayoutGrid className="mr-3 size-5" /> Dashboard
             </Link>
           </DropdownMenuItem>
 
@@ -42,7 +42,7 @@ export default function Profile() {
               href="#"
               className="w-full justify-start py-3.5 pl-3 pr-8 tracking-wide !cursor-pointer"
             >
-              <Settings className="mr-3 h-5 w-5" /> Edit Profile
+              <Settings className="mr-3 size-5" /> Edit Profile
             </Link>
           </DropdownMenuItem>
 
@@ -52,7 +52,7 @@ export default function Profile() {
                 type="submit"
                 className="w-full justify-start py-3.5 pl-3 pr-8 tracking-wide !cursor-pointer"
               >
-                <LogOut className="mr-3 h-5 w-5" /> Log Out
+                <LogOut className="mr-3 size-5" /> Log Out
               </button>
             </DropdownMenuItem>
           </form>

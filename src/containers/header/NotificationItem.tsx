@@ -50,7 +50,7 @@ export default function NotificationItem({ notification }: Props) {
           alt={notificationDetails.title}
           width={30}
           height={30}
-          className="w-[1.875rem] h-[1.875rem] rounded-full flex-shrink-0 self-start mt-1.5 sm:mt-0 sm:self-center"
+          className="size-[1.875rem] rounded-full flex-shrink-0 self-start mt-1.5 sm:mt-0 sm:self-center"
         />
 
         <div className="flex flex-col">
@@ -75,7 +75,7 @@ export default function NotificationItem({ notification }: Props) {
         onClick={() => handleDeleteNotification(notification.id)}
         className="flex-shrink-0 p-2 rounded-full hover:bg-accent"
       >
-        <X className="w-3.5 h-3.5" />
+        <X className="size-3.5" />
       </button>
     </div>
   );

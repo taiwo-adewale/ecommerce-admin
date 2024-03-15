@@ -30,7 +30,7 @@ export default function PasswordUpdateForm() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [success, setSuccess] = useState(false);
 
   // Get query param of code from url
   const code = searchParams.get("code");

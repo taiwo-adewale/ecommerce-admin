@@ -29,7 +29,7 @@ import forgotPasswordImg from "public/assets/forgot-password.jpg";
 export default function PasswordResetForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [success, setSuccess] = useState(false);
 
   // Initialize the form using react-hook-form and zodResolver for schema-based validation.
   const form = useForm<z.infer<typeof passwordResetFormSchema>>({
