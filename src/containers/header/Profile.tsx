@@ -16,7 +16,7 @@ export default function Profile() {
   return (
     <div className="flex ml-2">
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger className="rounded-full ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>

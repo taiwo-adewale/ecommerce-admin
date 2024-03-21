@@ -1,52 +1,29 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { useSelector, useDispatch } from "@/redux/utils";
-import { closeSidebar } from "@/redux/features/app-slice";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useState, useEffect } from "react";
+
 import SidebarContent from "@/containers/sidebar/SidebarContent";
 import useGetWindowWidth from "@/hooks/useGetWindowWidth";
-import useGetMountStatus from "@/hooks/useGetMountStatus";
+import { useAppContext } from "@/context/App";
 
 export default function Sidebar() {
-  const dispatch = useDispatch();
-  const { sidebarOpen } = useSelector((state) => state.app);
+  const { sidebarOpen } = useAppContext();
+  const [isVisible, setIsVisible] = useState(sidebarOpen);
   const windowWidth = useGetWindowWidth();
-  const mounted = useGetMountStatus();
 
-  const handleCloseSidebar = () => {
-    dispatch(closeSidebar());
-  };
+  useEffect(() => {
+    if (sidebarOpen && windowWidth && windowWidth >= 1024) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [sidebarOpen, windowWidth]);
 
-  if (!mounted) {
-    return null;
-  }
-
-  /* toggle sidebar button for large screens */
-  if (windowWidth && windowWidth >= 1024) {
-    return (
-      <aside
-        className={cn(
-          "hidden lg:block bg-popover h-dvh overflow-hidden flex-shrink-0 transition-all duration-500 shadow-md relative z-40",
-          sidebarOpen ? "w-sidebar" : "w-0"
-        )}
-      >
+  return (
+    isVisible && (
+      <aside className="hidden lg:block bg-popover h-dvh overflow-hidden flex-shrink-0 shadow-md relative z-40 w-sidebar">
         <SidebarContent />
       </aside>
-    );
-  }
-
-  /* toggle sidebar button for small screens */
-  return (
-    <Sheet open={sidebarOpen}>
-      <SheetContent
-        side="left"
-        className="w-full !max-w-sidebar bg-popover p-0"
-        onEscapeKeyDown={handleCloseSidebar}
-        overlayOnClickFn={handleCloseSidebar}
-      >
-        <SidebarContent />
-      </SheetContent>
-    </Sheet>
+    )
   );
 }

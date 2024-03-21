@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Bell } from "lucide-react";
 
-import { useSelector } from "@/redux/utils";
 import {
   Popover,
   PopoverContent,
@@ -15,15 +14,23 @@ import Typography from "@/components/ui/typography";
 import NotificationItem from "./NotificationItem";
 import NotificationsBadge from "./NotificationsBadge";
 
-export default function Notifications() {
-  const { notifications } = useSelector((state) => state.notifications);
+// dummy notifications
+import { testNotifications } from "@/test-files/notifications";
 
+export default function Notifications() {
+  const [notifications, setNotifications] = useState(testNotifications);
   const [unreadNotifications, setUnreadNotifications] = useState(
     notifications.length
   );
 
   const handleNotificationsOpen = () => {
     setUnreadNotifications(0);
+  };
+
+  const handleDeleteNotification = (id: string) => {
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((notification) => notification.id !== id)
+    );
   };
 
   return (
@@ -44,10 +51,13 @@ export default function Notifications() {
         >
           <ScrollArea type="auto" className="h-full max-h-[350px]">
             {notifications.length > 0 ? (
-              [...notifications].map((notification, index) => (
+              notifications.map((notification, index) => (
                 <NotificationItem
                   key={`notification-${index}`}
                   notification={notification}
+                  deleteNotification={() =>
+                    handleDeleteNotification(notification.id)
+                  }
                 />
               ))
             ) : (

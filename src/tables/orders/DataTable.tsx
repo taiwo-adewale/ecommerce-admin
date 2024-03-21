@@ -17,7 +17,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
+import Typography from "@/components/ui/typography";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -92,18 +102,37 @@ export function OrdersTable<TData, TValue>({
       </Table>
 
       {/* pagination */}
-      <div className="flex items-center justify-end space-x-2 py-4 bg-popover">
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-
-        <span>
+      <div className="flex items-center justify-between space-x-2 p-4 bg-popover">
+        <Typography className="text-sm flex-shrink-0">
           showing {lowerPageLimit} to {upperPageLimit} of{" "}
-        </span>
+        </Typography>
+
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+
+            {table.getPageOptions().map((item) => (
+              <PaginationItem key={`page-${item}`}>
+                <PaginationLink
+                  href="#"
+                  isActive={item === table.getState().pagination.pageIndex}
+                >
+                  {item + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
 
         <Button
           variant="outline"
@@ -121,9 +150,6 @@ export function OrdersTable<TData, TValue>({
         >
           Next
         </Button>
-
-        <pre>{table.getPageCount()}</pre>
-        <pre>{table.getPageOptions()}</pre>
       </div>
     </div>
   );

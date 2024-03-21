@@ -2,38 +2,40 @@
 
 import { Menu } from "lucide-react";
 
-import { useDispatch } from "@/redux/utils";
-import { toggleSidebar, openSidebar } from "@/redux/features/app-slice";
+import { useAppContext } from "@/context/App";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SidebarContent from "@/containers/sidebar/SidebarContent";
 import useGetWindowWidth from "@/hooks/useGetWindowWidth";
 
 export default function NavMenuToggle() {
-  const dispatch = useDispatch();
   const windowWidth = useGetWindowWidth();
+  const { toggleSidebar } = useAppContext();
 
-  // toggle sidebar function
-  const handleToggleSidebar = () => {
-    dispatch(toggleSidebar());
-  };
+  if (!windowWidth) return null;
 
-  // open sidebar function
-  const handleSidebarOpen = () => {
-    dispatch(openSidebar());
-  };
-
-  /* toggle sidebar button for large screens */
-  if (windowWidth && windowWidth >= 1024) {
+  if (windowWidth >= 1024) {
     return (
-      <Button variant="ghost" size="icon" onClick={handleToggleSidebar}>
+      <Button variant="ghost" size="icon" onClick={toggleSidebar}>
         <Menu />
       </Button>
     );
   }
 
-  /* toggle sidebar button for small screens */
   return (
-    <Button variant="ghost" size="icon" onClick={handleSidebarOpen}>
-      <Menu />
-    </Button>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Menu />
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent
+        side="left"
+        className="w-full !max-w-sidebar bg-popover p-0"
+      >
+        <SidebarContent />
+      </SheetContent>
+    </Sheet>
   );
 }

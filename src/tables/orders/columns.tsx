@@ -41,7 +41,13 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "customerName",
     header: "customer name",
-    cell: ({ row }) => row.getValue("customerName"),
+    cell: ({ row }) => {
+      return (
+        <span className="max-w-80 line-clamp-1">
+          {row.getValue("customerName")}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "method",

@@ -16,7 +16,7 @@ export default function useGetWindowWidth(): number | null {
   );
 
   // Using the debounce hook to manage the debounced window width value
-  const debouncedWidthValue = useDebounce(windowWidth, 500);
+  const debouncedWidthValue = useDebounce(windowWidth, 100);
 
   useEffect(() => {
     // Function to handle window resize event

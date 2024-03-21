@@ -1,4 +1,3 @@
-import { ReduxProvider } from "@/redux/provider";
 import { ThemeProvider } from "@/lib/theme-provider";
 
 import "@/app/globals.css";
@@ -16,13 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <ReduxProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TooltipProvider>{children}</TooltipProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TooltipProvider>{children}</TooltipProvider>
 
-            <Toaster />
-          </ThemeProvider>
-        </ReduxProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

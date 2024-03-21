@@ -2,9 +2,9 @@
 
 import Typography from "@/components/ui/typography";
 
-import { columns } from "../../tables/orders/columns";
-import { OrdersTable } from "../../tables/orders/DataTable";
-import { fetchOrders } from "@/test-files/recent-orders";
+import { columns } from "@/tables/orders/columns";
+import { OrdersTable } from "@/tables/orders/DataTable";
+import { fetchOrders, fetchData } from "@/test-files/recent-orders";
 
 import useGetMountStatus from "@/hooks/useGetMountStatus";
 

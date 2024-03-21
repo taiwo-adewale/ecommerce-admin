@@ -9,4 +9,5 @@ export type Order = {
   method: OrderMethod;
   amount: string;
   status: BadgeStatus;
+  subRows?: Order[];
 };

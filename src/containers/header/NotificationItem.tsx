@@ -1,19 +1,20 @@
 import Image from "next/image";
 import { X } from "lucide-react";
 
-import { useDispatch } from "@/redux/utils";
-import { deleteNotification } from "@/redux/features/notification-slice";
 import { Notification } from "@/types/notifications";
 import { Badge } from "@/components/ui/badge";
 import Typography from "@/components/ui/typography";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   notification: Notification;
+  deleteNotification: () => void;
 };
 
-export default function NotificationItem({ notification }: Props) {
-  const dispatch = useDispatch();
-
+export default function NotificationItem({
+  notification,
+  deleteNotification,
+}: Props) {
   const notificationDetails =
     notification.type === "stock-out"
       ? {
@@ -35,10 +36,6 @@ export default function NotificationItem({ notification }: Props) {
           ),
         }
       : null;
-
-  const handleDeleteNotification = (id: string) => {
-    dispatch(deleteNotification(id));
-  };
 
   if (!notificationDetails) return null;
 
@@ -71,12 +68,14 @@ export default function NotificationItem({ notification }: Props) {
         </div>
       </div>
 
-      <button
-        onClick={() => handleDeleteNotification(notification.id)}
-        className="flex-shrink-0 p-2 rounded-full hover:bg-accent"
+      <Button
+        variant="ghost"
+        size="icon"
+        className="flex-shrink-0 w-8 h-8"
+        onClick={deleteNotification}
       >
         <X className="size-3.5" />
-      </button>
+      </Button>
     </div>
   );
 }
