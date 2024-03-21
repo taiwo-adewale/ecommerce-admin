@@ -11,13 +11,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // // Check if the user is authenticated by calling the isAuth function.
-  // const session = await isAuth();
+  // Check if the user is authenticated by calling the isAuth function.
+  const session = await isAuth();
 
-  // // If the user is not authenticated (no session), redirect them to the login page.
-  // if (!session) {
-  //   return redirect("/login");
-  // }
+  // If the user is not authenticated (no session), redirect them to the login page.
+  if (!session) {
+    return redirect("/login");
+  }
 
   return (
     <AppContextProvider>
