@@ -102,7 +102,7 @@ export function OrdersTable<TData, TValue>({
       </Table>
 
       {/* pagination */}
-      <div className="flex items-center justify-between space-x-2 p-4 bg-popover">
+      {/* <div className="flex items-center justify-between space-x-2 p-4 bg-popover">
         <Typography className="text-sm flex-shrink-0">
           showing {lowerPageLimit} to {upperPageLimit} of{" "}
         </Typography>
@@ -150,7 +150,7 @@ export function OrdersTable<TData, TValue>({
         >
           Next
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

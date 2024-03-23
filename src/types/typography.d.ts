@@ -1,4 +1,7 @@
-type TypographyVariants = "h1" | "h2" | "h3" | "h4" | "p" | "span";
+export type HeadingVariants = "h1" | "h2" | "h3" | "h4";
+export type BodyVariants = "p" | "span";
+
+export type TypographyVariants = HeadingVariants | BodyVariants;
 
 type BaseTypographyProps = {
   variant?: TypographyVariants;

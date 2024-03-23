@@ -1,11 +1,5 @@
-import DashboardOverview from "@/containers/dashboard/Overview";
-import RecentOrders from "@/containers/dashboard/RecentOrders";
+import Dashboard from "@/containers/dashboard";
 
-export default async function Dashboard() {
-  return (
-    <>
-      <DashboardOverview />
-      <RecentOrders />
-    </>
-  );
+export default async function DashboardPage() {
+  return <Dashboard />;
 }

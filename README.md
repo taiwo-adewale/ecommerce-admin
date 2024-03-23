@@ -21,8 +21,7 @@ The Ecommerce Admin Dashboard is a tool designed specifically for managing an on
 
 ## Technologies Used
 
-- **Frontend:** Next.js, TypeScript, Shadcn UI, React Table, Tailwind CSS.
-- **State Management:** Redux Toolkit.
+- **Frontend:** Next.js, TypeScript, Shadcn UI, React Table, Tailwind CSS, React Query.
 - **Database:** Supabase.
 
 ## Installation

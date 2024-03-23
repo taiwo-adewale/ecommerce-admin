@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import useDebounce from "@/hooks/useDebounce";
+import { useDebounce } from "use-debounce";
 
 /**
  * Hook to retrieve and manage the debounced window width.
@@ -32,5 +31,5 @@ export default function useGetWindowWidth(): number | null {
   }, []);
 
   // Return the debounced width value to be used in the component
-  return debouncedWidthValue;
+  return debouncedWidthValue[0];
 }
