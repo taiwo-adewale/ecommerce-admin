@@ -4,8 +4,9 @@ export interface NewOrderNotification {
   type: "new-order";
   imageUrl: string;
   name: string;
-  timestamp: string;
   price: number;
+  timestamp: string;
+  isRead: string;
 }
 
 // Interface for stock-out notifications
@@ -15,6 +16,7 @@ export interface StockOutNotification {
   imageUrl: string;
   item: string;
   timestamp: string;
+  isRead: string;
 }
 
 // Notifications can either be of type "new-order" or "stock-out"
