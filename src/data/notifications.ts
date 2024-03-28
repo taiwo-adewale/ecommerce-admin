@@ -1,9 +1,5 @@
+import axiosInstance from "@/helpers/axiosInstance";
 import { Notification } from "@/types/notifications";
-import axios from "axios";
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
-});
 
 export const fetchNotifications = async () => {
   await new Promise((resolve, reject) => setTimeout(resolve, 500));

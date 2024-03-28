@@ -5,7 +5,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -26,29 +25,28 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
+import { Order } from "@/types/order";
+import { PaginationProps } from "@/types/pagination";
+import { getPaginationButtons } from "@/helpers/getPaginationButtons";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  columns: ColumnDef<Order>[];
+  data: Order[];
+  pagination: PaginationProps;
 }
 
-export function OrdersTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function OrdersTable({ columns, data, pagination }: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const currentPageIndex = table.getState().pagination.pageIndex;
-  const pageSize = table.getState().pagination.pageSize;
-  const lowerPageLimit = currentPageIndex * pageSize + 1;
-  const upperPageLimit = (currentPageIndex + 1) * pageSize;
+  const paginationButtons = getPaginationButtons({
+    totalPages: pagination.pages,
+    currentPage: pagination.current,
+  });
 
   return (
     <div className="rounded-md border overflow-hidden">
@@ -102,55 +100,47 @@ export function OrdersTable<TData, TValue>({
       </Table>
 
       {/* pagination */}
-      {/* <div className="flex items-center justify-between space-x-2 p-4 bg-popover">
-        <Typography className="text-sm flex-shrink-0">
-          showing {lowerPageLimit} to {upperPageLimit} of{" "}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-3.5 p-4 bg-popover text-muted-foreground">
+        <Typography className="text-sm flex-shrink-0 uppercase font-medium">
+          Showing{" "}
+          {Math.max((pagination.current - 1) * pagination.perPage + 1, 1)} to{" "}
+          {Math.min(pagination.current * pagination.perPage, pagination.items)}{" "}
+          of {pagination.items}
         </Typography>
 
         <Pagination>
-          <PaginationContent>
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href={`?orders_page=${pagination.prev}`}
+                disabled={!pagination.prev}
+              />
             </PaginationItem>
 
-            {table.getPageOptions().map((item) => (
-              <PaginationItem key={`page-${item}`}>
-                <PaginationLink
-                  href="#"
-                  isActive={item === table.getState().pagination.pageIndex}
-                >
-                  {item + 1}
-                </PaginationLink>
+            {paginationButtons.map((page, index) => (
+              <PaginationItem key={`page-${index}`}>
+                {page === "..." ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationLink
+                    href={`?orders_page=${page}`}
+                    isActive={page === pagination.current}
+                  >
+                    {page}
+                  </PaginationLink>
+                )}
               </PaginationItem>
             ))}
 
             <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href={`?orders_page=${pagination.next}`}
+                disabled={!pagination.next}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div> */}
+      </div>
     </div>
   );
 }

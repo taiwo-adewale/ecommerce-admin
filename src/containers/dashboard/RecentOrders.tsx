@@ -1,14 +1,53 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+
 import { columns } from "./columns";
 import { OrdersTable } from "./OrdersTable";
-import { fetchOrders, fetchData } from "@/test-files/recent-orders";
-
-import useGetMountStatus from "@/hooks/useGetMountStatus";
+import TableSkeleton from "./TableSkeleton";
+import TableError from "./TableError";
+import { fetchOrders } from "@/data/orders";
 
 export default function RecentOrders() {
-  const mounted = useGetMountStatus();
-  const orders = fetchOrders();
+  const searchParams = useSearchParams();
+  const ordersPage = searchParams.get("orders_page");
 
-  return <>{mounted && <OrdersTable columns={columns} data={orders} />}</>;
+  const page = Math.trunc(Number(ordersPage)) || 1;
+  const perPage = 10;
+
+  const {
+    data: orders,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["orders", page],
+    queryFn: () => fetchOrders(page, perPage),
+    placeholderData: keepPreviousData,
+    select: (ordersData) => {
+      const { data, pages, ...rest } = ordersData;
+
+      return {
+        data: data,
+        pagination: {
+          ...rest,
+          pages,
+          current: page < 1 ? 1 : Math.min(page, pages),
+          perPage,
+        },
+      };
+    },
+  });
+
+  if (isLoading) return <TableSkeleton />;
+
+  if (isError || !orders) return <TableError />;
+
+  return (
+    <OrdersTable
+      columns={columns}
+      data={orders.data}
+      pagination={orders.pagination}
+    />
+  );
 }
