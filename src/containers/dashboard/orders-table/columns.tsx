@@ -43,7 +43,7 @@ export const columns: ColumnDef<Order>[] = [
     header: "customer name",
     cell: ({ row }) => {
       return (
-        <span className="max-w-80 line-clamp-1">
+        <span className="block max-w-52 truncate">
           {row.getValue("customerName")}
         </span>
       );

@@ -1,8 +1,8 @@
 import PageTitle from "@/components/shared/PageTitle";
-import DashboardCharts from "./DashboardCharts";
 import SalesOverview from "./SalesOverview";
 import StatusOverview from "./StatusOverview";
-import RecentOrders from "./RecentOrders";
+import DashboardCharts from "./dashboard-charts";
+import RecentOrders from "./orders-table";
 
 export default function Dashboard() {
   return (

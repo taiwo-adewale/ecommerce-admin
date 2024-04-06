@@ -31,7 +31,7 @@ export default function Providers({ authType = "Login" }: Props) {
       <Button
         onClick={() => handleAuth("github")}
         variant="secondary"
-        className="w-full !min-h-[3.5rem]"
+        className="w-full min-h-14"
       >
         <FaGithub className="mr-3 size-4" />
         {authType} With Github
@@ -40,7 +40,7 @@ export default function Providers({ authType = "Login" }: Props) {
       <Button
         onClick={() => handleAuth("google")}
         variant="secondary"
-        className="w-full !min-h-[3.5rem]"
+        className="w-full min-h-14"
       >
         <FcGoogle className="mr-3 size-4" />
         {authType} With Google

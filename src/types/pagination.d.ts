@@ -7,6 +7,11 @@ interface Pagination {
   prev: number | null;
 }
 
+export interface PaginationQueryProps {
+  page: number;
+  perPage?: number;
+}
+
 export interface PaginationProps extends Pagination {
   current: number;
   perPage: number;
