@@ -35,7 +35,7 @@ export default function ProductFilters() {
     <Card className="mb-5">
       <form className="flex flex-col md:flex-row gap-4 lg:gap-6">
         <Input
-          type="text"
+          type="search"
           placeholder="Search product..."
           className="h-12 md:basis-[40%]"
         />

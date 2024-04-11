@@ -1,4 +1,4 @@
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export default function TableError<TData>({
   refetch,
 }: TableErrorProps<TData>) {
   return (
-    <div className="rounded-md border border-destructive overflow-hidden">
+    <div className="rounded-md border-destructive border-2 overflow-hidden">
       <div className="px-4 py-12 min-h-60 text-center grid place-items-center">
         <div className="flex flex-col items-center gap-4 text-destructive">
           <AlertCircle className="size-7" />
@@ -28,6 +28,7 @@ export default function TableError<TData>({
             variant="destructive"
             className="py-3 px-8 mt-2"
           >
+            <RefreshCw className="size-4 mr-2" />
             Retry
           </Button>
         </div>

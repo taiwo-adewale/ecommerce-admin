@@ -1,15 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { ZoomIn, PenSquare, Trash2 } from "lucide-react";
+import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import Typography from "@/components/ui/typography";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,15 +36,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { formatAmount } from "@/helpers/formatAmount";
 
-import { ProductBadgeStatus, ProductBadgeVariants } from "@/types/badge";
-import { Product } from "@/types/product";
 import { SkeletonColumn } from "@/types/skeleton";
+import { Category } from "@/types/category";
 
 const handleSwitchChange = () => {};
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Category>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -69,73 +64,28 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
-    header: "product name",
+    header: "id",
+    cell: ({ row }) => row.original._id.slice(-4),
+  },
+  {
+    header: "icon",
     cell: ({ row }) => (
-      <div className="flex gap-2 items-center">
-        <Image
-          src={row.original.images[0]}
-          alt={row.original.name}
-          width={32}
-          height={32}
-          className="size-8 rounded-full"
-        />
-
-        <Typography className="capitalize block truncate">
-          {row.original.name}
-        </Typography>
-      </div>
+      <Image
+        src={`/temp/notification-img.jpg`}
+        alt={row.original.name}
+        width={32}
+        height={32}
+        className="size-8 rounded-full"
+      />
     ),
   },
   {
-    header: "category",
-    cell: ({ row }) => (
-      <span className="block max-w-52 truncate">
-        {row.original.categories[0].name}
-      </span>
-    ),
+    header: "name",
+    cell: ({ row }) => row.original.name,
   },
   {
-    header: "price",
-    cell: ({ row }) => {
-      return formatAmount(row.original.prices.price);
-    },
-  },
-  {
-    header: "sale price",
-    cell: ({ row }) => {
-      const { price, discount } = row.original.prices;
-
-      return formatAmount(price * (1 - discount));
-    },
-  },
-  {
-    header: "stock",
-    cell: ({ row }) => row.original.stock,
-  },
-  {
-    header: "status",
-    cell: ({ row }) => {
-      const status: ProductBadgeStatus = row.original.status;
-
-      return (
-        <Badge
-          variant={ProductBadgeVariants[status]}
-          className="flex-shrink-0 text-xs"
-        >
-          {status === "selling" ? "Selling" : "Out of stock"}
-        </Badge>
-      );
-    },
-  },
-  {
-    header: "view",
-    cell: ({ row }) => (
-      <Button size="icon" asChild variant="ghost" className="text-foreground">
-        <Link href={`/product/${row.original.slug}`}>
-          <ZoomIn className="size-5" />
-        </Link>
-      </Button>
-    ),
+    header: "description",
+    cell: ({ row }) => row.original.description,
   },
   {
     header: "published",
@@ -255,38 +205,20 @@ export const skeletonColumns: SkeletonColumn[] = [
     cell: <Skeleton className="size-4 rounded-sm" />,
   },
   {
-    header: "product name",
-    cell: (
-      <div className="flex gap-2 items-center">
-        <Skeleton className="size-8 rounded-full" />
-
-        <Skeleton className="w-28 h-8" />
-      </div>
-    ),
+    header: "id",
+    cell: <Skeleton className="w-16 h-8" />,
   },
   {
-    header: "category",
+    header: "icon",
+    cell: <Skeleton className="w-8 h-8 rounded-full" />,
+  },
+  {
+    header: "name",
+    cell: <Skeleton className="w-20 h-8" />,
+  },
+  {
+    header: "description",
     cell: <Skeleton className="w-32 h-8" />,
-  },
-  {
-    header: "price",
-    cell: <Skeleton className="w-20 h-8" />,
-  },
-  {
-    header: "sale price",
-    cell: <Skeleton className="w-20 h-8" />,
-  },
-  {
-    header: "stock",
-    cell: <Skeleton className="w-20 h-8" />,
-  },
-  {
-    header: "status",
-    cell: <Skeleton className="w-24 h-8" />,
-  },
-  {
-    header: "view",
-    cell: <Skeleton className="w-8 h-8" />,
   },
   {
     header: "published",
