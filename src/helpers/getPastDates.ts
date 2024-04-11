@@ -1,3 +1,9 @@
+/**
+ * Generates an array of past dates in the format "Mon DD" (e.g., "Apr 13").
+ * @param days - The number of past days to generate dates for.
+ * @returns An array of past dates.
+ */
+
 export const getPastDates = (days: number): string[] => {
   const today = new Date();
   const dates = [];

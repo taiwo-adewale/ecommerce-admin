@@ -4,28 +4,28 @@ import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import { columns, skeletonColumns } from "./columns";
-import OrdersTable from "./Table";
+import ProductsTable from "./Table";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
-import { fetchOrders } from "@/data/orders";
+import { fetchProducts } from "@/data/products";
 
-export default function RecentOrders() {
-  const ordersPage = useSearchParams().get("page");
+export default function AllProducts() {
+  const productsPage = useSearchParams().get("page");
 
-  const page = Math.trunc(Number(ordersPage)) || 1;
+  const page = Math.trunc(Number(productsPage)) || 1;
   const perPage = 10;
 
   const {
-    data: orders,
+    data: products,
     isLoading,
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["orders", page],
-    queryFn: () => fetchOrders({ page, perPage }),
+    queryKey: ["products", page],
+    queryFn: () => fetchProducts({ page, perPage }),
     placeholderData: keepPreviousData,
-    select: (ordersData) => {
-      const { data, pages, ...rest } = ordersData;
+    select: (productsData) => {
+      const { data, pages, ...rest } = productsData;
 
       return {
         data: data,
@@ -41,19 +41,19 @@ export default function RecentOrders() {
 
   if (isLoading) return <TableSkeleton columns={skeletonColumns} />;
 
-  if (isError || !orders)
+  if (isError || !products)
     return (
       <TableError
-        errorMessage="Something went wrong while trying to fetch orders."
+        errorMessage="Something went wrong while trying to fetch products."
         refetch={refetch}
       />
     );
 
   return (
-    <OrdersTable
+    <ProductsTable
       columns={columns}
-      data={orders.data}
-      pagination={orders.pagination}
+      data={products.data}
+      pagination={products.pagination}
     />
   );
 }

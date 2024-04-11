@@ -127,8 +127,8 @@ export default function PasswordResetForm() {
         </Form>
 
         <div>
-          <Typography variant="a" href="/login" className="md:!text-sm">
-            Already have an account? Login
+          <Typography variant="a" href="/signup" className="md:!text-sm">
+            Don&apos;t have an account? Create one now
           </Typography>
         </div>
       </div>

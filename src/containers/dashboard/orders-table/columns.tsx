@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -22,54 +23,51 @@ import { formatAmount } from "@/helpers/formatAmount";
 import { formatDate } from "@/helpers/formatDate";
 
 import { Order } from "@/types/order";
-import { BadgeStatus, BadgeVariants, badgeStatuses } from "@/types/badge";
+import { SkeletonColumn } from "@/types/skeleton";
+import {
+  OrderBadgeStatus,
+  OrderBadgeVariants,
+  ORDER_BADGE_STATUSES,
+} from "@/types/badge";
 
-const changeStatus = (value: BadgeStatus, invoiceNo: string) => {};
+const changeStatus = (value: OrderBadgeStatus, invoiceNo: string) => {};
 const printInvoice = (invoiceNo: string) => {};
 
 export const columns: ColumnDef<Order>[] = [
   {
-    accessorKey: "invoiceNo",
     header: "invoice no",
-    cell: ({ row }) => row.getValue("invoiceNo"),
+    cell: ({ row }) => row.original.invoiceNo,
   },
   {
-    accessorKey: "orderTime",
     header: "order time",
-    cell: ({ row }) => formatDate(row.getValue("orderTime")),
+    cell: ({ row }) => formatDate(row.original.orderTime),
   },
   {
-    accessorKey: "customerName",
     header: "customer name",
-    cell: ({ row }) => {
-      return (
-        <span className="block max-w-52 truncate">
-          {row.getValue("customerName")}
-        </span>
-      );
-    },
-  },
-  {
-    accessorKey: "method",
-    header: "method",
     cell: ({ row }) => (
-      <span className="capitalize">{row.getValue("method")}</span>
+      <span className="block max-w-52 truncate">
+        {row.original.customerName}
+      </span>
     ),
   },
   {
-    accessorKey: "amount",
-    header: "amount",
-    cell: ({ row }) => formatAmount(row.getValue("amount")),
+    header: "method",
+    cell: ({ row }) => (
+      <span className="capitalize">{row.original.method}</span>
+    ),
   },
   {
-    accessorKey: "status",
+    header: "amount",
+    cell: ({ row }) => formatAmount(row.original.amount),
+  },
+  {
     header: "status",
     cell: ({ row }) => {
-      const status: BadgeStatus = row.getValue("status");
+      const status: OrderBadgeStatus = row.original.status;
 
       return (
         <Badge
-          variant={BadgeVariants[status]}
+          variant={OrderBadgeVariants[status]}
           className="flex-shrink-0 text-xs"
         >
           {status}
@@ -78,23 +76,22 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "action",
     header: "action",
     cell: ({ row }) => {
-      const invoiceNo = row.getValue("invoiceNo");
+      const invoiceNo = row.original.invoiceNo;
 
       return (
         <Select
-          onValueChange={(value: BadgeStatus) =>
-            changeStatus(value, invoiceNo as string)
+          onValueChange={(value: OrderBadgeStatus) =>
+            changeStatus(value, invoiceNo)
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder={row.getValue("status")} />
+            <SelectValue placeholder={row.original.status} />
           </SelectTrigger>
 
           <SelectContent>
-            {badgeStatuses.map((badgeStatus) => (
+            {ORDER_BADGE_STATUSES.map((badgeStatus) => (
               <SelectItem value={badgeStatus} key={badgeStatus}>
                 {badgeStatus}
               </SelectItem>
@@ -105,20 +102,19 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "invoice",
     header: "invoice",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => printInvoice(row.getValue("invoiceNo"))}
+                onClick={() => printInvoice(row.original.invoiceNo)}
                 className="text-foreground"
               >
-                <Printer className="w-5 h-5" />
+                <Printer className="size-5" />
               </Button>
             </TooltipTrigger>
 
@@ -135,8 +131,8 @@ export const columns: ColumnDef<Order>[] = [
                 className="text-foreground"
                 asChild
               >
-                <Link href="#">
-                  <ZoomIn className="w-5 h-5" />
+                <Link href={`/orders/${row.original.id}`}>
+                  <ZoomIn className="size-5" />
                 </Link>
               </Button>
             </TooltipTrigger>
@@ -148,5 +144,40 @@ export const columns: ColumnDef<Order>[] = [
         </div>
       );
     },
+  },
+];
+
+export const skeletonColumns: SkeletonColumn[] = [
+  {
+    header: "invoice no",
+    cell: <Skeleton className="w-20 h-8" />,
+  },
+  {
+    header: "order time",
+    cell: <Skeleton className="w-32 h-8" />,
+  },
+  {
+    header: "customer name",
+    cell: <Skeleton className="w-32 h-8" />,
+  },
+  {
+    header: "method",
+    cell: <Skeleton className="w-14 h-8" />,
+  },
+  {
+    header: "amount",
+    cell: <Skeleton className="w-16 h-8" />,
+  },
+  {
+    header: "status",
+    cell: <Skeleton className="w-16 h-8" />,
+  },
+  {
+    header: "action",
+    cell: <Skeleton className="w-24 h-10" />,
+  },
+  {
+    header: "invoice",
+    cell: <Skeleton className="w-20 h-8" />,
   },
 ];

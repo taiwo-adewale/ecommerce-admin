@@ -3,6 +3,14 @@ interface Props {
   currentPage: number;
 }
 
+/**
+ * Generates an array of pagination buttons based on the total number of pages and the current page.
+ * @param props - Object containing totalPages and currentPage.
+ * @param props.totalPages - The total number of pages.
+ * @param props.currentPage - The current page.
+ * @returns An array of pagination buttons.
+ */
+
 export const getPaginationButtons = ({ totalPages, currentPage }: Props) => {
   const paginationButtons: (number | "...")[] = [];
 

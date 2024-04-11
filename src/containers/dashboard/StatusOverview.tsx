@@ -45,7 +45,7 @@ export default function StatusOverview() {
   return (
     <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
       {cards.map((card) => (
-        <Card key={card.title} className="p-4 shadow-none">
+        <Card key={card.title}>
           <CardContent className="flex items-center gap-3 p-0">
             <div
               className={cn(
