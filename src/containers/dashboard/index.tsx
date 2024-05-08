@@ -2,7 +2,7 @@ import PageTitle from "@/components/shared/PageTitle";
 import SalesOverview from "./SalesOverview";
 import StatusOverview from "./StatusOverview";
 import DashboardCharts from "./dashboard-charts";
-import RecentOrders from "./orders-table";
+import RecentOrders from "@/containers/orders/orders-table";
 
 export default function Dashboard() {
   return (

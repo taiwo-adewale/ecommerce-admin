@@ -4,14 +4,8 @@ import { NextResponse } from "next/server";
 
 import { siteUrl } from "@/constants/siteUrl";
 
-// Required for cookies. Next JS will throw an error at build time if this isn't present
-export const dynamic = "force-dynamic";
-
-export async function POST(request: Request) {
+export async function POST() {
   const supabase = createRouteHandlerClient({ cookies });
-
-  // Parse the request URL to extract its origin.
-  const requestUrl = new URL(request.url);
 
   // Sign the user out by invoking the signOut method of the Supabase auth client.
   await supabase.auth.signOut();

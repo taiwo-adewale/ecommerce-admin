@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: "Poppins", sans-serif;
-}
-
 @layer base {
   :root {
     --background: 210 20% 98%;
@@ -57,6 +53,7 @@
 
 @layer base {
   * {
+    font-family: "Poppins", sans-serif;
     @apply border-border;
   }
   body {

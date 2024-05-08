@@ -1,8 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import { Printer, ZoomIn } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,17 +19,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
-import { formatDate } from "@/helpers/formatDate";
 
-import { Order } from "@/types/order";
+import { ORDER_STATUSES } from "@/constants/orders";
+import { OrderBadgeVariants } from "@/constants/badge";
+import { Order, OrderStatus } from "@/types/order";
 import { SkeletonColumn } from "@/types/skeleton";
-import {
-  OrderBadgeStatus,
-  OrderBadgeVariants,
-  ORDER_BADGE_STATUSES,
-} from "@/types/badge";
 
-const changeStatus = (value: OrderBadgeStatus, invoiceNo: string) => {};
+const changeStatus = (value: OrderStatus, invoiceNo: string) => {};
 const printInvoice = (invoiceNo: string) => {};
 
 export const columns: ColumnDef<Order>[] = [
@@ -40,7 +35,11 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     header: "order time",
-    cell: ({ row }) => formatDate(row.original.orderTime),
+    cell: ({ row }) =>
+      `${format(row.original.orderTime, "PP")} ${format(
+        row.original.orderTime,
+        "p"
+      )}`,
   },
   {
     header: "customer name",
@@ -63,12 +62,12 @@ export const columns: ColumnDef<Order>[] = [
   {
     header: "status",
     cell: ({ row }) => {
-      const status: OrderBadgeStatus = row.original.status;
+      const status = row.original.status;
 
       return (
         <Badge
           variant={OrderBadgeVariants[status]}
-          className="flex-shrink-0 text-xs"
+          className="flex-shrink-0 text-xs capitalize"
         >
           {status}
         </Badge>
@@ -82,17 +81,19 @@ export const columns: ColumnDef<Order>[] = [
 
       return (
         <Select
-          onValueChange={(value: OrderBadgeStatus) =>
-            changeStatus(value, invoiceNo)
-          }
+          onValueChange={(value: OrderStatus) => changeStatus(value, invoiceNo)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="capitalize">
             <SelectValue placeholder={row.original.status} />
           </SelectTrigger>
 
           <SelectContent>
-            {ORDER_BADGE_STATUSES.map((badgeStatus) => (
-              <SelectItem value={badgeStatus} key={badgeStatus}>
+            {ORDER_STATUSES.map((badgeStatus) => (
+              <SelectItem
+                value={badgeStatus}
+                key={badgeStatus}
+                className="capitalize"
+              >
                 {badgeStatus}
               </SelectItem>
             ))}

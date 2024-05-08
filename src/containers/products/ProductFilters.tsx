@@ -37,11 +37,11 @@ export default function ProductFilters() {
         <Input
           type="search"
           placeholder="Search product..."
-          className="h-12 md:basis-[40%]"
+          className="h-12 md:basis-[30%]"
         />
 
         <Select>
-          <SelectTrigger className="md:basis-[30%]">
+          <SelectTrigger className="md:basis-1/5">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
 
@@ -69,7 +69,7 @@ export default function ProductFilters() {
         </Select>
 
         <Select>
-          <SelectTrigger className="md:basis-[30%]">
+          <SelectTrigger className="md:basis-1/5">
             <SelectValue placeholder="Price" />
           </SelectTrigger>
 
@@ -91,11 +91,11 @@ export default function ProductFilters() {
           </SelectContent>
         </Select>
 
-        <div className="flex gap-4">
-          <Button size="lg" className="w-full">
+        <div className="flex flex-wrap sm:flex-nowrap gap-4 md:basis-[30%]">
+          <Button size="lg" className="flex-grow">
             Filter
           </Button>
-          <Button size="lg" variant="secondary" className="w-full">
+          <Button size="lg" variant="secondary" className="flex-grow">
             Reset
           </Button>
         </div>

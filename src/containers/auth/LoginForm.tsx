@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { redirect } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -28,13 +29,12 @@ import { loginFields } from "./fields";
 import { loginFormSchema } from "./schemas";
 import loginImg from "public/assets/login.jpg";
 
+type FormData = z.infer<typeof loginFormSchema>;
+
 export default function LoginForm() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
-  // Initialize the form using react-hook-form and zodResolver for schema-based validation.
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "test@admin.com",
@@ -42,24 +42,11 @@ export default function LoginForm() {
     },
   });
 
-  // Redirect to the dashboard when login is successful.
-  useEffect(() => {
-    if (success) {
-      return redirect("/");
-    }
-  }, [success]);
-
-  // Handle form submission.
-  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    setSuccess(false);
-    setIsLoading(true);
-
-    try {
-      await axios.post("/auth/sign-in", {
-        ...values,
-      });
-
-      // Show a success toast and reset the form on successful login.
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (formData: FormData) => {
+      await axios.post("/auth/sign-in", formData);
+    },
+    onSuccess: () => {
       toast({
         title: "Login Success",
         description:
@@ -67,23 +54,34 @@ export default function LoginForm() {
         variant: "success",
       });
 
-      setIsLoading(false);
-      setSuccess(true);
       form.reset();
-    } catch (e: any) {
-      // Handle errors from the server and display them in the form.
-      const { errors } = e.response.data;
-      for (const key in errors) {
-        if (errors[key]) {
-          // @ts-ignore
-          form.setError(key, {
-            message: errors[key],
-          });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const { errors } = error.response?.data;
+
+        for (const key in errors) {
+          if (errors[key]) {
+            form.setError(key as keyof FormData, {
+              message: errors[key],
+            });
+          }
         }
+      } else {
+        console.error(error);
       }
-      setIsLoading(false);
+    },
+  });
+
+  const onSubmit = (formData: FormData) => {
+    mutate(formData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      return redirect("/");
     }
-  }
+  }, [isSuccess]);
 
   return (
     <FormTemplate image={loginImg}>
@@ -116,12 +114,12 @@ export default function LoginForm() {
             ))}
 
             <Button
-              disabled={isLoading}
+              disabled={isPending}
               type="submit"
               className="w-full"
               size="lg"
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Login
             </Button>
           </form>

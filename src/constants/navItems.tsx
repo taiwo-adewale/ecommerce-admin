@@ -10,7 +10,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 export const navItems = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "/",
     icon: <MdOutlineDashboard />,
   },
   {

@@ -9,11 +9,13 @@ import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
 import { fetchOrders } from "@/data/orders";
 
-export default function RecentOrders() {
-  const ordersPage = useSearchParams().get("page");
+type Props = {
+  perPage?: number;
+};
 
+export default function RecentOrders({ perPage = 10 }: Props) {
+  const ordersPage = useSearchParams().get("page");
   const page = Math.trunc(Number(ordersPage)) || 1;
-  const perPage = 10;
 
   const {
     data: orders,
@@ -21,7 +23,7 @@ export default function RecentOrders() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["orders", page],
+    queryKey: ["orders", page, perPage],
     queryFn: () => fetchOrders({ page, perPage }),
     placeholderData: keepPreviousData,
     select: (ordersData) => {
@@ -39,7 +41,8 @@ export default function RecentOrders() {
     },
   });
 
-  if (isLoading) return <TableSkeleton columns={skeletonColumns} />;
+  if (isLoading)
+    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
 
   if (isError || !orders)
     return (

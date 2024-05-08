@@ -5,9 +5,6 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { signupFormSchema } from "@/containers/auth/schemas";
 import validateFormData from "@/helpers/validateFormData";
 
-// Required for cookies. Next JS will throw an error at build time if this isn't present
-export const dynamic = "force-dynamic";
-
 export async function POST(request: Request) {
   const supabase = createRouteHandlerClient({ cookies });
 
@@ -35,7 +32,7 @@ export async function POST(request: Request) {
     password,
     options: {
       data: {
-        name,
+        full_name: name,
       },
     },
   });

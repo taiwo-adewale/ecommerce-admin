@@ -14,7 +14,7 @@ interface Props {
 export const getPaginationButtons = ({ totalPages, currentPage }: Props) => {
   const paginationButtons: (number | "...")[] = [];
 
-  // less than 8 pages
+  // Total pages less than 8 pages
   if (totalPages < 8) {
     for (let i = 1; i <= totalPages; i++) {
       paginationButtons.push(i);
@@ -23,7 +23,7 @@ export const getPaginationButtons = ({ totalPages, currentPage }: Props) => {
     return paginationButtons;
   }
 
-  // first 5 pages
+  // Current page in first 5 pages
   if (currentPage < 5) {
     for (let i = 1; i < 6; i++) {
       paginationButtons.push(i);
@@ -35,7 +35,7 @@ export const getPaginationButtons = ({ totalPages, currentPage }: Props) => {
     return paginationButtons;
   }
 
-  // last five pages
+  // Current page in last five pages
   if (totalPages - currentPage < 4) {
     paginationButtons.push(1);
     paginationButtons.push("...");
@@ -47,7 +47,7 @@ export const getPaginationButtons = ({ totalPages, currentPage }: Props) => {
     return paginationButtons;
   }
 
-  // other pages
+  // Current page not in first or last five pages
   paginationButtons.push(1);
   paginationButtons.push("...");
 

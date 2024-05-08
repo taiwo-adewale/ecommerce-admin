@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { ZoomIn, PenSquare, Trash2 } from "lucide-react";
@@ -41,8 +39,8 @@ import {
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
 
-import { ProductBadgeStatus, ProductBadgeVariants } from "@/types/badge";
-import { Product } from "@/types/product";
+import { ProductBadgeVariants } from "@/constants/badge";
+import { Product, ProductStatus } from "@/types/product";
 import { SkeletonColumn } from "@/types/skeleton";
 
 const handleSwitchChange = () => {};
@@ -89,9 +87,9 @@ export const columns: ColumnDef<Product>[] = [
   {
     header: "category",
     cell: ({ row }) => (
-      <span className="block max-w-52 truncate">
+      <Typography className="block max-w-52 truncate">
         {row.original.categories[0].name}
-      </span>
+      </Typography>
     ),
   },
   {
@@ -115,7 +113,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     header: "status",
     cell: ({ row }) => {
-      const status: ProductBadgeStatus = row.original.status;
+      const status = row.original.status;
 
       return (
         <Badge

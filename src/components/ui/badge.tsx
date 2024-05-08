@@ -29,6 +29,11 @@ const badgeVariants = cva(
   }
 );
 
+export type BadgeVariantProps = Exclude<
+  VariantProps<typeof badgeVariants>["variant"],
+  null | undefined
+>;
+
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}

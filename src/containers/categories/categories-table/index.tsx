@@ -9,11 +9,13 @@ import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
 import { fetchCategories } from "@/data/categories";
 
-export default function AllCategories() {
-  const categoriesPage = useSearchParams().get("page");
+type Props = {
+  perPage?: number;
+};
 
+export default function AllCategories({ perPage = 10 }: Props) {
+  const categoriesPage = useSearchParams().get("page");
   const page = Math.trunc(Number(categoriesPage)) || 1;
-  const perPage = 10;
 
   const {
     data: categories,
@@ -39,7 +41,8 @@ export default function AllCategories() {
     },
   });
 
-  if (isLoading) return <TableSkeleton columns={skeletonColumns} />;
+  if (isLoading)
+    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
 
   if (isError || !categories)
     return (

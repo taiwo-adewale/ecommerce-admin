@@ -12,11 +12,11 @@ export default function CategoryFilters() {
           className="h-12 md:basis-1/2"
         />
 
-        <div className="flex gap-4 md:basis-1/2">
-          <Button size="lg" className="w-full">
+        <div className="flex flex-wrap sm:flex-nowrap gap-4 md:basis-1/2">
+          <Button size="lg" className="flex-grow">
             Filter
           </Button>
-          <Button size="lg" variant="secondary" className="w-full">
+          <Button size="lg" variant="secondary" className="flex-grow">
             Reset
           </Button>
         </div>

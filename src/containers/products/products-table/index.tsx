@@ -9,11 +9,13 @@ import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
 import { fetchProducts } from "@/data/products";
 
-export default function AllProducts() {
-  const productsPage = useSearchParams().get("page");
+type Props = {
+  perPage?: number;
+};
 
+export default function AllProducts({ perPage = 10 }: Props) {
+  const productsPage = useSearchParams().get("page");
   const page = Math.trunc(Number(productsPage)) || 1;
-  const perPage = 10;
 
   const {
     data: products,
@@ -39,7 +41,8 @@ export default function AllProducts() {
     },
   });
 
-  if (isLoading) return <TableSkeleton columns={skeletonColumns} />;
+  if (isLoading)
+    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
 
   if (isError || !products)
     return (

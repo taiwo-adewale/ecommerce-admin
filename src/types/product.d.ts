@@ -1,6 +1,6 @@
 import { Category } from "./category";
 
-type Status = "selling" | "out-of-stock";
+export type ProductStatus = "selling" | "out-of-stock";
 
 type Price = {
   price: number;
@@ -27,7 +27,7 @@ export type Product = {
   stock: number;
   sales: number;
   sku: string;
-  status: Status;
+  status: ProductStatus;
   images: string[];
   published: boolean;
   slug: string;

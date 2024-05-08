@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { redirect } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -26,37 +27,23 @@ import { passwordResetFields } from "./fields";
 import { passwordResetFormSchema } from "./schemas";
 import forgotPasswordImg from "public/assets/forgot-password.jpg";
 
+type FormData = z.infer<typeof passwordResetFormSchema>;
+
 export default function PasswordResetForm() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
-  // Initialize the form using react-hook-form and zodResolver for schema-based validation.
-  const form = useForm<z.infer<typeof passwordResetFormSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(passwordResetFormSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  // Redirect to the login page when password reset is successful.
-  useEffect(() => {
-    if (success) {
-      return redirect("/login");
-    }
-  }, [success]);
-
-  // Handle form submission.
-  async function onSubmit(values: z.infer<typeof passwordResetFormSchema>) {
-    setSuccess(false);
-    setIsLoading(true);
-
-    try {
-      await axios.post("/auth/forgot-password", {
-        ...values,
-      });
-
-      // Show a success toast and reset the form on successful password reset.
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (formData: FormData) => {
+      await axios.post("/auth/forgot-password", formData);
+    },
+    onSuccess: () => {
       toast({
         title: "Password Reset Email Sent",
         description:
@@ -64,22 +51,34 @@ export default function PasswordResetForm() {
         variant: "success",
       });
 
-      setIsLoading(false);
-      setSuccess(true);
       form.reset();
-    } catch (e: any) {
-      const { errors } = e.response.data;
-      for (const key in errors) {
-        if (errors[key]) {
-          // @ts-ignore
-          form.setError(key, {
-            message: errors[key],
-          });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const { errors } = error.response?.data;
+
+        for (const key in errors) {
+          if (errors[key]) {
+            form.setError(key as keyof FormData, {
+              message: errors[key],
+            });
+          }
         }
+      } else {
+        console.error(error);
       }
-      setIsLoading(false);
+    },
+  });
+
+  const onSubmit = (formData: FormData) => {
+    mutate(formData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      return redirect("/login");
     }
-  }
+  }, [isSuccess]);
 
   return (
     <FormTemplate image={forgotPasswordImg}>
@@ -115,12 +114,12 @@ export default function PasswordResetForm() {
             ))}
 
             <Button
-              disabled={isLoading}
+              disabled={isPending}
               type="submit"
               className="w-full"
               size="lg"
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Recover password
             </Button>
           </form>

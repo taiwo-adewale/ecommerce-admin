@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { redirect, useSearchParams } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -26,17 +27,14 @@ import { passwordUpdateFields } from "./fields";
 import { passwordUpdateFormSchema } from "./schemas";
 import updatePasswordImg from "public/assets/update-password.jpg";
 
+type FormData = z.infer<typeof passwordUpdateFormSchema>;
+
 export default function PasswordUpdateForm() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  // Get query param of code from url
   const code = searchParams.get("code");
 
-  // Initialize the form using react-hook-form and zodResolver for schema-based validation.
-  const form = useForm<z.infer<typeof passwordUpdateFormSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(passwordUpdateFormSchema),
     defaultValues: {
       password: "",
@@ -44,32 +42,20 @@ export default function PasswordUpdateForm() {
     },
   });
 
-  // Redirect to the login page after password update is successful.
-  useEffect(() => {
-    if (success) {
-      return redirect("/login");
-    }
-  }, [success]);
-
-  // Redirect to the login page if the `code` query param is not present.
   useEffect(() => {
     if (!code) {
       return redirect("/login");
     }
   }, [code]);
 
-  // Handle form submission.
-  async function onSubmit(values: z.infer<typeof passwordUpdateFormSchema>) {
-    setSuccess(false);
-    setIsLoading(true);
-
-    try {
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (formData: FormData) => {
       await axios.post("/auth/update-password", {
-        ...values,
+        ...formData,
         code,
       });
-
-      // Show a success toast and reset the form on successful password update.
+    },
+    onSuccess: () => {
       toast({
         title: "Password Updated Successfully",
         description:
@@ -77,23 +63,34 @@ export default function PasswordUpdateForm() {
         variant: "success",
       });
 
-      setIsLoading(false);
-      setSuccess(true);
       form.reset();
-    } catch (e: any) {
-      // Handle errors from the server and display them in the form.
-      const { errors } = e.response.data;
-      for (const key in errors) {
-        if (errors[key]) {
-          // @ts-ignore
-          form.setError(key, {
-            message: errors[key],
-          });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const { errors } = error.response?.data;
+
+        for (const key in errors) {
+          if (errors[key]) {
+            form.setError(key as keyof FormData, {
+              message: errors[key],
+            });
+          }
         }
+      } else {
+        console.error(error);
       }
-      setIsLoading(false);
+    },
+  });
+
+  const onSubmit = (formData: FormData) => {
+    mutate(formData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      return redirect("/login");
     }
-  }
+  }, [isSuccess]);
 
   return (
     <FormTemplate image={updatePasswordImg}>
@@ -129,12 +126,12 @@ export default function PasswordUpdateForm() {
             ))}
 
             <Button
-              disabled={isLoading}
+              disabled={isPending}
               type="submit"
               className="w-full"
               size="lg"
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Update password
             </Button>
           </form>

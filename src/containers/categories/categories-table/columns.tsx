@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -10,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import Typography from "@/components/ui/typography";
 import {
   Sheet,
   SheetClose,
@@ -65,7 +64,11 @@ export const columns: ColumnDef<Category>[] = [
   },
   {
     header: "id",
-    cell: ({ row }) => row.original._id.slice(-4),
+    cell: ({ row }) => (
+      <Typography className="uppercase">
+        {row.original._id.slice(-4)}
+      </Typography>
+    ),
   },
   {
     header: "icon",

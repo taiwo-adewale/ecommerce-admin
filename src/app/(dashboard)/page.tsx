@@ -1,5 +1,11 @@
-import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
-export default async function Home() {
-  return redirect("/dashboard");
+import Dashboard from "@/containers/dashboard";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
+
+export default async function DashboardPage() {
+  return <Dashboard />;
 }

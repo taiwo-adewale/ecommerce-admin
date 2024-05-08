@@ -1,6 +1,5 @@
-import { BadgeStatus } from "@/types/badge";
-
-type OrderMethod = "cash" | "card" | "credit";
+export type OrderStatus = "pending" | "processing" | "delivered" | "cancel";
+export type OrderMethod = "cash" | "card" | "credit";
 
 export type Order = {
   id: string;
@@ -9,6 +8,6 @@ export type Order = {
   customerName: string;
   method: OrderMethod;
   amount: string;
-  status: BadgeStatus;
+  status: OrderStatus;
   subRows?: Order[];
 };

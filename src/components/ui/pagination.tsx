@@ -52,7 +52,7 @@ const PaginationLink = ({
     scroll={false}
     className={cn(
       buttonVariants({
-        variant: isActive ? "outline" : "ghost",
+        variant: isActive ? "default" : "ghost",
         size,
       }),
       className,
