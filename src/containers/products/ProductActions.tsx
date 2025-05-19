@@ -2,11 +2,14 @@ import { Upload, Download, PenSquare, Trash2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+
+import EditProduct from "./EditProduct";
 
 export default function ProductActions() {
   return (
     <Card className="mb-5">
-      <form className="flex flex-col xl:flex-row xl:justify-between gap-4">
+      <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
         <div className="flex flex-wrap gap-3">
           <Button variant="outline">
             <Upload className="mr-2 size-4" /> Export
@@ -34,15 +37,23 @@ export default function ProductActions() {
             <Trash2 className="mr-2 size-4" /> Delete
           </Button>
 
-          <Button
-            variant="default"
-            size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
-          >
-            <Plus className="mr-2 size-4" /> Add Product
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="default"
+                size="lg"
+                className="sm:flex-grow xl:flex-grow-0"
+              >
+                <Plus className="mr-2 size-4" /> Add Product
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent className="flex flex-col">
+              <EditProduct />
+            </SheetContent>
+          </Sheet>
         </div>
-      </form>
+      </div>
     </Card>
   );
 }

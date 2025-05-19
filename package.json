@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start:server": "json-server --watch db.json --port 8000"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",

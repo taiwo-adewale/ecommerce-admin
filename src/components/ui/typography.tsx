@@ -35,7 +35,7 @@ const Typography = ({
 
   return React.createElement(
     component || variant,
-    { className: mergedClassName },
+    { className: mergedClassName || undefined },
     children
   );
 };

@@ -13,3 +13,9 @@ export const fetchOrders = async ({
   );
   return data as PaginationData<Order>;
 };
+
+export const fetchOrder = async ({ id }: { id: string }) => {
+  await new Promise((resolve, reject) => setTimeout(resolve, 500));
+  const { data } = await axiosInstance.get(`/orders/${id}`);
+  return data as Order;
+};

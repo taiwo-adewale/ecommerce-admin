@@ -30,10 +30,7 @@ export default function NavMenuToggle() {
         </Button>
       </SheetTrigger>
 
-      <SheetContent
-        side="left"
-        className="w-full !max-w-sidebar bg-popover p-0"
-      >
+      <SheetContent side="left" className="w-full max-w-sidebar">
         <SidebarContent />
       </SheetContent>
     </Sheet>
