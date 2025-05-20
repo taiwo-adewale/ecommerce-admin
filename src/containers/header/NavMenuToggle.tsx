@@ -2,37 +2,15 @@
 
 import { Menu } from "lucide-react";
 
-import { useAppContext } from "@/context/App";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import SidebarContent from "@/containers/sidebar/SidebarContent";
-import useGetWindowWidth from "@/hooks/useGetWindowWidth";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export default function NavMenuToggle() {
-  const windowWidth = useGetWindowWidth();
-  const { toggleSidebar } = useAppContext();
-
-  if (!windowWidth) return null;
-
-  if (windowWidth >= 1024) {
-    return (
-      <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-        <Menu />
-      </Button>
-    );
-  }
+  const { toggleSidebar } = useSidebar();
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Menu />
-        </Button>
-      </SheetTrigger>
-
-      <SheetContent side="left" className="w-full max-w-sidebar">
-        <SidebarContent />
-      </SheetContent>
-    </Sheet>
+    <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+      <Menu />
+    </Button>
   );
 }
