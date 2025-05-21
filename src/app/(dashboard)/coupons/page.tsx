@@ -1,11 +1,22 @@
 import { Metadata } from "next";
 
-import Coupons from "@/containers/coupons";
+import PageTitle from "@/components/shared/PageTitle";
+import CouponActions from "./_components/CouponActions";
+import CouponFilters from "./_components/CouponFilters";
+import AllCoupons from "./_components/coupons-table";
 
 export const metadata: Metadata = {
   title: "Coupons",
 };
 
 export default async function CouponsPage() {
-  return <Coupons />;
+  return (
+    <section>
+      <PageTitle>Coupons</PageTitle>
+
+      <CouponActions />
+      <CouponFilters />
+      <AllCoupons />
+    </section>
+  );
 }

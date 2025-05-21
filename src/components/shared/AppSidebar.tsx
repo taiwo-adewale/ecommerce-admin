@@ -29,7 +29,7 @@ export default function AppSidebar() {
               )}
             >
               <BsFillHandbagFill className="size-6 text-primary mb-1.5 flex-shrink-0" />
-              <Typography component="span">Admin</Typography>
+              <Typography component="span">Zorvex</Typography>
             </Link>
 
             <ul className="pt-6 flex flex-col gap-y-2">

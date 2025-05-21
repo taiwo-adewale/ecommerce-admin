@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import isAuth from "@/helpers/isAuth";
-import Header from "@/containers/header";
+import Header from "@/components/shared/header";
 import Container from "@/components/ui/container";
 import AppSidebar from "@/components/shared/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";

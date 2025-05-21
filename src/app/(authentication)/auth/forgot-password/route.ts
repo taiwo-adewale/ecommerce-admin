@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 
-import { passwordResetFormSchema } from "@/containers/auth/schemas";
+import { passwordResetFormSchema } from "@/app/(authentication)/forgot-password/_components/schema";
 import validateFormData from "@/helpers/validateFormData";
 import { siteUrl } from "@/constants/siteUrl";
 

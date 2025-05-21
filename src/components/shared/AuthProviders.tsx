@@ -13,7 +13,7 @@ type Props = {
   authType?: "Login" | "Signup";
 };
 
-export default function Providers({ authType = "Login" }: Props) {
+export default function AuthProviders({ authType = "Login" }: Props) {
   const supabase = createClientComponentClient();
 
   // Handle authentication with OAuth providers.

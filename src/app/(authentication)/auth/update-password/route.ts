@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 
-import { passwordUpdateFormSchema } from "@/containers/auth/schemas";
+import { passwordUpdateFormSchema } from "@/app/(authentication)/update-password/_components/schema";
 import validateFormData from "@/helpers/validateFormData";
 
 export async function POST(request: Request) {

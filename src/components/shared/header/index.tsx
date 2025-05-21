@@ -1,8 +1,8 @@
 import Container from "@/components/ui/container";
-import Profile from "@/containers/header/Profile";
+import Profile from "@/components/shared/header/Profile";
 import NavMenuToggle from "./NavMenuToggle";
-import ThemeToggle from "@/containers/header/ThemeToggle";
-import Notifications from "@/containers/header/Notifications";
+import ThemeToggle from "@/components/shared/header/ThemeToggle";
+import Notifications from "@/components/shared/header/Notifications";
 
 export default function Header() {
   return (

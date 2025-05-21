@@ -23,11 +23,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 
-import Providers from "./Providers";
-import FormTemplate from "./FormTemplate";
 import { loginFields } from "./fields";
-import { loginFormSchema } from "./schemas";
-import loginImg from "public/assets/login.jpg";
+import { loginFormSchema } from "./schema";
+import AuthProviders from "@/components/shared/AuthProviders";
 
 type FormData = z.infer<typeof loginFormSchema>;
 
@@ -84,64 +82,58 @@ export default function LoginForm() {
   }, [isSuccess]);
 
   return (
-    <FormTemplate image={loginImg}>
-      <div className="w-full">
-        <Typography variant="h2" className="mb-8">
-          Login
-        </Typography>
+    <div className="w-full">
+      <Typography variant="h2" className="mb-8">
+        Login
+      </Typography>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {loginFields.map((formField) => (
-              <FormField
-                key={`form-field-${formField.name}`}
-                control={form.control}
-                name={formField.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{formField.label}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={formField.inputType}
-                        placeholder={formField.placeholder}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {loginFields.map((formField) => (
+            <FormField
+              key={`form-field-${formField.name}`}
+              control={form.control}
+              name={formField.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{formField.label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={formField.inputType}
+                      placeholder={formField.placeholder}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
 
-            <Button
-              disabled={isPending}
-              type="submit"
-              className="w-full"
-              size="lg"
-            >
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Login
-            </Button>
-          </form>
-        </Form>
-
-        <Separator className="my-12" />
-
-        <Providers />
-
-        <div className="flex flex-wrap justify-between gap-4 w-full">
-          <Typography
-            variant="a"
-            href="/forgot-password"
-            className="md:!text-sm"
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="w-full"
+            size="lg"
           >
-            Forgot password?
-          </Typography>
-          <Typography variant="a" href="/signup" className="md:!text-sm">
-            Create an account
-          </Typography>
-        </div>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Login
+          </Button>
+        </form>
+      </Form>
+
+      <Separator className="my-12" />
+
+      <AuthProviders />
+
+      <div className="flex flex-wrap justify-between gap-4 w-full">
+        <Typography variant="a" href="/forgot-password" className="md:!text-sm">
+          Forgot password?
+        </Typography>
+        <Typography variant="a" href="/signup" className="md:!text-sm">
+          Create an account
+        </Typography>
       </div>
-    </FormTemplate>
+    </div>
   );
 }

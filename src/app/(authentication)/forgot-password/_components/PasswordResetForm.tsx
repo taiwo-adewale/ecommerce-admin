@@ -22,10 +22,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-import FormTemplate from "./FormTemplate";
 import { passwordResetFields } from "./fields";
-import { passwordResetFormSchema } from "./schemas";
-import forgotPasswordImg from "public/assets/forgot-password.jpg";
+import { passwordResetFormSchema } from "./schema";
 
 type FormData = z.infer<typeof passwordResetFormSchema>;
 
@@ -81,56 +79,51 @@ export default function PasswordResetForm() {
   }, [isSuccess]);
 
   return (
-    <FormTemplate image={forgotPasswordImg}>
-      <div className="w-full">
-        <Typography variant="h2" className="mb-4">
-          Forgot Password?
-        </Typography>
+    <div className="w-full">
+      <Typography variant="h2" className="mb-4">
+        Forgot Password?
+      </Typography>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 pb-6"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pb-6">
+          {passwordResetFields.map((formField) => (
+            <FormField
+              key={`form-field-${formField.name}`}
+              control={form.control}
+              name={formField.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{formField.label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={formField.inputType}
+                      placeholder={formField.placeholder}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="w-full"
+            size="lg"
           >
-            {passwordResetFields.map((formField) => (
-              <FormField
-                key={`form-field-${formField.name}`}
-                control={form.control}
-                name={formField.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{formField.label}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={formField.inputType}
-                        placeholder={formField.placeholder}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Recover password
+          </Button>
+        </form>
+      </Form>
 
-            <Button
-              disabled={isPending}
-              type="submit"
-              className="w-full"
-              size="lg"
-            >
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Recover password
-            </Button>
-          </form>
-        </Form>
-
-        <div>
-          <Typography variant="a" href="/signup" className="md:!text-sm">
-            Don&apos;t have an account? Create one now
-          </Typography>
-        </div>
+      <div>
+        <Typography variant="a" href="/signup" className="md:!text-sm">
+          Don&apos;t have an account? Create one now
+        </Typography>
       </div>
-    </FormTemplate>
+    </div>
   );
 }

@@ -1,11 +1,20 @@
 import { Metadata } from "next";
 
-import Orders from "@/containers/orders";
+import PageTitle from "@/components/shared/PageTitle";
+import AllOrders from "./_components/orders-table";
+import OrderFilters from "./_components/OrderFilters";
 
 export const metadata: Metadata = {
   title: "Orders",
 };
 
 export default async function OrdersPage() {
-  return <Orders />;
+  return (
+    <section>
+      <PageTitle>Orders</PageTitle>
+
+      <OrderFilters />
+      <AllOrders perPage={20} />
+    </section>
+  );
 }

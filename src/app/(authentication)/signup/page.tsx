@@ -1,5 +1,12 @@
-import SignupForm from "@/containers/auth/SignupForm";
+import signupImg from "public/assets/signup.jpg";
+
+import AuthFormTemplate from "@/components/shared/AuthFormTemplate";
+import SignupForm from "./_components/SignupForm";
 
 export default function Page() {
-  return <SignupForm />;
+  return (
+    <AuthFormTemplate image={signupImg}>
+      <SignupForm />
+    </AuthFormTemplate>
+  );
 }

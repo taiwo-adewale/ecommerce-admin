@@ -22,10 +22,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-import FormTemplate from "./FormTemplate";
 import { passwordUpdateFields } from "./fields";
-import { passwordUpdateFormSchema } from "./schemas";
-import updatePasswordImg from "public/assets/update-password.jpg";
+import { passwordUpdateFormSchema } from "./schema";
 
 type FormData = z.infer<typeof passwordUpdateFormSchema>;
 
@@ -93,50 +91,45 @@ export default function PasswordUpdateForm() {
   }, [isSuccess]);
 
   return (
-    <FormTemplate image={updatePasswordImg}>
-      <div className="w-full">
-        <Typography variant="h2" className="mb-4">
-          Update Password
-        </Typography>
+    <div className="w-full">
+      <Typography variant="h2" className="mb-4">
+        Update Password
+      </Typography>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 pb-6"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pb-6">
+          {passwordUpdateFields.map((formField) => (
+            <FormField
+              key={`form-field-${formField.name}`}
+              control={form.control}
+              name={formField.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{formField.label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={formField.inputType}
+                      placeholder={formField.placeholder}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="w-full"
+            size="lg"
           >
-            {passwordUpdateFields.map((formField) => (
-              <FormField
-                key={`form-field-${formField.name}`}
-                control={form.control}
-                name={formField.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{formField.label}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={formField.inputType}
-                        placeholder={formField.placeholder}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-
-            <Button
-              disabled={isPending}
-              type="submit"
-              className="w-full"
-              size="lg"
-            >
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Update password
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </FormTemplate>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Update password
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

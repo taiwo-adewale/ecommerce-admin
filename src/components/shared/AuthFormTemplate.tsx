@@ -5,7 +5,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function FormTemplate({ image, children }: Props) {
+export default function AuthFormTemplate({ image, children }: Props) {
   return (
     <section>
       <div className="p-6 min-h-dvh flex items-center">
