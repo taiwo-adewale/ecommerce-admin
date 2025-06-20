@@ -1,4 +1,3 @@
-// Interface for new-order notifications
 export interface NewOrderNotification {
   id: string;
   type: "new-order";
@@ -9,7 +8,6 @@ export interface NewOrderNotification {
   isRead: string;
 }
 
-// Interface for stock-out notifications
 export interface StockOutNotification {
   id: string;
   type: "stock-out";
@@ -19,5 +17,4 @@ export interface StockOutNotification {
   isRead: string;
 }
 
-// Notifications can either be of type "new-order" or "stock-out"
 export type Notification = NewOrderNotification | StockOutNotification;

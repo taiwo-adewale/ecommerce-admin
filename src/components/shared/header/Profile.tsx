@@ -39,7 +39,7 @@ export default function Profile() {
 
           <DropdownMenuItem asChild>
             <Link
-              href="#"
+              href="/edit-profile"
               className="w-full justify-start py-3.5 pl-3 pr-8 tracking-wide !cursor-pointer"
             >
               <Settings className="mr-3 size-5" /> Edit Profile

@@ -1,4 +1,8 @@
-import { LoginField } from "@/types/input";
+import { InputField } from "@/types/input";
+
+interface LoginField extends InputField {
+  name: "email" | "password";
+}
 
 export const loginFields: LoginField[] = [
   {

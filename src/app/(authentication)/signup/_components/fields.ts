@@ -1,10 +1,15 @@
-import { SignupField } from "@/types/input";
+import { InputField } from "@/types/input";
+
+interface SignupField extends InputField {
+  name: "name" | "email" | "password" | "confirmPassword";
+}
 
 export const signupFields: SignupField[] = [
   {
     name: "name",
     label: "Name",
     placeholder: "Admin",
+    inputType: "text",
   },
   {
     name: "email",

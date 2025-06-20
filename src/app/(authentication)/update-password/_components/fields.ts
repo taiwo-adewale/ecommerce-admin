@@ -1,4 +1,8 @@
-import { PasswordUpdateField } from "@/types/input";
+import { InputField } from "@/types/input";
+
+interface PasswordUpdateField extends InputField {
+  name: "password" | "confirmPassword";
+}
 
 export const passwordUpdateFields: PasswordUpdateField[] = [
   {
