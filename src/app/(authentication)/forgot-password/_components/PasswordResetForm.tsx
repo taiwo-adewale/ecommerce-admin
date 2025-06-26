@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +21,6 @@ import {
 import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 import { passwordResetFields } from "./fields";
 import { passwordResetFormSchema } from "./schema";
@@ -28,8 +28,6 @@ import { passwordResetFormSchema } from "./schema";
 type FormData = z.infer<typeof passwordResetFormSchema>;
 
 export default function PasswordResetForm() {
-  const { toast } = useToast();
-
   const form = useForm<FormData>({
     resolver: zodResolver(passwordResetFormSchema),
     defaultValues: {
@@ -42,11 +40,10 @@ export default function PasswordResetForm() {
       await axios.post("/auth/forgot-password", formData);
     },
     onSuccess: () => {
-      toast({
-        title: "Password Reset Email Sent",
+      toast.success(null, {
         description:
           "We've sent you an email with instructions to reset your password. Please check your inbox and follow the instructions.",
-        variant: "success",
+        position: "top-center",
       });
 
       form.reset();

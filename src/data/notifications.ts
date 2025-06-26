@@ -8,6 +8,6 @@ export const fetchNotifications = async () => {
 };
 
 export const deleteNotification = async (id: string) => {
-  await new Promise((resolve, reject) => setTimeout(resolve, 500));
+  await new Promise((resolve, reject) => setTimeout(reject, 500));
   await axiosInstance.delete(`/notifications/${id}`);
 };

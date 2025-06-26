@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { redirect, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +21,6 @@ import {
 import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 import { passwordUpdateFields } from "./fields";
 import { passwordUpdateFormSchema } from "./schema";
@@ -28,7 +28,6 @@ import { passwordUpdateFormSchema } from "./schema";
 type FormData = z.infer<typeof passwordUpdateFormSchema>;
 
 export default function PasswordUpdateForm() {
-  const { toast } = useToast();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
 
@@ -54,11 +53,9 @@ export default function PasswordUpdateForm() {
       });
     },
     onSuccess: () => {
-      toast({
-        title: "Password Updated Successfully",
-        description:
-          "Your password has been successfully updated. Please log in with your new password.",
-        variant: "success",
+      toast.success("Password Updated Successfully!", {
+        description: "Please log in with your new password.",
+        position: "top-center",
       });
 
       form.reset();

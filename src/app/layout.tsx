@@ -2,7 +2,7 @@ import { ThemeProvider } from "@/lib/theme-provider";
 import TanstackQueryProvider from "@/lib/tanstack-query-provider";
 
 import "@/app/globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 // pages have to be rendered dynamically because supabase server component client uses cookies

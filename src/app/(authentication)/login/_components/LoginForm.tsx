@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +22,6 @@ import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
 
 import { loginFields } from "./fields";
 import { loginFormSchema } from "./schema";
@@ -30,8 +30,6 @@ import AuthProviders from "@/components/shared/AuthProviders";
 type FormData = z.infer<typeof loginFormSchema>;
 
 export default function LoginForm() {
-  const { toast } = useToast();
-
   const form = useForm<FormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -45,11 +43,9 @@ export default function LoginForm() {
       await axios.post("/auth/sign-in", formData);
     },
     onSuccess: () => {
-      toast({
-        title: "Login Success",
-        description:
-          "You have successfully logged in. Redirecting to the dashboard...",
-        variant: "success",
+      toast.success("Login Success!", {
+        description: "Redirecting to the dashboard...",
+        position: "top-center",
       });
 
       form.reset();

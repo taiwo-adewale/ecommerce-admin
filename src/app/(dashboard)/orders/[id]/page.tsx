@@ -64,7 +64,7 @@ export default async function Order({ params: { id } }: PageParams) {
                 variant="h2"
                 className="text-card-foreground"
               >
-                Admin
+                Zorvex
               </Typography>
             </div>
 
@@ -167,6 +167,22 @@ export default async function Order({ params: { id } }: PageParams) {
                 </TableCell>
                 <TableCell className="font-semibold py-3 text-primary text-right">
                   $996.30
+                </TableCell>
+              </TableRow>
+
+              <TableRow className="hover:bg-transparent">
+                <TableCell className="py-3">2</TableCell>
+                <TableCell className="font-semibold py-3 px-6 text-card-foreground">
+                  Mustard
+                </TableCell>
+                <TableCell className="font-semibold py-3 text-center">
+                  12
+                </TableCell>
+                <TableCell className="font-semibold py-3 text-center">
+                  $200.00
+                </TableCell>
+                <TableCell className="font-semibold py-3 text-primary text-right">
+                  $2400.00
                 </TableCell>
               </TableRow>
             </TableBody>

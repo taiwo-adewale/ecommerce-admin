@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +22,6 @@ import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { signupFields } from "./fields";
@@ -31,8 +31,6 @@ import AuthProviders from "@/components/shared/AuthProviders";
 type FormData = z.infer<typeof signupFormSchema>;
 
 export default function SignupForm() {
-  const { toast } = useToast();
-
   const form = useForm<FormData>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -48,11 +46,10 @@ export default function SignupForm() {
       await axios.post("/auth/sign-up", formData);
     },
     onSuccess: () => {
-      toast({
-        title: "Sign up Success",
+      toast.success("Signup Success!", {
         description:
-          "You have successfully created an account. Redirecting to the dashboard...",
-        variant: "success",
+          "Account created succesfully. Redirecting to the dashboard...",
+        position: "top-center",
       });
 
       form.reset();
