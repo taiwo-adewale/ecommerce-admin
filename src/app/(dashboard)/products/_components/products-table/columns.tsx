@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ZoomIn, PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -40,7 +41,7 @@ import {
 import { formatAmount } from "@/helpers/formatAmount";
 
 import { ProductBadgeVariants } from "@/constants/badge";
-import { Product, ProductStatus } from "@/types/product";
+import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";
 
 const handleSwitchChange = () => {};
@@ -71,7 +72,7 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2 items-center">
         <Image
-          src={row.original.images[0]}
+          src={row.original.image_url}
           alt={row.original.name}
           width={32}
           height={32}
@@ -87,23 +88,26 @@ export const columns: ColumnDef<Product>[] = [
   {
     header: "category",
     cell: ({ row }) => (
-      <Typography className="block max-w-52 truncate">
-        {row.original.categories[0].name}
+      <Typography
+        className={cn(
+          "block max-w-52 truncate",
+          !row.original.categories?.name && "pl-8"
+        )}
+      >
+        {row.original.categories?.name || "—"}
       </Typography>
     ),
   },
   {
     header: "price",
     cell: ({ row }) => {
-      return formatAmount(row.original.prices.price);
+      return formatAmount(row.original.cost_price);
     },
   },
   {
     header: "sale price",
     cell: ({ row }) => {
-      const { price, discount } = row.original.prices;
-
-      return formatAmount(price * (1 - discount));
+      return formatAmount(row.original.selling_price);
     },
   },
   {
@@ -113,7 +117,8 @@ export const columns: ColumnDef<Product>[] = [
   {
     header: "status",
     cell: ({ row }) => {
-      const status = row.original.status;
+      const stock = row.original.stock;
+      const status = stock > 0 ? "selling" : "out-of-stock";
 
       return (
         <Badge

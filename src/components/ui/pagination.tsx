@@ -35,8 +35,8 @@ const PaginationItem = React.forwardRef<
 ));
 PaginationItem.displayName = "PaginationItem";
 
-type PaginationLinkProps = LinkProps &
-  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+type PaginationLinkProps = ButtonProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
     isActive?: boolean;
     disabled?: boolean;
   } & Pick<ButtonProps, "size">;
@@ -47,17 +47,11 @@ const PaginationLink = ({
   size = "icon",
   ...props
 }: PaginationLinkProps) => (
-  <Link
+  <Button
     aria-current={isActive ? "page" : undefined}
-    scroll={false}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "default" : "ghost",
-        size,
-      }),
-      className,
-      "w-9 h-9"
-    )}
+    variant={isActive ? "default" : "ghost"}
+    size={size}
+    className={cn(className, "w-9 h-9")}
     {...props}
   />
 );
@@ -67,32 +61,32 @@ const PaginationPrevious = ({
   className,
   disabled = false,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) =>
-  disabled ? (
-    <Button variant="ghost" size="icon" disabled className="w-9 h-9">
-      <ChevronLeft className="h-4 w-4" />
-    </Button>
-  ) : (
-    <PaginationLink aria-label="Go to previous page" {...props}>
-      <ChevronLeft className="h-4 w-4" />
-    </PaginationLink>
-  );
+}: React.ComponentProps<typeof PaginationLink>) => (
+  <PaginationLink
+    aria-current={undefined}
+    aria-label="Go to previous page"
+    disabled={disabled}
+    {...props}
+  >
+    <ChevronLeft className="h-4 w-4" />
+  </PaginationLink>
+);
 PaginationPrevious.displayName = "PaginationPrevious";
 
 const PaginationNext = ({
   className,
   disabled = false,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) =>
-  disabled ? (
-    <Button variant="ghost" size="icon" disabled className="w-9 h-9">
-      <ChevronRight className="h-4 w-4" />
-    </Button>
-  ) : (
-    <PaginationLink aria-label="Go to next page" {...props}>
-      <ChevronRight className="h-4 w-4" />
-    </PaginationLink>
-  );
+}: React.ComponentProps<typeof PaginationLink>) => (
+  <PaginationLink
+    aria-current={undefined}
+    aria-label="Go to next page"
+    disabled={disabled}
+    {...props}
+  >
+    <ChevronRight className="h-4 w-4" />
+  </PaginationLink>
+);
 PaginationNext.displayName = "PaginationNext";
 
 const PaginationEllipsis = ({

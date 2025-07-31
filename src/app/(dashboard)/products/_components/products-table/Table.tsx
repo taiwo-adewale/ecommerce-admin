@@ -4,8 +4,8 @@ import * as React from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 import DataTable from "@/components/shared/DataTable";
-import { Product } from "@/types/product";
 import { DataTableProps } from "@/types/data-table";
+import { Product } from "@/services/products/types";
 
 export default function ProductsTable({
   data,

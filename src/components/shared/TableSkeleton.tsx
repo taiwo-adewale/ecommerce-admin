@@ -11,10 +11,10 @@ import { SkeletonColumn } from "@/types/skeleton";
 
 type Props = {
   columns: SkeletonColumn[];
-  perPage: number;
+  perPage?: number;
 };
 
-export default function TableSkeleton({ columns, perPage }: Props) {
+export default function TableSkeleton({ columns, perPage = 10 }: Props) {
   return (
     <div className="rounded-md border overflow-hidden">
       <Table>

@@ -47,6 +47,7 @@
     "react-icons": "^5.0.1",
     "sharp": "^0.32.6",
     "sonner": "^2.0.5",
+    "supabase": "^2.31.8",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.2"

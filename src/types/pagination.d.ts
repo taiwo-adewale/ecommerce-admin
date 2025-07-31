@@ -1,8 +1,8 @@
-interface Pagination {
+export interface Pagination {
+  limit: number;
+  current: number;
   items: number;
   pages: number;
-  first: number;
-  last: number;
   next: number | null;
   prev: number | null;
 }
@@ -14,7 +14,9 @@ export interface PaginationQueryProps {
 
 export interface PaginationProps extends Pagination {
   current: number;
-  perPage: number;
+  // TODO: Remove next line and remove ? from next 2 lines
+  perPage?: number;
+  limit: number;
 }
 
 export interface PaginationData<Data> extends Pagination {
