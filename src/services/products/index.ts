@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
 import { Database } from "@/types/supabase";
+import { queryPaginatedTable } from "@/helpers/queryPaginatedTable";
 import { Product, FetchProductsParams, FetchProductsResponse } from "./types";
 
 export async function fetchProducts(
@@ -59,32 +60,12 @@ export async function fetchProducts(
     query = query.order("created_at", { ascending: false });
   }
 
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
-  query = query.range(from, to);
+  const paginatedProducts = await queryPaginatedTable<Product, "products">({
+    name: "products",
+    page,
+    limit,
+    query,
+  });
 
-  const { data, error, count } = await query;
-
-  if (error) {
-    console.error("Error fetching products:", error.message);
-    throw new Error(error.message);
-  }
-
-  const totalItems = count ?? 0;
-  const totalPages = Math.ceil(totalItems / limit);
-  const currentPage = Math.max(1, Math.min(page, totalPages));
-  const nextPage = currentPage < totalPages ? currentPage + 1 : null;
-  const prevPage = currentPage > 1 ? currentPage - 1 : null;
-
-  return {
-    data: (data as Product[]) ?? [],
-    pagination: {
-      limit,
-      current: currentPage,
-      items: totalItems,
-      pages: totalPages,
-      next: nextPage,
-      prev: prevPage,
-    },
-  };
+  return paginatedProducts;
 }

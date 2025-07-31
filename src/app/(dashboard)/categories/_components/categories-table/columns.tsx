@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { SkeletonColumn } from "@/types/skeleton";
-import { Category } from "@/types/category";
+import { Category } from "@/services/categories/types";
 
 const handleSwitchChange = () => {};
 
@@ -63,18 +63,10 @@ export const columns: ColumnDef<Category>[] = [
     ),
   },
   {
-    header: "id",
-    cell: ({ row }) => (
-      <Typography className="uppercase">
-        {row.original._id.slice(-4)}
-      </Typography>
-    ),
-  },
-  {
     header: "icon",
     cell: ({ row }) => (
       <Image
-        src={`/temp/notification-img.jpg`}
+        src={row.original.image_url}
         alt={row.original.name}
         width={32}
         height={32}
@@ -88,7 +80,11 @@ export const columns: ColumnDef<Category>[] = [
   },
   {
     header: "description",
-    cell: ({ row }) => row.original.description,
+    cell: ({ row }) => (
+      <span className="min-w-80 max-w-lg line-clamp-1 wrap-text break-all">
+        {row.original.description}
+      </span>
+    ),
   },
   {
     header: "published",
@@ -206,10 +202,6 @@ export const skeletonColumns: SkeletonColumn[] = [
   {
     header: <Checkbox disabled checked={false} />,
     cell: <Skeleton className="size-4 rounded-sm" />,
-  },
-  {
-    header: "id",
-    cell: <Skeleton className="w-16 h-8" />,
   },
   {
     header: "icon",

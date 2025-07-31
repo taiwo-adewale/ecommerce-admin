@@ -3,19 +3,17 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { columns, skeletonColumns } from "./columns";
 import CategoriesTable from "./Table";
+import { columns, skeletonColumns } from "./columns";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
-import { fetchCategories } from "@/data/categories";
 
-type Props = {
-  perPage?: number;
-};
+import { getSearchParams } from "@/helpers/getSearchParams";
+import { fetchCategories } from "@/services/categories";
+import { createBrowserClient } from "@/lib/supabase/client";
 
-export default function AllCategories({ perPage = 10 }: Props) {
-  const categoriesPage = useSearchParams().get("page");
-  const page = Math.trunc(Number(categoriesPage)) || 1;
+export default function AllCategories() {
+  const { page, limit, search } = getSearchParams(useSearchParams());
 
   const {
     data: categories,
@@ -23,26 +21,14 @@ export default function AllCategories({ perPage = 10 }: Props) {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["categories", page],
-    queryFn: () => fetchCategories({ page, perPage }),
+    queryKey: ["categories", page, limit, search],
+    queryFn: () =>
+      fetchCategories(createBrowserClient(), { page, limit, search }),
     placeholderData: keepPreviousData,
-    select: (categoriesData) => {
-      const { data, pages, ...rest } = categoriesData;
-
-      return {
-        data: data,
-        pagination: {
-          ...rest,
-          pages,
-          current: page < 1 ? 1 : Math.min(page, pages),
-          perPage,
-        },
-      };
-    },
   });
 
   if (isLoading)
-    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
+    return <TableSkeleton perPage={limit} columns={skeletonColumns} />;
 
   if (isError || !categories)
     return (

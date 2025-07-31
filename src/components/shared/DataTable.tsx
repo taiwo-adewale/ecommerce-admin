@@ -91,7 +91,10 @@ export default function DataTable<TData>({
                 className="hover:bg-transparent"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="whitespace-nowrap">
+                  <TableCell
+                    key={cell.id}
+                    className="whitespace-nowrap has-[.wrap-text]:whitespace-normal"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

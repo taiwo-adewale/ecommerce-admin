@@ -8,29 +8,13 @@ import { columns, skeletonColumns } from "./columns";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
 
+import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchProducts } from "@/services/products";
 import { createBrowserClient } from "@/lib/supabase/client";
 
 export default function AllProducts() {
-  const searchParams = useSearchParams();
-
-  const page =
-    Math.max(1, Math.trunc(Number(searchParams.get("page")))) || undefined;
-  const limit = Math.trunc(Number(searchParams.get("limit"))) || undefined;
-  const search = searchParams.get("search") || undefined;
-  const category =
-    searchParams.get("category") === "all"
-      ? undefined
-      : searchParams.get("category") || undefined;
-  const price = searchParams.get("price") || undefined;
-  const published =
-    searchParams.get("published") === "true"
-      ? true
-      : searchParams.get("published") === "false"
-      ? false
-      : undefined;
-  const status = searchParams.get("status") || undefined;
-  const date = searchParams.get("date") || undefined;
+  const { page, limit, search, category, price, published, status, date } =
+    getSearchParams(useSearchParams());
 
   const {
     data: products,
