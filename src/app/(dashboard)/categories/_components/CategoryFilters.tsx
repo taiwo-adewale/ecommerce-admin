@@ -27,6 +27,7 @@ export default function CategoryFilters() {
     setSearch("");
     router.push("/categories");
   };
+
   return (
     <Card className="mb-5">
       <form

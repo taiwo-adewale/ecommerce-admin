@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ZoomIn, PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 

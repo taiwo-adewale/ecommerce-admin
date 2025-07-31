@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -82,9 +81,9 @@ export const columns: ColumnDef<Category>[] = [
   {
     header: "description",
     cell: ({ row }) => (
-      <span className="min-w-80 max-w-lg line-clamp-1 wrap-text break-all">
+      <Typography className="block max-w-md xl:max-w-lg truncate">
         {row.original.description}
-      </span>
+      </Typography>
     ),
   },
   {

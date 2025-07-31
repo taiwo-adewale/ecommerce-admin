@@ -35,21 +35,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { Customer } from "@/types/customer";
 import { SkeletonColumn } from "@/types/skeleton";
+import { Customer } from "@/services/customers/types";
 
 export const columns: ColumnDef<Customer>[] = [
   {
     header: "id",
     cell: ({ row }) => (
-      <Typography className="uppercase">
-        {row.original._id.slice(-4)}
-      </Typography>
+      <Typography className="uppercase">{row.original.id.slice(-4)}</Typography>
     ),
   },
   {
     header: "joining date",
-    cell: ({ row }) => format(row.original.createdAt, "PP"),
+    cell: ({ row }) => format(row.original.created_at, "PP"),
   },
   {
     header: "name",
@@ -78,7 +76,7 @@ export const columns: ColumnDef<Customer>[] = [
             variant="ghost"
             className="text-foreground"
           >
-            <Link href={`/customer-orders/${row.original._id}`}>
+            <Link href={`/customer-orders/${row.original.id}`}>
               <ZoomIn className="size-5" />
             </Link>
           </Button>

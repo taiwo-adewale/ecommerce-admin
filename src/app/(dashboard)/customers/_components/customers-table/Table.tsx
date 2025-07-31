@@ -3,8 +3,8 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 import DataTable from "@/components/shared/DataTable";
-import { Customer } from "@/types/customer";
 import { DataTableProps } from "@/types/data-table";
+import { Customer } from "@/services/customers/types";
 
 export default function CustomersTable({
   data,
