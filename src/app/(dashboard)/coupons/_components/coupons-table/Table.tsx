@@ -4,10 +4,10 @@ import * as React from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 import DataTable from "@/components/shared/DataTable";
-import { Coupon } from "@/types/coupon";
 import { DataTableProps } from "@/types/data-table";
+import { Coupon } from "@/services/coupons/types";
 
-export default function CategoryTable({
+export default function CouponTable({
   data,
   columns,
   pagination,

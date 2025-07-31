@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -37,9 +36,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { CouponBadgeVariants } from "@/constants/badge";
 import { SkeletonColumn } from "@/types/skeleton";
-import { Coupon, CouponStatus } from "@/types/coupon";
+import { Coupon, CouponStatus } from "@/services/coupons/types";
 import { Badge } from "@/components/ui/badge";
 
 const handleSwitchChange = () => {};
@@ -69,16 +69,16 @@ export const columns: ColumnDef<Coupon>[] = [
     header: "campaign name",
     cell: ({ row }) => (
       <div className="flex gap-2 items-center">
-        <Image
-          src={row.original.image}
-          alt={row.original.title}
+        <ImagePlaceholder
+          src={row.original.image_url}
+          alt={row.original.campaign_name}
           width={32}
           height={32}
           className="size-8 rounded-full"
         />
 
         <Typography className="capitalize block truncate">
-          {row.original.title}
+          {row.original.campaign_name}
         </Typography>
       </div>
     ),
@@ -86,12 +86,20 @@ export const columns: ColumnDef<Coupon>[] = [
   {
     header: "code",
     cell: ({ row }) => (
-      <Typography className="uppercase">{row.original.couponCode}</Typography>
+      <Typography className="uppercase">{row.original.code}</Typography>
     ),
   },
   {
     header: "discount",
-    cell: ({ row }) => `${Math.trunc(row.original.discount * 100)}%`,
+    cell: ({ row }) => {
+      const discountType = row.original.discount_type;
+
+      if (discountType === "fixed") {
+        return `$${row.original.discount_value}`;
+      }
+
+      return `${row.original.discount_value}%`;
+    },
   },
   {
     header: "published",
@@ -106,17 +114,17 @@ export const columns: ColumnDef<Coupon>[] = [
   },
   {
     header: "start date",
-    cell: ({ row }) => format(row.original.startTime, "PP"),
+    cell: ({ row }) => format(row.original.start_date, "PP"),
   },
   {
     header: "end date",
-    cell: ({ row }) => format(row.original.endTime, "PP"),
+    cell: ({ row }) => format(row.original.end_date, "PP"),
   },
   {
     header: "status",
     cell: ({ row }) => {
       const currentTime = new Date();
-      const endTime = new Date(row.original.endTime);
+      const endTime = new Date(row.original.end_date);
 
       const status: CouponStatus = currentTime > endTime ? "expired" : "active";
 

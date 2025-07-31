@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
 
-import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
+import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { ProductBadgeVariants } from "@/constants/badge";
 import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";

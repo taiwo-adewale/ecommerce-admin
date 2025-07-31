@@ -35,7 +35,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
+import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { SkeletonColumn } from "@/types/skeleton";
 import { Category } from "@/services/categories/types";
 

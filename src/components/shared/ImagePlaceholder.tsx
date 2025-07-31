@@ -11,7 +11,7 @@ type Props = ImageProps & {
   containerClassName?: string;
 };
 
-export default function ImagePlaceholder({
+export function ImagePlaceholder({
   skeletonClassName,
   containerClassName,
   className,

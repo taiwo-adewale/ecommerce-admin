@@ -3,19 +3,17 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { columns, skeletonColumns } from "./columns";
 import CouponsTable from "./Table";
+import { columns, skeletonColumns } from "./columns";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import TableError from "@/components/shared/TableError";
-import { fetchCoupons } from "@/data/coupons";
 
-type Props = {
-  perPage?: number;
-};
+import { getSearchParams } from "@/helpers/getSearchParams";
+import { fetchCoupons } from "@/services/coupons";
+import { createBrowserClient } from "@/lib/supabase/client";
 
-export default function AllCategories({ perPage = 10 }: Props) {
-  const couponsPage = useSearchParams().get("page");
-  const page = Math.trunc(Number(couponsPage)) || 1;
+export default function AllCoupons() {
+  const { page, limit, search } = getSearchParams(useSearchParams());
 
   const {
     data: coupons,
@@ -23,26 +21,13 @@ export default function AllCategories({ perPage = 10 }: Props) {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["coupons", page],
-    queryFn: () => fetchCoupons({ page, perPage }),
+    queryKey: ["coupons", page, limit, search],
+    queryFn: () => fetchCoupons(createBrowserClient(), { page, limit, search }),
     placeholderData: keepPreviousData,
-    select: (couponsData) => {
-      const { data, pages, ...rest } = couponsData;
-
-      return {
-        data: data,
-        pagination: {
-          ...rest,
-          pages,
-          current: page < 1 ? 1 : Math.min(page, pages),
-          perPage,
-        },
-      };
-    },
   });
 
   if (isLoading)
-    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
+    return <TableSkeleton perPage={limit} columns={skeletonColumns} />;
 
   if (isError || !coupons)
     return (
