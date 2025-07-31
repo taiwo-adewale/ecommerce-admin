@@ -36,6 +36,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import { SkeletonColumn } from "@/types/skeleton";
 import { Category } from "@/services/categories/types";
 
@@ -65,7 +66,7 @@ export const columns: ColumnDef<Category>[] = [
   {
     header: "icon",
     cell: ({ row }) => (
-      <Image
+      <ImagePlaceholder
         src={row.original.image_url}
         alt={row.original.name}
         width={32}
@@ -213,7 +214,7 @@ export const skeletonColumns: SkeletonColumn[] = [
   },
   {
     header: "description",
-    cell: <Skeleton className="w-32 h-8" />,
+    cell: <Skeleton className="w-[32rem] h-8" />,
   },
   {
     header: "published",

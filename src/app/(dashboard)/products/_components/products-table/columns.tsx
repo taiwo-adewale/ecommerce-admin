@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
 
+import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import { ProductBadgeVariants } from "@/constants/badge";
 import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";
@@ -71,7 +72,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "product name",
     cell: ({ row }) => (
       <div className="flex gap-2 items-center">
-        <Image
+        <ImagePlaceholder
           src={row.original.image_url}
           alt={row.original.name}
           width={32}
