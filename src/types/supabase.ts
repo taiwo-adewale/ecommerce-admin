@@ -380,7 +380,7 @@ export type Database = {
           created_at: string;
           email: string;
           id: string;
-          image_url: string | null;
+          image_url: string;
           joining_date: string;
           name: string;
           phone: string | null;
@@ -427,16 +427,19 @@ export type Database = {
           id: number;
           is_default: boolean;
           name: string;
+          display_name: string;
         };
         Insert: {
           id?: number;
           is_default?: boolean;
           name: string;
+          display_name: string;
         };
         Update: {
           id?: number;
           is_default?: boolean;
           name?: string;
+          display_name: string;
         };
         Relationships: [];
       };

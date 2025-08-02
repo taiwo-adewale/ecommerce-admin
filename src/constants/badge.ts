@@ -1,8 +1,8 @@
 import { OrderStatus } from "@/types/order";
-import { CouponStatus } from "@/types/coupon";
-import { StaffStatus } from "@/types/staff";
 
 import { ProductStatus } from "@/services/products/types";
+import { CouponStatus } from "@/services/coupons/types";
+import { StaffStatus } from "@/services/staff/types";
 
 import { BadgeVariantProps } from "@/components/ui/badge";
 

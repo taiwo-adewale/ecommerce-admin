@@ -21,13 +21,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Typography from "@/components/ui/typography";
-import { PaginationProps } from "@/types/pagination";
+import { Pagination as PaginationType } from "@/types/pagination";
 import { useUpdateQueryString } from "@/hooks/useUpdateQueryString";
 import { getPaginationButtons } from "@/helpers/getPaginationButtons";
 
 interface DataTableProps<TData> {
   table: TableType<TData>;
-  pagination: PaginationProps;
+  pagination: PaginationType;
 }
 
 export default function DataTable<TData>({

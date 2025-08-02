@@ -12,13 +12,6 @@ export interface PaginationQueryProps {
   perPage?: number;
 }
 
-export interface PaginationProps extends Pagination {
-  current: number;
-  // TODO: Remove next line and remove ? from next 2 lines
-  perPage?: number;
-  limit: number;
-}
-
 export interface PaginationData<Data> extends Pagination {
   data: Data[];
 }

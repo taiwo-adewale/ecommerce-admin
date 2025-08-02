@@ -1,4 +1,9 @@
-import { Plus } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Plus, Loader2, ShieldAlert } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Select,
@@ -21,32 +26,97 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import Typography from "@/components/ui/typography";
+
+import { createBrowserClient } from "@/lib/supabase/client";
+import { fetchStaffRolesDropdown } from "@/services/staff";
 
 export default function StaffFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [role, setRole] = useState(searchParams.get("role") || "");
+
+  const {
+    data: staffRoles,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["staff_roles"],
+    queryFn: () => fetchStaffRolesDropdown(createBrowserClient()),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const handleFilter = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (role && role !== "all") params.set("role", role);
+
+    params.set("page", "1");
+    params.set("limit", searchParams.get("limit") || "10");
+    router.push(`/staff?${params.toString()}`);
+  };
+
+  const handleReset = () => {
+    setSearch("");
+    setRole("all");
+    router.push("/staff");
+  };
+
   return (
     <Card className="mb-5">
-      <form className="flex flex-col md:flex-row gap-4 lg:gap-6">
+      <form
+        onSubmit={handleFilter}
+        className="flex flex-col md:flex-row gap-4 lg:gap-6"
+      >
         <Input
           type="search"
           placeholder="Search by name, email or phone"
           className="h-12 md:basis-1/3"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
-        <Select>
-          <SelectTrigger className="md:basis-1/3">
+        <Select value={role} onValueChange={(value) => setRole(value)}>
+          <SelectTrigger className="md:basis-1/3 capitalize">
             <SelectValue placeholder="Role" />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="cashier">Cashier</SelectItem>
-            <SelectItem value="super-admin">Super Admin</SelectItem>
+            {isLoading ? (
+              <div className="flex flex-col gap-2 items-center px-2 py-6">
+                <Loader2 className="size-4 animate-spin" />
+                <Typography>Loading...</Typography>
+              </div>
+            ) : isError || !staffRoles ? (
+              <div className="flex flex-col gap-2 items-center px-2 py-6 max-w-full">
+                <ShieldAlert className="size-6" />
+                <Typography>Failed to load staff roles</Typography>
+              </div>
+            ) : (
+              [
+                <SelectItem key="all" value="all">
+                  All Roles
+                </SelectItem>,
+                staffRoles.map((role) => (
+                  <SelectItem
+                    key={role.name}
+                    value={role.name}
+                    className="capitalize"
+                  >
+                    {role.display_name}
+                  </SelectItem>
+                )),
+              ]
+            )}
           </SelectContent>
         </Select>
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="lg" className="h-12 md:basis-1/3">
+            <Button type="button" size="lg" className="h-12 md:basis-1/3">
               <Plus className="mr-2 size-4" /> Add Staff
             </Button>
           </SheetTrigger>
@@ -82,10 +152,16 @@ export default function StaffFilters() {
         </Sheet>
 
         <div className="flex flex-wrap sm:flex-nowrap gap-4">
-          <Button size="lg" className="flex-grow">
+          <Button type="submit" size="lg" className="flex-grow">
             Filter
           </Button>
-          <Button size="lg" variant="secondary" className="flex-grow">
+          <Button
+            type="button"
+            size="lg"
+            variant="secondary"
+            className="flex-grow"
+            onClick={handleReset}
+          >
             Reset
           </Button>
         </div>

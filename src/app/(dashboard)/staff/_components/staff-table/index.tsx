@@ -8,15 +8,12 @@ import { columns, skeletonColumns } from "./columns";
 import TableError from "@/components/shared/TableError";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 
-import { fetchStaff } from "@/data/staff";
+import { getSearchParams } from "@/helpers/getSearchParams";
+import { fetchStaff } from "@/services/staff";
+import { createBrowserClient } from "@/lib/supabase/client";
 
-type Props = {
-  perPage?: number;
-};
-
-export default function AllStaff({ perPage = 10 }: Props) {
-  const staffPage = useSearchParams().get("page");
-  const page = Math.trunc(Number(staffPage)) || 1;
+export default function AllStaff() {
+  const { page, limit, search, role } = getSearchParams(useSearchParams());
 
   const {
     data: staff,
@@ -24,26 +21,14 @@ export default function AllStaff({ perPage = 10 }: Props) {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["staff", page],
-    queryFn: () => fetchStaff({ page, perPage }),
+    queryKey: ["staff", page, limit, search, role],
+    queryFn: () =>
+      fetchStaff(createBrowserClient(), { page, limit, search, role }),
     placeholderData: keepPreviousData,
-    select: (staffData) => {
-      const { data, pages, ...rest } = staffData;
-
-      return {
-        data: data,
-        pagination: {
-          ...rest,
-          pages,
-          current: page < 1 ? 1 : Math.min(page, pages),
-          perPage,
-        },
-      };
-    },
   });
 
   if (isLoading)
-    return <TableSkeleton perPage={perPage} columns={skeletonColumns} />;
+    return <TableSkeleton perPage={limit} columns={skeletonColumns} />;
 
   if (isError || !staff)
     return (

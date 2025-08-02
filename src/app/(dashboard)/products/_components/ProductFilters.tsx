@@ -48,7 +48,7 @@ export default function ProductFilters() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", "dropdown"],
     queryFn: () => fetchCategoriesDropdown(createBrowserClient()),
     staleTime: 5 * 60 * 1000,
   });
@@ -57,7 +57,8 @@ export default function ProductFilters() {
     e.preventDefault();
     const params = new URLSearchParams();
     if (filters.search) params.set("search", filters.search);
-    if (filters.category !== "all") params.set("category", filters.category);
+    if (filters.category && filters.category !== "all")
+      params.set("category", filters.category);
 
     if (filters.sort && filters.sort !== "none") {
       const sortConfig = sortMap[filters.sort];

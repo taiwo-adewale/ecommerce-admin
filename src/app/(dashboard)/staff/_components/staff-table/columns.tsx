@@ -1,10 +1,9 @@
-import Image from "next/image";
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import Typography from "@/components/ui/typography";
 import { Label } from "@/components/ui/label";
@@ -37,9 +36,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { StaffBadgeVariants } from "@/constants/badge";
-import { Staff } from "@/types/staff";
 import { SkeletonColumn } from "@/types/skeleton";
+import { Staff } from "@/services/staff/types";
 import { format } from "date-fns";
 
 const handleSwitchChange = () => {};
@@ -49,8 +49,8 @@ export const columns: ColumnDef<Staff>[] = [
     header: "name",
     cell: ({ row }) => (
       <div className="flex gap-2 items-center">
-        <Image
-          src={row.original.image}
+        <ImagePlaceholder
+          src={row.original.image_url}
           alt={row.original.name}
           width={32}
           height={32}
@@ -73,26 +73,28 @@ export const columns: ColumnDef<Staff>[] = [
   },
   {
     header: "phone",
-    cell: ({ row }) => row.original.phone,
+    cell: ({ row }) => (
+      <Typography className={cn(!row.original.phone && "pl-4")}>
+        {row.original.phone || "—"}
+      </Typography>
+    ),
   },
   {
     header: "joining date",
-    cell: ({ row }) => format(row.original.createdAt, "PP"),
+    cell: ({ row }) => format(row.original.created_at, "PP"),
   },
   {
     header: "role",
     cell: ({ row }) => (
       <Typography className="capitalize font-medium">
-        {row.original.role === "super-admin"
-          ? "Super Admin"
-          : row.original.role}
+        {row.original.staff_roles?.display_name}
       </Typography>
     ),
   },
   {
     header: "status",
     cell: ({ row }) => {
-      const status = row.original.status;
+      const status = row.original.published ? "active" : "inactive";
 
       return (
         <Badge
@@ -109,7 +111,7 @@ export const columns: ColumnDef<Staff>[] = [
     cell: ({ row }) => (
       <div className="pl-5">
         <Switch
-          checked={row.original.status === "active"}
+          checked={row.original.published === true}
           onCheckedChange={(value) => handleSwitchChange()}
         />
       </div>

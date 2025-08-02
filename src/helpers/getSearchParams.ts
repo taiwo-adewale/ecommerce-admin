@@ -9,6 +9,7 @@ type ParamsResponse = {
   published?: boolean;
   status?: string;
   date?: string;
+  role?: string;
 };
 
 export const getSearchParams = (
@@ -31,6 +32,10 @@ export const getSearchParams = (
       : undefined;
   const status = searchParams.get("status") || undefined;
   const date = searchParams.get("date") || undefined;
+  const role =
+    searchParams.get("role") === "all"
+      ? undefined
+      : searchParams.get("role") || undefined;
 
   return {
     page,
@@ -41,5 +46,6 @@ export const getSearchParams = (
     published,
     status,
     date,
+    role,
   };
 };

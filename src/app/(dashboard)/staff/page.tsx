@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 import PageTitle from "@/components/shared/PageTitle";
-import StaffFilters from "./_components/StaffFilters";
 import StaffTable from "./_components/staff-table";
+import StaffFilters from "./_components/StaffFilters";
 
 export const metadata: Metadata = {
   title: "Staff",
