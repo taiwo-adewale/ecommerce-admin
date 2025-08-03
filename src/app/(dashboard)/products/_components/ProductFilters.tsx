@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2, ShieldAlert } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -15,9 +14,9 @@ import {
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Typography from "@/components/ui/typography";
-import { sortMap, reverseSortMap } from "./sortMap";
+import FetchDropdownContainer from "@/components/shared/FetchDropdownContainer";
 
+import { sortToParamsMap, getSortFromParams } from "./sortParams";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { fetchCategoriesDropdown } from "@/services/categories";
 
@@ -25,22 +24,10 @@ export default function ProductFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    const sortKey = params.get("price")
-      ? `price=${params.get("price")}`
-      : params.get("published")
-      ? `published=${params.get("published")}`
-      : params.get("status")
-      ? `status=${params.get("status")}`
-      : params.get("date")
-      ? `date=${params.get("date")}`
-      : "";
-    return {
-      search: params.get("search") || "",
-      category: params.get("category") || "all",
-      sort: reverseSortMap[sortKey] || "none",
-    };
+  const [filters, setFilters] = useState({
+    search: searchParams.get("search") || "",
+    category: searchParams.get("category") || "",
+    sort: getSortFromParams(searchParams) || "",
   });
 
   const {
@@ -61,7 +48,7 @@ export default function ProductFilters() {
       params.set("category", filters.category);
 
     if (filters.sort && filters.sort !== "none") {
-      const sortConfig = sortMap[filters.sort];
+      const sortConfig = sortToParamsMap[filters.sort];
       if (sortConfig) {
         params.set(sortConfig.key, sortConfig.value);
       }
@@ -100,28 +87,24 @@ export default function ProductFilters() {
           </SelectTrigger>
 
           <SelectContent>
-            {isLoading ? (
-              <div className="flex flex-col gap-2 items-center px-2 py-6">
-                <Loader2 className="size-4 animate-spin" />
-                <Typography>Loading...</Typography>
-              </div>
-            ) : isError || !categories ? (
-              <div className="flex flex-col gap-2 items-center px-2 py-6 max-w-full">
-                <ShieldAlert className="size-6" />
-                <Typography>Failed to load categories</Typography>
-              </div>
-            ) : (
-              [
-                <SelectItem key="all" value="all">
-                  All Categories
-                </SelectItem>,
-                categories.map((category) => (
+            <FetchDropdownContainer
+              isLoading={isLoading}
+              isError={isError}
+              errorMessage="Failed to load categories"
+            >
+              <SelectItem key="all" value="all">
+                All Categories
+              </SelectItem>
+
+              {!isLoading &&
+                !isError &&
+                categories &&
+                categories!.map((category) => (
                   <SelectItem key={category.slug} value={category.slug}>
                     {category.name}
                   </SelectItem>
-                )),
-              ]
-            )}
+                ))}
+            </FetchDropdownContainer>
           </SelectContent>
         </Select>
 
@@ -130,7 +113,7 @@ export default function ProductFilters() {
           onValueChange={(value) => setFilters({ ...filters, sort: value })}
         >
           <SelectTrigger className="md:basis-1/5">
-            <SelectValue placeholder="Sort by..." />
+            <SelectValue placeholder="Sort by" />
           </SelectTrigger>
 
           <SelectContent>

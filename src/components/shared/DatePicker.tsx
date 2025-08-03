@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -15,11 +14,11 @@ import {
 
 type Props = {
   className?: string;
+  date: string | undefined;
+  setDate: (date: string) => void;
 };
 
-export default function DatePicker({ className }: Props) {
-  const [date, setDate] = useState<Date>();
-
+export default function DatePicker({ className, date, setDate }: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -40,8 +39,13 @@ export default function DatePicker({ className }: Props) {
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={date ? new Date(date) : undefined}
+          onSelect={(date) => {
+            if (date) setDate(new Date(date).toISOString());
+          }}
+          disabled={(date) =>
+            date > new Date() || date < new Date("2023-01-01")
+          }
           initialFocus
         />
       </PopoverContent>

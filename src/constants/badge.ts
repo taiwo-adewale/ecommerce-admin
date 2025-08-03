@@ -1,5 +1,4 @@
-import { OrderStatus } from "@/types/order";
-
+import { OrderStatus } from "@/services/orders/types";
 import { ProductStatus } from "@/services/products/types";
 import { CouponStatus } from "@/services/coupons/types";
 import { StaffStatus } from "@/services/staff/types";
@@ -10,7 +9,7 @@ export const OrderBadgeVariants: Record<OrderStatus, BadgeVariantProps> = {
   pending: "warning",
   processing: "processing",
   delivered: "success",
-  cancel: "destructive",
+  cancelled: "destructive",
 };
 
 export const ProductBadgeVariants: Record<ProductStatus, BadgeVariantProps> = {

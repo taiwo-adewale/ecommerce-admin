@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-import { fetchOrder } from "@/data/orders";
+// import { fetchOrder } from "@/data/orders";
 import { OrderBadgeVariants } from "@/constants/badge";
 
 type PageParams = {
@@ -26,7 +26,7 @@ type PageParams = {
 };
 
 export default async function Order({ params: { id } }: PageParams) {
-  const order = await fetchOrder({ id });
+  // const order = await fetchOrder({ id });
 
   return (
     <section>
@@ -47,12 +47,12 @@ export default async function Order({ params: { id } }: PageParams) {
                 status
               </Typography>
 
-              <Badge
+              {/* <Badge
                 variant={OrderBadgeVariants[order.status]}
                 className="flex-shrink-0 text-xs capitalize"
               >
                 {order.status}
-              </Badge>
+              </Badge> */}
             </div>
           </div>
 
@@ -198,9 +198,9 @@ export default async function Order({ params: { id } }: PageParams) {
               payment method
             </Typography>
 
-            <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
+            {/* <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
               {order.method}
-            </Typography>
+            </Typography> */}
           </div>
 
           <div>

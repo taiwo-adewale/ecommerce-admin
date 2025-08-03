@@ -14,7 +14,7 @@ export default async function OrdersPage() {
       <PageTitle>Orders</PageTitle>
 
       <OrderFilters />
-      <AllOrders perPage={20} />
+      <AllOrders />
     </section>
   );
 }

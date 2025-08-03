@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus, Loader2, ShieldAlert } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -26,7 +26,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import Typography from "@/components/ui/typography";
+import FetchDropdownContainer from "@/components/shared/FetchDropdownContainer";
 
 import { createBrowserClient } from "@/lib/supabase/client";
 import { fetchStaffRolesDropdown } from "@/services/staff";
@@ -85,21 +85,18 @@ export default function StaffFilters() {
           </SelectTrigger>
 
           <SelectContent>
-            {isLoading ? (
-              <div className="flex flex-col gap-2 items-center px-2 py-6">
-                <Loader2 className="size-4 animate-spin" />
-                <Typography>Loading...</Typography>
-              </div>
-            ) : isError || !staffRoles ? (
-              <div className="flex flex-col gap-2 items-center px-2 py-6 max-w-full">
-                <ShieldAlert className="size-6" />
-                <Typography>Failed to load staff roles</Typography>
-              </div>
-            ) : (
-              [
-                <SelectItem key="all" value="all">
-                  All Roles
-                </SelectItem>,
+            <FetchDropdownContainer
+              isLoading={isLoading}
+              isError={isError}
+              errorMessage="Failed to load staff roles"
+            >
+              <SelectItem key="all" value="all">
+                All Roles
+              </SelectItem>
+
+              {!isLoading &&
+                !isError &&
+                staffRoles &&
                 staffRoles.map((role) => (
                   <SelectItem
                     key={role.name}
@@ -108,9 +105,8 @@ export default function StaffFilters() {
                   >
                     {role.display_name}
                   </SelectItem>
-                )),
-              ]
-            )}
+                ))}
+            </FetchDropdownContainer>
           </SelectContent>
         </Select>
 

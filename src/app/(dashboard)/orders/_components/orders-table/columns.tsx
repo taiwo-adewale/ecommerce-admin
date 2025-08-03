@@ -20,9 +20,8 @@ import {
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
 
-import { ORDER_STATUSES } from "@/constants/orders";
 import { OrderBadgeVariants } from "@/constants/badge";
-import { Order, OrderStatus } from "@/types/order";
+import { Order, OrderStatus } from "@/services/orders/types";
 import { SkeletonColumn } from "@/types/skeleton";
 
 const changeStatus = (value: OrderStatus, invoiceNo: string) => {};
@@ -31,13 +30,13 @@ const printInvoice = (invoiceNo: string) => {};
 export const columns: ColumnDef<Order>[] = [
   {
     header: "invoice no",
-    cell: ({ row }) => row.original.invoiceNo,
+    cell: ({ row }) => row.original.invoice_no,
   },
   {
     header: "order time",
     cell: ({ row }) =>
-      `${format(row.original.orderTime, "PP")} ${format(
-        row.original.orderTime,
+      `${format(row.original.order_time, "PP")} ${format(
+        row.original.order_time,
         "p"
       )}`,
   },
@@ -45,19 +44,19 @@ export const columns: ColumnDef<Order>[] = [
     header: "customer name",
     cell: ({ row }) => (
       <span className="block max-w-52 truncate">
-        {row.original.customerName}
+        {row.original.customers?.name}
       </span>
     ),
   },
   {
     header: "method",
     cell: ({ row }) => (
-      <span className="capitalize">{row.original.method}</span>
+      <span className="capitalize">{row.original.payment_method}</span>
     ),
   },
   {
     header: "amount",
-    cell: ({ row }) => formatAmount(row.original.amount),
+    cell: ({ row }) => formatAmount(row.original.total_amount),
   },
   {
     header: "status",
@@ -77,10 +76,11 @@ export const columns: ColumnDef<Order>[] = [
   {
     header: "action",
     cell: ({ row }) => {
-      const invoiceNo = row.original.invoiceNo;
+      const invoiceNo = row.original.invoice_no;
 
       return (
         <Select
+          value={row.original.status}
           onValueChange={(value: OrderStatus) => changeStatus(value, invoiceNo)}
         >
           <SelectTrigger className="capitalize">
@@ -88,15 +88,10 @@ export const columns: ColumnDef<Order>[] = [
           </SelectTrigger>
 
           <SelectContent>
-            {ORDER_STATUSES.map((badgeStatus) => (
-              <SelectItem
-                value={badgeStatus}
-                key={badgeStatus}
-                className="capitalize"
-              >
-                {badgeStatus}
-              </SelectItem>
-            ))}
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="processing">Processing</SelectItem>
+            <SelectItem value="delivered">Delivered</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       );
@@ -112,7 +107,7 @@ export const columns: ColumnDef<Order>[] = [
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => printInvoice(row.original.invoiceNo)}
+                onClick={() => printInvoice(row.original.invoice_no)}
                 className="text-foreground"
               >
                 <Printer className="size-5" />
