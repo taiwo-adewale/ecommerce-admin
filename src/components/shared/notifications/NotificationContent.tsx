@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Typography from "@/components/ui/typography";
 import NotificationItem from "./NotificationItem";
 import NotificationItemSkeleton from "./NotificationItemSkeleton";
-import { fetchNotifications } from "@/data/notifications";
+import { fetchNotifications } from "@/components/shared/notifications/data/notifications";
 
 export default function NotificationContent() {
   const {

@@ -1,6 +1,6 @@
 import signupImg from "public/assets/signup.jpg";
 
-import AuthFormTemplate from "@/components/shared/AuthFormTemplate";
+import AuthFormTemplate from "@/components/shared/auth/AuthFormTemplate";
 import SignupForm from "./_components/SignupForm";
 
 export default function Page() {

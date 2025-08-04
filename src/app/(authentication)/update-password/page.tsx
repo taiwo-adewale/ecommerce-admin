@@ -1,6 +1,6 @@
 import updatePasswordImg from "public/assets/update-password.jpg";
 
-import AuthFormTemplate from "@/components/shared/AuthFormTemplate";
+import AuthFormTemplate from "@/components/shared/auth/AuthFormTemplate";
 import PasswordUpdateForm from "./_components/PasswordUpdateForm";
 
 export default function Page() {

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
 import Typography from "@/components/ui/typography";
-import { fetchNotifications } from "@/data/notifications";
+import { fetchNotifications } from "@/components/shared/notifications/data/notifications";
 
 const NotificationsBadge = () => {
   const {

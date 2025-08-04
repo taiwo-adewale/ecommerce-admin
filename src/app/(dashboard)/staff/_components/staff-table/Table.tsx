@@ -3,7 +3,7 @@
 import * as React from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import DataTable from "@/components/shared/DataTable";
+import DataTable from "@/components/shared/table/DataTable";
 import { DataTableProps } from "@/types/data-table";
 import { Staff } from "@/services/staff/types";
 

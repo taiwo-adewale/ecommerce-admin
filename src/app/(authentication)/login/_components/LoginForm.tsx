@@ -25,7 +25,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { loginFields } from "./fields";
 import { loginFormSchema } from "./schema";
-import AuthProviders from "@/components/shared/AuthProviders";
+import AuthProviders from "@/components/shared/auth/AuthProviders";
 
 type FormData = z.infer<typeof loginFormSchema>;
 

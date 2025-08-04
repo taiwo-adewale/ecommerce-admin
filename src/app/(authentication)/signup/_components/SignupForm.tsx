@@ -26,7 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { signupFields } from "./fields";
 import { signupFormSchema } from "./schema";
-import AuthProviders from "@/components/shared/AuthProviders";
+import AuthProviders from "@/components/shared/auth/AuthProviders";
 
 type FormData = z.infer<typeof signupFormSchema>;
 

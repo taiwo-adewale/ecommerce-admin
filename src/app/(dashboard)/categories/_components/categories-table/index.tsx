@@ -5,8 +5,8 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import CategoriesTable from "./Table";
 import { columns, skeletonColumns } from "./columns";
-import TableSkeleton from "@/components/shared/TableSkeleton";
-import TableError from "@/components/shared/TableError";
+import TableSkeleton from "@/components/shared/table/TableSkeleton";
+import TableError from "@/components/shared/table/TableError";
 
 import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchCategories } from "@/services/categories";

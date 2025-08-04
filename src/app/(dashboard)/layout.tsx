@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import isAuth from "@/helpers/isAuth";
 import Header from "@/components/shared/header";
 import Container from "@/components/ui/container";
-import AppSidebar from "@/components/shared/AppSidebar";
+import AppSidebar from "@/components/shared/sidebar/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default async function RootLayout({

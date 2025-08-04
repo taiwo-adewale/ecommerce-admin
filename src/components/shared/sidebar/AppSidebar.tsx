@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { BsFillHandbagFill } from "react-icons/bs";
 
 import { cn } from "@/lib/utils";
-import { navItems } from "@/constants/navItems";
+import { navItems } from "@/components/shared/sidebar/navItems";
 import Typography from "@/components/ui/typography";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";

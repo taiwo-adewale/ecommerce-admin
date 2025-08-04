@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
-import EditProduct from "./EditProduct";
+import AddProduct from "./AddProduct";
 
 export default function ProductActions() {
   return (
@@ -48,8 +48,8 @@ export default function ProductActions() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent className="flex flex-col">
-              <EditProduct />
+            <SheetContent className="w-[90%] max-w-5xl">
+              <AddProduct />
             </SheetContent>
           </Sheet>
         </div>

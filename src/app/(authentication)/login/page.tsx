@@ -1,6 +1,6 @@
 import loginImg from "public/assets/login.jpg";
 
-import AuthFormTemplate from "@/components/shared/AuthFormTemplate";
+import AuthFormTemplate from "@/components/shared/auth/AuthFormTemplate";
 import LoginForm from "./_components/LoginForm";
 
 export default async function Page() {

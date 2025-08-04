@@ -10,7 +10,7 @@ import { Notification } from "@/types/notifications";
 import { Badge } from "@/components/ui/badge";
 import Typography from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
-import { deleteNotification } from "@/data/notifications";
+import { deleteNotification } from "@/components/shared/notifications/data/notifications";
 
 type Props = {
   notification: Notification;
