@@ -36,10 +36,12 @@ export async function fetchCategories(
 export async function fetchCategoriesDropdown(
   client: SupabaseClient<Database>
 ): Promise<CategoryDropdown[]> {
-  const { data, error } = await client.from("categories").select("name, slug");
+  const { data, error } = await client
+    .from("categories")
+    .select("id, name, slug");
 
   if (error) {
-    console.error("Error fetching products:", error.message);
+    console.error("Error fetching categories:", error.message);
     throw new Error(error.message);
   }
 

@@ -12,23 +12,29 @@ const ImageDropzone = forwardRef<
   {
     previewImage?: string;
     onFileAccepted: (file: File) => void;
+    onFileRemoved: () => void;
   }
->(function ImageDropzone({ previewImage, onFileAccepted }, ref) {
+>(function ImageDropzone({ previewImage, onFileAccepted, onFileRemoved }, ref) {
   const [preview, setPreview] = useState<string | undefined>(previewImage);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (file) {
+        if (preview) URL.revokeObjectURL(preview);
+
         setPreview(URL.createObjectURL(file));
         onFileAccepted(file);
       }
     },
-    [onFileAccepted]
+    [onFileAccepted, preview]
   );
 
   const removePreview = () => {
+    if (preview) URL.revokeObjectURL(preview);
+
     setPreview(undefined);
+    onFileRemoved();
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

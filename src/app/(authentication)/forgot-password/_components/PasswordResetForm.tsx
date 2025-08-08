@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Loader2 } from "lucide-react";
 
 import {
   Form,
@@ -20,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
 import { passwordResetFields } from "./fields";
 import { passwordResetFormSchema } from "./schema";
@@ -104,15 +103,9 @@ export default function PasswordResetForm() {
             />
           ))}
 
-          <Button
-            disabled={isPending}
-            type="submit"
-            className="w-full"
-            size="lg"
-          >
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <FormSubmitButton isPending={isPending}>
             Recover password
-          </Button>
+          </FormSubmitButton>
         </form>
       </Form>
 

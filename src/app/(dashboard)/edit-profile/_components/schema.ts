@@ -1,6 +1,7 @@
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE_MB = 3;
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; // 3MB
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -19,7 +20,7 @@ export const editProfileFormSchema = z.object({
     .instanceof(File)
     .refine(
       (file) => file.size <= MAX_FILE_SIZE,
-      `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+      `File size must be less than ${MAX_FILE_SIZE_MB}MB`
     )
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),

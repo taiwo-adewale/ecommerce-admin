@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Loader2 } from "lucide-react";
 
 import {
   Form,
@@ -17,8 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import ImageDropzone from "@/components/shared/ImageDropzone";
+import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
 import { editProfileFields } from "./fields";
 import { editProfileFormSchema } from "./schema";
@@ -79,6 +78,7 @@ export default function EditProfileForm() {
                         <ImageDropzone
                           previewImage={profileData.profilePicture}
                           onFileAccepted={(file) => field.onChange(file)}
+                          onFileRemoved={() => field.onChange(null)}
                         />
                       ) : (
                         <Input
@@ -99,10 +99,9 @@ export default function EditProfileForm() {
           ))}
 
           <div className="flex justify-end !mt-10">
-            <Button disabled={isPending} type="submit" size="lg">
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <FormSubmitButton isPending={isPending} className="w-auto">
               Update Profile
-            </Button>
+            </FormSubmitButton>
           </div>
         </form>
       </Form>

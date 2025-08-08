@@ -46,6 +46,7 @@
     "react-hook-form": "^7.46.2",
     "react-icons": "^5.0.1",
     "sharp": "^0.32.6",
+    "slugify": "^1.6.6",
     "sonner": "^2.0.5",
     "supabase": "^2.31.8",
     "tailwind-merge": "^1.14.0",

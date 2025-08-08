@@ -3,7 +3,7 @@ import { Pagination } from "@/types/pagination";
 
 export type ProductStatus = "selling" | "out-of-stock";
 
-type SBProduct = Database["public"]["Tables"]["products"]["Row"];
+export type SBProduct = Database["public"]["Tables"]["products"]["Row"];
 
 export type Product = SBProduct & {
   categories: {

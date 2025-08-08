@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Loader2 } from "lucide-react";
 
 import {
   Form,
@@ -20,9 +19,9 @@ import {
 } from "@/components/ui/form";
 import Typography from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
 import { signupFields } from "./fields";
 import { signupFormSchema } from "./schema";
@@ -140,15 +139,9 @@ export default function SignupForm() {
             )}
           />
 
-          <Button
-            disabled={isPending}
-            type="submit"
-            className="w-full"
-            size="lg"
-          >
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <FormSubmitButton isPending={isPending}>
             Create account
-          </Button>
+          </FormSubmitButton>
         </form>
       </Form>
 

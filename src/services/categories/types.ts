@@ -16,4 +16,4 @@ export interface FetchCategoriesResponse {
   pagination: Pagination;
 }
 
-export type CategoryDropdown = Pick<SBCategory, "name" | "slug">;
+export type CategoryDropdown = Pick<SBCategory, "id" | "name" | "slug">;
