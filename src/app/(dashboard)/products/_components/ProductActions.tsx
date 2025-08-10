@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { SheetTrigger } from "@/components/ui/sheet";
 
 import { addProduct } from "@/actions/products/addProduct";
-import ProductFormSheet from "./forms/ProductFormSheet";
+import ProductFormSheet from "./form/ProductFormSheet";
 
 export default function ProductActions() {
   return (

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { productFormSchema } from "@/app/(dashboard)/products/_components/forms/schema";
+import { productFormSchema } from "@/app/(dashboard)/products/_components/form/schema";
 import { formatValidationErrors } from "@/helpers/formatValidationErrors";
 import { ProductServerActionResponse } from "@/types/server-action";
 

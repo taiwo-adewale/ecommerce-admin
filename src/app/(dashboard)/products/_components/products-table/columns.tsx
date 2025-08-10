@@ -26,7 +26,7 @@ import {
 } from "@/components/shared/table/TableActionTooltip";
 
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
-import ProductFormSheet from "../forms/ProductFormSheet";
+import ProductFormSheet from "../form/ProductFormSheet";
 import { ProductBadgeVariants } from "@/constants/badge";
 import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";
