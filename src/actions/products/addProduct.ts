@@ -2,15 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 
-import { SBProduct } from "@/services/products/types";
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { addProductSchema } from "@/app/(dashboard)/products/_components/forms/schema";
+import { productFormSchema } from "@/app/(dashboard)/products/_components/forms/schema";
 import { formatValidationErrors } from "@/helpers/formatValidationErrors";
+import { ProductServerActionResponse } from "@/types/server-action";
 
-export async function addProduct(formData: FormData) {
+export async function addProduct(
+  formData: FormData
+): Promise<ProductServerActionResponse> {
   const supabase = createServerActionClient();
 
-  const parsedData = addProductSchema.safeParse({
+  const parsedData = productFormSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
     image: formData.get("image"),
@@ -80,5 +82,5 @@ export async function addProduct(formData: FormData) {
 
   revalidatePath("/products");
 
-  return { success: true, product: newProduct as SBProduct };
+  return { success: true, product: newProduct };
 }

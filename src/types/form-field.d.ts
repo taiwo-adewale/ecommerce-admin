@@ -35,4 +35,5 @@ export type FormFieldProps<TFormData extends FieldValues> = {
   form: UseFormReturn<TFormData>;
   formField: FormFieldConfig<TFormData>;
   portalContainer?: HTMLDivElement;
+  previewImage?: string;
 };

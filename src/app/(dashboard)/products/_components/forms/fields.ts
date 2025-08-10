@@ -1,11 +1,11 @@
 import * as z from "zod";
 
-import { addProductSchema } from "./schema";
+import { productFormSchema } from "./schema";
 import { FormFieldConfig } from "@/types/form-field";
 
-export type ProductFormData = z.infer<typeof addProductSchema>;
+export type ProductFormData = z.infer<typeof productFormSchema>;
 
-export const addProductFields: FormFieldConfig<ProductFormData>[] = [
+export const productFormFields: FormFieldConfig<ProductFormData>[] = [
   {
     name: "name",
     label: "Product Name",

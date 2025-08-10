@@ -8,19 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import Typography from "@/components/ui/typography";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,19 +18,20 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
+import {
+  SheetTooltip,
+  AlertDialogTooltip,
+} from "@/components/shared/table/TableActionTooltip";
 
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import ProductFormSheet from "../forms/ProductFormSheet";
 import { ProductBadgeVariants } from "@/constants/badge";
 import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";
+
+import { editProduct } from "@/actions/products/editProduct";
 
 const handleSwitchChange = () => {};
 
@@ -156,81 +145,36 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <Sheet>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <PenSquare className="size-5" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Edit Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+          <ProductFormSheet
+            key={row.original.id}
+            title="Update Products"
+            description="Update necessary product information here"
+            submitButtonText="Update Product"
+            actionVerb="updated"
+            initialData={{
+              name: row.original.name,
+              description: row.original.description ?? "",
+              image: row.original.image_url,
+              sku: row.original.sku,
+              category: row.original.category_id,
+              costPrice: row.original.cost_price,
+              salesPrice: row.original.selling_price,
+              stock: row.original.stock,
+              minStockThreshold: row.original.min_stock_threshold,
+              slug: row.original.slug,
+            }}
+            action={(formData) => editProduct(row.original.id, formData)}
+            previewImage={row.original.image_url}
+          >
+            <SheetTooltip content="Edit Product">
+              <PenSquare className="size-5" />
+            </SheetTooltip>
+          </ProductFormSheet>
 
           <AlertDialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <Trash2 className="size-5" />
-                  </Button>
-                </AlertDialogTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Delete Product</p>
-              </TooltipContent>
-            </Tooltip>
+            <AlertDialogTooltip content="Delete Product">
+              <Trash2 className="size-5" />
+            </AlertDialogTooltip>
 
             <AlertDialogContent>
               <AlertDialogHeader>

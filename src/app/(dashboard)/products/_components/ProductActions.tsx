@@ -1,21 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { Upload, Download, PenSquare, Trash2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { SheetTrigger } from "@/components/ui/sheet";
 
-import AddProduct from "./forms/AddProduct";
+import { addProduct } from "@/actions/products/addProduct";
+import ProductFormSheet from "./forms/ProductFormSheet";
 
 export default function ProductActions() {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-  const handleSheetClose = () => {
-    setIsSheetOpen(false);
-  };
-
   return (
     <Card className="mb-5">
       <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
@@ -46,7 +40,13 @@ export default function ProductActions() {
             <Trash2 className="mr-2 size-4" /> Delete
           </Button>
 
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <ProductFormSheet
+            title="Add Product"
+            description="Add necessary product information here"
+            submitButtonText="Add Product"
+            actionVerb="added"
+            action={addProduct}
+          >
             <SheetTrigger asChild>
               <Button
                 variant="default"
@@ -56,11 +56,7 @@ export default function ProductActions() {
                 <Plus className="mr-2 size-4" /> Add Product
               </Button>
             </SheetTrigger>
-
-            <SheetContent className="w-[90%] max-w-5xl">
-              <AddProduct handleSheetClose={handleSheetClose} />
-            </SheetContent>
-          </Sheet>
+          </ProductFormSheet>
         </div>
       </div>
     </Card>

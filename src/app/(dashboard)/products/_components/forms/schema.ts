@@ -9,7 +9,18 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-export const addProductSchema = z
+const fileSchema = z
+  .instanceof(File, { message: "Product image is required" })
+  .refine(
+    (file) => file.size <= MAX_FILE_SIZE,
+    `File size must be less than ${MAX_FILE_SIZE_MB}MB`
+  )
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported"
+  );
+
+export const productFormSchema = z
   .object({
     name: z
       .string()
@@ -19,16 +30,7 @@ export const addProductSchema = z
       .string()
       .min(1, { message: "Product description is required" })
       .max(1000, "Product description must be 1000 characters or less"),
-    image: z
-      .instanceof(File, { message: "Product image is required" })
-      .refine(
-        (file) => file.size <= MAX_FILE_SIZE,
-        `File size must be less than ${MAX_FILE_SIZE_MB}MB`
-      )
-      .refine(
-        (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported"
-      ),
+    image: z.union([fileSchema, z.string().url()]),
     sku: z
       .string()
       .min(1, { message: "SKU is required" })

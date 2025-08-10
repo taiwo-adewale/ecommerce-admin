@@ -318,7 +318,7 @@ export type Database = {
       };
       products: {
         Row: {
-          category_id: string | null;
+          category_id: string;
           cost_price: number;
           created_at: string;
           description: string | null;
@@ -328,29 +328,29 @@ export type Database = {
           name: string;
           published: boolean;
           selling_price: number;
-          sku: string | null;
+          sku: string;
           slug: string;
           stock: number;
           updated_at: string;
         };
         Insert: {
-          category_id?: string | null;
+          category_id: string;
           cost_price: number;
           created_at?: string;
           description?: string | null;
           id?: string;
           image_url: string;
-          min_stock_threshold?: number;
+          min_stock_threshold: number;
           name: string;
           published?: boolean;
           selling_price: number;
-          sku?: string | null;
+          sku: string;
           slug: string;
           stock: number;
           updated_at?: string;
         };
         Update: {
-          category_id?: string | null;
+          category_id?: string;
           cost_price?: number;
           created_at?: string;
           description?: string | null;
@@ -360,7 +360,7 @@ export type Database = {
           name?: string;
           published?: boolean;
           selling_price?: number;
-          sku?: string | null;
+          sku?: string;
           slug?: string;
           stock?: number;
           updated_at?: string;

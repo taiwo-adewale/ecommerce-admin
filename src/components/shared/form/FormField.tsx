@@ -23,6 +23,7 @@ export function FormField<TFormData extends FieldValues>({
   form,
   formField,
   portalContainer,
+  previewImage,
 }: FormFieldProps<TFormData>) {
   return (
     <SFormField
@@ -36,7 +37,10 @@ export function FormField<TFormData extends FieldValues>({
 
           <div className="space-y-2 w-full">
             {formField.inputType === "file" ? (
-              <FormImageFileInput onChange={field.onChange} />
+              <FormImageFileInput
+                previewImage={previewImage}
+                onChange={field.onChange}
+              />
             ) : formField.inputType === "category" ? (
               <FormCategory
                 value={field.value}
