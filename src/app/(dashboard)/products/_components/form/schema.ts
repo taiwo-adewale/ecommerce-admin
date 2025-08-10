@@ -65,8 +65,8 @@ export const productFormSchema = z
       .min(0, { message: "Min stock threshold cannot be negative" }),
     slug: z
       .string()
-      .min(1, { message: "Slug is required" })
-      .max(100, "Slug must be 100 characters or less")
+      .min(1, { message: "Product slug is required" })
+      .max(100, "Product slug must be 100 characters or less")
       .regex(/^[a-z0-9-]+$/, {
         message:
           "Slug must be lowercase, alphanumeric, and use hyphens for spaces",

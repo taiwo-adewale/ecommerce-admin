@@ -3,25 +3,19 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { productFormSchema } from "@/app/(dashboard)/products/_components/form/schema";
+import { categoryFormSchema } from "@/app/(dashboard)/categories/_components/form/schema";
 import { formatValidationErrors } from "@/helpers/formatValidationErrors";
-import { ProductServerActionResponse } from "@/types/server-action";
+import { CategoryServerActionResponse } from "@/types/server-action";
 
-export async function addProduct(
+export async function addCategory(
   formData: FormData
-): Promise<ProductServerActionResponse> {
+): Promise<CategoryServerActionResponse> {
   const supabase = createServerActionClient();
 
-  const parsedData = productFormSchema.safeParse({
+  const parsedData = categoryFormSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
     image: formData.get("image"),
-    sku: formData.get("sku"),
-    category: formData.get("category"),
-    costPrice: formData.get("costPrice"),
-    salesPrice: formData.get("salesPrice"),
-    stock: formData.get("stock"),
-    minStockThreshold: formData.get("minStockThreshold"),
     slug: formData.get("slug"),
   });
 
@@ -33,13 +27,13 @@ export async function addProduct(
     };
   }
 
-  const { image, ...productData } = parsedData.data;
+  const { image, ...categoryData } = parsedData.data;
 
   let imageUrl: string | undefined;
 
   if (image instanceof File && image.size > 0) {
     const fileExt = image.name.split(".").pop();
-    const fileName = `products/${
+    const fileName = `categories/${
       parsedData.data.slug
     }-${Date.now()}.${fileExt}`;
 
@@ -59,18 +53,12 @@ export async function addProduct(
     imageUrl = publicUrlData.publicUrl;
   }
 
-  const { data: newProduct, error: dbError } = await supabase
-    .from("products")
+  const { data: newCategory, error: dbError } = await supabase
+    .from("categories")
     .insert({
-      name: productData.name,
-      description: productData.description,
-      cost_price: productData.costPrice,
-      selling_price: productData.salesPrice,
-      stock: productData.stock,
-      min_stock_threshold: productData.minStockThreshold,
-      category_id: productData.category,
-      slug: productData.slug,
-      sku: productData.sku,
+      name: categoryData.name,
+      description: categoryData.description,
+      slug: categoryData.slug,
       published: false,
       image_url: imageUrl as string,
     })
@@ -82,7 +70,7 @@ export async function addProduct(
     return { dbError: "Something went wrong. Please try again later." };
   }
 
-  revalidatePath("/products");
+  revalidatePath("/categories");
 
-  return { success: true, product: newProduct };
+  return { success: true, category: newCategory };
 }

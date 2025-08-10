@@ -1,7 +1,13 @@
+"use client";
+
 import { Upload, Download, PenSquare, Trash2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SheetTrigger } from "@/components/ui/sheet";
+
+import { addCategory } from "@/actions/categories/addCategory";
+import CategoryFormSheet from "./form/CategoryFormSheet";
 
 export default function CategoryActions() {
   return (
@@ -34,13 +40,23 @@ export default function CategoryActions() {
             <Trash2 className="mr-2 size-4" /> Delete
           </Button>
 
-          <Button
-            variant="default"
-            size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+          <CategoryFormSheet
+            title="Add Category"
+            description="Add product category and necessary information here"
+            submitButtonText="Add Category"
+            actionVerb="added"
+            action={addCategory}
           >
-            <Plus className="mr-2 size-4" /> Add Category
-          </Button>
+            <SheetTrigger asChild>
+              <Button
+                variant="default"
+                size="lg"
+                className="sm:flex-grow xl:flex-grow-0"
+              >
+                <Plus className="mr-2 size-4" /> Add Category
+              </Button>
+            </SheetTrigger>
+          </CategoryFormSheet>
         </div>
       </form>
     </Card>

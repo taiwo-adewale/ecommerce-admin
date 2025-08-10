@@ -1,45 +1,21 @@
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import Typography from "@/components/ui/typography";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
+import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
-import { SkeletonColumn } from "@/types/skeleton";
+import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
+import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
+import CategoryFormSheet from "../form/CategoryFormSheet";
 import { Category } from "@/services/categories/types";
+import { SkeletonColumn } from "@/types/skeleton";
 
-const handleSwitchChange = () => {};
+import { editCategory } from "@/actions/categories/editCategory";
+import { deleteCategory } from "@/actions/categories/deleteCategory";
+import { toggleCategoryPublishedStatus } from "@/actions/categories/toggleCategoryStatus";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -90,9 +66,16 @@ export const columns: ColumnDef<Category>[] = [
     header: "published",
     cell: ({ row }) => (
       <div className="pl-5">
-        <Switch
+        <TableSwitch
           checked={row.original.published}
-          onCheckedChange={(value) => handleSwitchChange()}
+          toastSuccessMessage="Category status updated successfully."
+          queryKey="categories"
+          onCheckedChange={() =>
+            toggleCategoryPublishedStatus(
+              row.original.id,
+              row.original.published
+            )
+          }
         />
       </div>
     ),
@@ -102,96 +85,37 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <Sheet>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <PenSquare className="size-5" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
+          <CategoryFormSheet
+            key={row.original.id}
+            title="Update Category"
+            description="Update necessary category information here"
+            submitButtonText="Update Category"
+            actionVerb="updated"
+            initialData={{
+              name: row.original.name,
+              description: row.original.description ?? "",
+              image: row.original.image_url,
+              slug: row.original.slug,
+            }}
+            action={(formData) => editCategory(row.original.id, formData)}
+            previewImage={row.original.image_url}
+          >
+            <SheetTooltip content="Edit Category">
+              <PenSquare className="size-5" />
+            </SheetTooltip>
+          </CategoryFormSheet>
 
-              <TooltipContent>
-                <p>Edit Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-
-          <AlertDialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <Trash2 className="size-5" />
-                  </Button>
-                </AlertDialogTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Delete Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <TableActionAlertDialog
+            title={`Delete ${row.original.name}?`}
+            description="This action cannot be undone. This will permanently delete the category and its associated data from the database."
+            tooltipContent="Delete Category"
+            actionButtonText="Delete Category"
+            toastSuccessMessage={`Category "${row.original.name}" deleted successfully!`}
+            queryKey="categories"
+            action={() => deleteCategory(row.original.id)}
+          >
+            <Trash2 className="size-5" />
+          </TableActionAlertDialog>
         </div>
       );
     },

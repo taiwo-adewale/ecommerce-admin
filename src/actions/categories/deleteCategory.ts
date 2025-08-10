@@ -5,26 +5,26 @@ import { revalidatePath } from "next/cache";
 import { createServerActionClient } from "@/lib/supabase/server-action";
 import { ServerActionResponse } from "@/types/server-action";
 
-export async function deleteProduct(
-  productId: string
+export async function deleteCategory(
+  categoryId: string
 ): Promise<ServerActionResponse> {
   const supabase = createServerActionClient();
 
-  const { data: productData, error: fetchError } = await supabase
-    .from("products")
+  const { data: categoryData, error: fetchError } = await supabase
+    .from("categories")
     .select("image_url")
-    .eq("id", productId)
+    .eq("id", categoryId)
     .single();
 
   if (fetchError) {
-    console.error("Failed to fetch product for deletion:", fetchError);
-    return { dbError: "Could not find the product to delete." };
+    console.error("Failed to fetch category for deletion:", fetchError);
+    return { dbError: "Could not find the category to delete." };
   }
 
-  const imageUrl = productData?.image_url;
+  const imageUrl = categoryData?.image_url;
 
   if (imageUrl) {
-    const imageFileName = `products/${imageUrl.split("/").pop()}`;
+    const imageFileName = `categories/${imageUrl.split("/").pop()}`;
 
     if (imageFileName) {
       const { error: storageError } = await supabase.storage
@@ -32,22 +32,22 @@ export async function deleteProduct(
         .remove([imageFileName]);
 
       if (storageError) {
-        console.error("Failed to delete product image:", storageError);
+        console.error("Failed to delete category image:", storageError);
       }
     }
   }
 
   const { error: dbError } = await supabase
-    .from("products")
+    .from("categories")
     .delete()
-    .eq("id", productId);
+    .eq("id", categoryId);
 
   if (dbError) {
     console.error("Database delete failed:", dbError);
-    return { dbError: "Something went wrong. Could not delete the product." };
+    return { dbError: "Something went wrong. Could not delete the category." };
   }
 
-  revalidatePath("/products");
+  revalidatePath("/categories");
 
   return { success: true };
 }

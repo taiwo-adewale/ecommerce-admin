@@ -3,26 +3,20 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { productFormSchema } from "@/app/(dashboard)/products/_components/form/schema";
+import { categoryFormSchema } from "@/app/(dashboard)/categories/_components/form/schema";
 import { formatValidationErrors } from "@/helpers/formatValidationErrors";
-import { ProductServerActionResponse } from "@/types/server-action";
+import { CategoryServerActionResponse } from "@/types/server-action";
 
-export async function editProduct(
-  productId: string,
+export async function editCategory(
+  categoryId: string,
   formData: FormData
-): Promise<ProductServerActionResponse> {
+): Promise<CategoryServerActionResponse> {
   const supabase = createServerActionClient();
 
-  const parsedData = productFormSchema.safeParse({
+  const parsedData = categoryFormSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
     image: formData.get("image"),
-    sku: formData.get("sku"),
-    category: formData.get("category"),
-    costPrice: formData.get("costPrice"),
-    salesPrice: formData.get("salesPrice"),
-    stock: formData.get("stock"),
-    minStockThreshold: formData.get("minStockThreshold"),
     slug: formData.get("slug"),
   });
 
@@ -34,26 +28,26 @@ export async function editProduct(
     };
   }
 
-  const { image, ...productData } = parsedData.data;
+  const { image, ...categoryData } = parsedData.data;
 
   let imageUrl: string | undefined;
 
   if (image instanceof File && image.size > 0) {
-    const { data: oldProductData, error: fetchError } = await supabase
-      .from("products")
+    const { data: oldCategoryData, error: fetchError } = await supabase
+      .from("categories")
       .select("image_url")
-      .eq("id", productId)
+      .eq("id", categoryId)
       .single();
 
     if (fetchError) {
-      console.error("Failed to fetch old product data:", fetchError);
-      return { dbError: "Could not find the product to update." };
+      console.error("Failed to fetch old category data:", fetchError);
+      return { dbError: "Could not find the category to update." };
     }
 
-    const oldImageUrl = oldProductData.image_url;
+    const oldImageUrl = oldCategoryData.image_url;
 
     const fileExt = image.name.split(".").pop();
-    const fileName = `products/${productData.slug}-${Date.now()}.${fileExt}`;
+    const fileName = `categories/${categoryData.slug}-${Date.now()}.${fileExt}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("assets")
@@ -79,21 +73,15 @@ export async function editProduct(
     }
   }
 
-  const { data: updatedProduct, error: dbError } = await supabase
-    .from("products")
+  const { data: updatedCategory, error: dbError } = await supabase
+    .from("categories")
     .update({
-      name: productData.name,
-      description: productData.description,
-      cost_price: productData.costPrice,
-      selling_price: productData.salesPrice,
-      stock: productData.stock,
-      min_stock_threshold: productData.minStockThreshold,
-      category_id: productData.category,
-      slug: productData.slug,
-      sku: productData.sku,
+      name: categoryData.name,
+      description: categoryData.description,
+      slug: categoryData.slug,
       ...(imageUrl && { image_url: imageUrl }),
     })
-    .eq("id", productId)
+    .eq("id", categoryId)
     .select()
     .single();
 
@@ -102,8 +90,8 @@ export async function editProduct(
     return { dbError: "Something went wrong. Please try again later." };
   }
 
-  revalidatePath("/products");
-  revalidatePath(`/products/${updatedProduct.slug}`);
+  revalidatePath("/categories");
+  revalidatePath(`/categories/${updatedCategory.slug}`);
 
-  return { success: true, product: updatedProduct };
+  return { success: true, category: updatedCategory };
 }
