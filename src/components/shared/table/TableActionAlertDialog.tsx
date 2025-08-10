@@ -13,9 +13,7 @@ import {
 import { toast } from "sonner";
 import { AlertDialogTooltip } from "@/components/shared/table/TableActionTooltip";
 import { FormSubmitButton } from "../form/FormSubmitButton";
-import { DbErrorResponse, SuccessResponse } from "@/types/server-action";
-
-type ActionResponse = DbErrorResponse | SuccessResponse;
+import { ServerActionResponse } from "@/types/server-action";
 
 type Props = {
   title: string;
@@ -25,7 +23,7 @@ type Props = {
   toastSuccessMessage: string;
   queryKey: string;
   children: React.ReactNode;
-  action: () => Promise<ActionResponse>;
+  action: () => Promise<ServerActionResponse>;
 };
 
 export function TableActionAlertDialog({

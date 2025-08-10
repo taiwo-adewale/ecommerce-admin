@@ -12,7 +12,7 @@ type SuccessResponse = {
   success: boolean;
 };
 
-export type DeleteServerActionResponse = DbErrorResponse | SuccessResponse;
+export type ServerActionResponse = DbErrorResponse | SuccessResponse;
 
 export type ProductServerActionResponse =
   | ValidationErrorsResponse

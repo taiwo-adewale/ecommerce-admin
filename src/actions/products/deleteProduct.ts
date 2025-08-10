@@ -3,11 +3,11 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { DeleteServerActionResponse } from "@/types/server-action";
+import { ServerActionResponse } from "@/types/server-action";
 
 export async function deleteProduct(
   productId: string
-): Promise<DeleteServerActionResponse> {
+): Promise<ServerActionResponse> {
   const supabase = createServerActionClient();
 
   const { data: productData, error: fetchError } = await supabase

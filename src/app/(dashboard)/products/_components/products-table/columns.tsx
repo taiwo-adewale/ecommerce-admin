@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
 import Typography from "@/components/ui/typography";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatAmount } from "@/helpers/formatAmount";
 
+import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
 import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
@@ -21,8 +21,7 @@ import { SkeletonColumn } from "@/types/skeleton";
 
 import { editProduct } from "@/actions/products/editProduct";
 import { deleteProduct } from "@/actions/products/deleteProduct";
-
-const handleSwitchChange = () => {};
+import { toggleProductPublishedStatus } from "@/actions/products/toggleProductStatus";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -122,9 +121,16 @@ export const columns: ColumnDef<Product>[] = [
     header: "published",
     cell: ({ row }) => (
       <div className="pl-5">
-        <Switch
+        <TableSwitch
           checked={row.original.published}
-          onCheckedChange={(value) => handleSwitchChange()}
+          toastSuccessMessage="Product status updated successfully."
+          queryKey="products"
+          onCheckedChange={() =>
+            toggleProductPublishedStatus(
+              row.original.id,
+              row.original.published
+            )
+          }
         />
       </div>
     ),
