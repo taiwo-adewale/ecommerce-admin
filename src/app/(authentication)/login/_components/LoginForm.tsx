@@ -105,7 +105,9 @@ export default function LoginForm() {
             />
           ))}
 
-          <FormSubmitButton isPending={isPending}>Login</FormSubmitButton>
+          <FormSubmitButton isPending={isPending} className="w-full">
+            Login
+          </FormSubmitButton>
         </form>
       </Form>
 

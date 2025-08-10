@@ -1,21 +1,26 @@
 import { Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 
-type Props = {
+interface Props extends ButtonProps {
   isPending: boolean;
-  className?: string;
   children: React.ReactNode;
-};
+}
 
-export function FormSubmitButton({ isPending, className, children }: Props) {
+export function FormSubmitButton({
+  isPending,
+  className,
+  children,
+  ...props
+}: Props) {
   return (
     <Button
       disabled={isPending}
       type="submit"
-      className={cn("w-full", className)}
+      className={cn(className)}
       size="lg"
+      {...props}
     >
       {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
       {children}

@@ -103,7 +103,7 @@ export default function PasswordResetForm() {
             />
           ))}
 
-          <FormSubmitButton isPending={isPending}>
+          <FormSubmitButton isPending={isPending} className="w-full">
             Recover password
           </FormSubmitButton>
         </form>

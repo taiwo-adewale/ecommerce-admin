@@ -99,7 +99,7 @@ export default function EditProfileForm() {
           ))}
 
           <div className="flex justify-end !mt-10">
-            <FormSubmitButton isPending={isPending} className="w-auto">
+            <FormSubmitButton isPending={isPending}>
               Update Profile
             </FormSubmitButton>
           </div>

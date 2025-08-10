@@ -9,29 +9,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import Typography from "@/components/ui/typography";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { formatAmount } from "@/helpers/formatAmount";
-import {
-  SheetTooltip,
-  AlertDialogTooltip,
-} from "@/components/shared/table/TableActionTooltip";
 
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
+import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
 import ProductFormSheet from "../form/ProductFormSheet";
 import { ProductBadgeVariants } from "@/constants/badge";
 import { Product } from "@/services/products/types";
 import { SkeletonColumn } from "@/types/skeleton";
 
 import { editProduct } from "@/actions/products/editProduct";
+import { deleteProduct } from "@/actions/products/deleteProduct";
 
 const handleSwitchChange = () => {};
 
@@ -171,25 +160,17 @@ export const columns: ColumnDef<Product>[] = [
             </SheetTooltip>
           </ProductFormSheet>
 
-          <AlertDialog>
-            <AlertDialogTooltip content="Delete Product">
-              <Trash2 className="size-5" />
-            </AlertDialogTooltip>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <TableActionAlertDialog
+            title={`Delete ${row.original.name}?`}
+            description="This action cannot be undone. This will permanently delete the product and its associated data from the database."
+            tooltipContent="Delete Product"
+            actionButtonText="Delete Product"
+            toastSuccessMessage={`Product "${row.original.name}" deleted successfully!`}
+            queryKey="products"
+            action={() => deleteProduct(row.original.id)}
+          >
+            <Trash2 className="size-5" />
+          </TableActionAlertDialog>
         </div>
       );
     },

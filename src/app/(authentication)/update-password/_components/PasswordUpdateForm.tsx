@@ -115,7 +115,7 @@ export default function PasswordUpdateForm() {
             />
           ))}
 
-          <FormSubmitButton isPending={isPending}>
+          <FormSubmitButton isPending={isPending} className="w-full">
             Update password
           </FormSubmitButton>
         </form>

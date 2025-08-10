@@ -139,7 +139,7 @@ export default function SignupForm() {
             )}
           />
 
-          <FormSubmitButton isPending={isPending}>
+          <FormSubmitButton isPending={isPending} className="w-full">
             Create account
           </FormSubmitButton>
         </form>

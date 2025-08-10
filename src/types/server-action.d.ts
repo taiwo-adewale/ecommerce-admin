@@ -8,12 +8,15 @@ type DbErrorResponse = {
   dbError: string;
 };
 
-type ProductSuccessResponse = {
+type SuccessResponse = {
   success: boolean;
-  product: SBProduct;
 };
+
+export type DeleteServerActionResponse = DbErrorResponse | SuccessResponse;
 
 export type ProductServerActionResponse =
   | ValidationErrorsResponse
   | DbErrorResponse
-  | ProductSuccessResponse;
+  | (SuccessResponse & {
+      product: SBProduct;
+    });

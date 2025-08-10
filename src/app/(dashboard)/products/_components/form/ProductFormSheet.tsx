@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useTransition } from "react";
+import { LegacyRef, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,7 +62,7 @@ export default function ProductFormSheet({
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const portalContainerRef = useRef<HTMLDivElement>(null);
+  const [container, setContainer] = useState(null);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -123,7 +123,10 @@ export default function ProductFormSheet({
               </FormSheetHeader>
 
               <FormSheetBody>
-                <div className="space-y-6" ref={portalContainerRef}>
+                <div
+                  className="space-y-6"
+                  ref={setContainer as LegacyRef<HTMLDivElement>}
+                >
                   {productFormFields.map((formField) => (
                     <FormField
                       key={formField.name}
@@ -131,7 +134,7 @@ export default function ProductFormSheet({
                       formField={formField}
                       portalContainer={
                         formField.inputType === "category"
-                          ? portalContainerRef.current || undefined
+                          ? container || undefined
                           : undefined
                       }
                       previewImage={
@@ -145,7 +148,7 @@ export default function ProductFormSheet({
               </FormSheetBody>
 
               <FormSheetFooter>
-                <FormSubmitButton isPending={isPending}>
+                <FormSubmitButton isPending={isPending} className="w-full">
                   {submitButtonText}
                 </FormSubmitButton>
               </FormSheetFooter>
