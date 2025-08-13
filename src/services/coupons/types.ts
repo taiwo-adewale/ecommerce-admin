@@ -3,7 +3,7 @@ import { Pagination } from "@/types/pagination";
 
 export type CouponStatus = "expired" | "active";
 
-type SBCoupon = Database["public"]["Tables"]["coupons"]["Row"];
+export type SBCoupon = Database["public"]["Tables"]["coupons"]["Row"];
 
 export type Coupon = SBCoupon;
 

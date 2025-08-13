@@ -83,7 +83,7 @@ export const columns: ColumnDef<Order>[] = [
           value={row.original.status}
           onValueChange={(value: OrderStatus) => changeStatus(value, invoiceNo)}
         >
-          <SelectTrigger className="capitalize">
+          <SelectTrigger className="capitalize min-w-32">
             <SelectValue placeholder={row.original.status} />
           </SelectTrigger>
 

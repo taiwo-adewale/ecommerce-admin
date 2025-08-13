@@ -1,7 +1,13 @@
+"use client";
+
 import { Upload, Download, PenSquare, Trash2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SheetTrigger } from "@/components/ui/sheet";
+
+import { addCoupon } from "@/actions/coupons/addCoupon";
+import CouponFormSheet from "./form/CouponFormSheet";
 
 export default function CouponActions() {
   return (
@@ -34,13 +40,23 @@ export default function CouponActions() {
             <Trash2 className="mr-2 size-4" /> Delete
           </Button>
 
-          <Button
-            variant="default"
-            size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+          <CouponFormSheet
+            title="Add Coupon"
+            description="Add necessary coupon information here"
+            submitButtonText="Add Coupon"
+            actionVerb="added"
+            action={addCoupon}
           >
-            <Plus className="mr-2 size-4" /> Add Coupon
-          </Button>
+            <SheetTrigger asChild>
+              <Button
+                variant="default"
+                size="lg"
+                className="sm:flex-grow xl:flex-grow-0"
+              >
+                <Plus className="mr-2 size-4" /> Add Coupon
+              </Button>
+            </SheetTrigger>
+          </CouponFormSheet>
         </div>
       </form>
     </Card>

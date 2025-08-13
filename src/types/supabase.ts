@@ -173,7 +173,7 @@ export type Database = {
           discount_value: number;
           end_date: string;
           id?: string;
-          image_url?: string | null;
+          image_url: string;
           published?: boolean;
           start_date: string;
           updated_at?: string;
@@ -186,7 +186,7 @@ export type Database = {
           discount_value?: number;
           end_date?: string;
           id?: string;
-          image_url?: string | null;
+          image_url?: string;
           published?: boolean;
           start_date?: string;
           updated_at?: string;
@@ -340,7 +340,7 @@ export type Database = {
           description?: string | null;
           id?: string;
           image_url: string;
-          min_stock_threshold: number;
+          min_stock_threshold?: number;
           name: string;
           published?: boolean;
           selling_price: number;
@@ -392,7 +392,7 @@ export type Database = {
           created_at?: string;
           email: string;
           id?: string;
-          image_url?: string | null;
+          image_url: string;
           joining_date: string;
           name: string;
           phone?: string | null;
@@ -404,7 +404,7 @@ export type Database = {
           created_at?: string;
           email?: string;
           id?: string;
-          image_url?: string | null;
+          image_url?: string;
           joining_date?: string;
           name?: string;
           phone?: string | null;
@@ -424,22 +424,22 @@ export type Database = {
       };
       staff_roles: {
         Row: {
+          display_name: string;
           id: number;
           is_default: boolean;
           name: string;
-          display_name: string;
         };
         Insert: {
+          display_name: string;
           id?: number;
           is_default?: boolean;
           name: string;
-          display_name: string;
         };
         Update: {
+          display_name?: string;
           id?: number;
           is_default?: boolean;
           name?: string;
-          display_name: string;
         };
         Relationships: [];
       };

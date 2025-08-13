@@ -2,47 +2,23 @@ import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import Typography from "@/components/ui/typography";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 
+import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
+import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
+import CouponFormSheet from "../form/CouponFormSheet";
 import { CouponBadgeVariants } from "@/constants/badge";
 import { SkeletonColumn } from "@/types/skeleton";
 import { Coupon, CouponStatus } from "@/services/coupons/types";
-import { Badge } from "@/components/ui/badge";
 
-const handleSwitchChange = () => {};
+import { editCoupon } from "@/actions/coupons/editCoupon";
+import { deleteCoupon } from "@/actions/coupons/deleteCoupon";
+import { toggleCouponPublishedStatus } from "@/actions/coupons/toggleCouponStatus";
 
 export const columns: ColumnDef<Coupon>[] = [
   {
@@ -105,9 +81,13 @@ export const columns: ColumnDef<Coupon>[] = [
     header: "published",
     cell: ({ row }) => (
       <div className="pl-5">
-        <Switch
+        <TableSwitch
           checked={row.original.published}
-          onCheckedChange={(value) => handleSwitchChange()}
+          toastSuccessMessage="Coupon status updated successfully."
+          queryKey="coupons"
+          onCheckedChange={() =>
+            toggleCouponPublishedStatus(row.original.id, row.original.published)
+          }
         />
       </div>
     ),
@@ -143,96 +123,40 @@ export const columns: ColumnDef<Coupon>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <Sheet>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <PenSquare className="size-5" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
+          <CouponFormSheet
+            key={row.original.id}
+            title="Update Coupon"
+            description="Update necessary coupon information here"
+            submitButtonText="Update Coupon"
+            actionVerb="updated"
+            initialData={{
+              name: row.original.campaign_name,
+              code: row.original.code,
+              image: row.original.image_url,
+              startDate: new Date(row.original.start_date),
+              endDate: new Date(row.original.end_date),
+              isPercentageDiscount: row.original.discount_type === "percentage",
+              discountValue: row.original.discount_value,
+            }}
+            action={(formData) => editCoupon(row.original.id, formData)}
+            previewImage={row.original.image_url}
+          >
+            <SheetTooltip content="Edit Coupon">
+              <PenSquare className="size-5" />
+            </SheetTooltip>
+          </CouponFormSheet>
 
-              <TooltipContent>
-                <p>Edit Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-
-          <AlertDialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <Trash2 className="size-5" />
-                  </Button>
-                </AlertDialogTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Delete Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <TableActionAlertDialog
+            title={`Delete ${row.original.campaign_name}?`}
+            description="This action cannot be undone. This will permanently delete the coupon and its associated data from the database."
+            tooltipContent="Delete Coupon"
+            actionButtonText="Delete Coupon"
+            toastSuccessMessage={`Coupon "${row.original.campaign_name}" deleted successfully!`}
+            queryKey="coupons"
+            action={() => deleteCoupon(row.original.id)}
+          >
+            <Trash2 className="size-5" />
+          </TableActionAlertDialog>
         </div>
       );
     },

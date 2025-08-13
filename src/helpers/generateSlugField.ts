@@ -1,8 +1,6 @@
 import slugify from "slugify";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
-import { FormFieldConfig, SlugFieldConfig } from "@/types/form-field";
-
 type SlugifyOptions<T> = {
   sourceField: Path<T>;
   targetField: Path<T>;
@@ -28,10 +26,4 @@ export function generateSlugField<T extends FieldValues>(
       shouldDirty: true,
     });
   }
-}
-
-export function isSlugField<TFormData extends FieldValues>(
-  formField: FormFieldConfig<TFormData>
-): formField is SlugFieldConfig<TFormData> {
-  return formField.inputType === "slug";
 }

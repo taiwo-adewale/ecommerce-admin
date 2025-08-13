@@ -22,40 +22,38 @@ import {
 } from "@/components/shared/form/FormSheet";
 import {
   FormTextInput,
-  FormCategoryInput,
   FormImageInput,
-  FormPriceInput,
-  FormSlugInput,
-  FormTextarea,
+  FormDatetimeInput,
+  FormDiscountInput,
 } from "@/components/shared/form";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
-import { productFormSchema, ProductFormData } from "./schema";
+import { couponFormSchema, CouponFormData } from "./schema";
 import { objectToFormData } from "@/helpers/objectToFormData";
-import { ProductServerActionResponse } from "@/types/server-action";
+import { CouponServerActionResponse } from "@/types/server-action";
 
-type BaseProductFormProps = {
+type BaseCouponFormProps = {
   title: string;
   description: string;
   submitButtonText: string;
   actionVerb: string;
   children: React.ReactNode;
-  action: (formData: FormData) => Promise<ProductServerActionResponse>;
+  action: (formData: FormData) => Promise<CouponServerActionResponse>;
 };
 
-type AddProductFormProps = BaseProductFormProps & {
+type AddCouponFormProps = BaseCouponFormProps & {
   initialData?: never;
   previewImage?: never;
 };
 
-type EditProductFormProps = BaseProductFormProps & {
-  initialData: Partial<ProductFormData>;
+type EditCouponFormProps = BaseCouponFormProps & {
+  initialData: Partial<CouponFormData>;
   previewImage: string;
 };
 
-type ProductFormProps = AddProductFormProps | EditProductFormProps;
+type CouponFormProps = AddCouponFormProps | EditCouponFormProps;
 
-export default function ProductFormSheet({
+export default function CouponFormSheet({
   title,
   description,
   submitButtonText,
@@ -64,32 +62,28 @@ export default function ProductFormSheet({
   previewImage,
   children,
   action,
-}: ProductFormProps) {
+}: CouponFormProps) {
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [container, setContainer] = useState(null);
   const imageDropzoneRef = useRef<HTMLDivElement>(null);
-  const categoryRef = useRef<HTMLButtonElement>(null);
 
-  const form = useForm<ProductFormData>({
-    resolver: zodResolver(productFormSchema),
+  const form = useForm<CouponFormData>({
+    resolver: zodResolver(couponFormSchema),
     defaultValues: {
       name: "",
-      description: "",
+      code: "",
       image: undefined,
-      sku: "",
-      category: "",
-      costPrice: 0,
-      salesPrice: 0,
-      stock: 0,
-      minStockThreshold: 0,
-      slug: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      isPercentageDiscount: true,
+      discountValue: 0,
       ...initialData,
     },
   });
 
-  const onSubmit = (data: ProductFormData) => {
+  const onSubmit = (data: CouponFormData) => {
     const formData = objectToFormData(data);
 
     startTransition(async () => {
@@ -97,7 +91,7 @@ export default function ProductFormSheet({
 
       if ("validationErrors" in result) {
         Object.keys(result.validationErrors).forEach((key) => {
-          form.setError(key as keyof ProductFormData, {
+          form.setError(key as keyof CouponFormData, {
             message: result.validationErrors![key],
           });
         });
@@ -106,20 +100,18 @@ export default function ProductFormSheet({
       } else {
         form.reset();
         toast.success(
-          `Product "${result.product.name}" ${actionVerb} successfully!`,
+          `Coupon "${result.coupon.campaign_name}" ${actionVerb} successfully!`,
           { position: "top-center" }
         );
-        queryClient.invalidateQueries({ queryKey: ["products"] });
+        queryClient.invalidateQueries({ queryKey: ["coupons"] });
         setIsSheetOpen(false);
       }
     });
   };
 
-  const onInvalid = (errors: FieldErrors<ProductFormData>) => {
+  const onInvalid = (errors: FieldErrors<CouponFormData>) => {
     if (errors.image) {
       imageDropzoneRef.current?.focus();
-    } else if (errors.category) {
-      categoryRef.current?.focus();
     }
   };
 
@@ -149,15 +141,15 @@ export default function ProductFormSheet({
                   <FormTextInput
                     control={form.control}
                     name="name"
-                    label="Product Name"
-                    placeholder="Product Name / Title"
+                    label="Campaign Name"
+                    placeholder="Campaign Name"
                   />
 
-                  <FormTextarea
+                  <FormTextInput
                     control={form.control}
-                    name="description"
-                    label="Product Description"
-                    placeholder="Product Description"
+                    name="code"
+                    label="Campaign Code"
+                    placeholder="Campaign Code"
                   />
 
                   <FormImageInput
@@ -168,58 +160,27 @@ export default function ProductFormSheet({
                     ref={imageDropzoneRef}
                   />
 
-                  <FormTextInput
+                  <FormDatetimeInput
                     control={form.control}
-                    name="sku"
-                    label="Product SKU"
-                    placeholder="Product SKU"
-                  />
-
-                  <FormCategoryInput
-                    control={form.control}
-                    name="category"
-                    label="Category"
+                    name="startDate"
+                    label="Start Date / Time"
                     container={container || undefined}
-                    ref={categoryRef}
                   />
 
-                  <FormPriceInput
+                  <FormDatetimeInput
                     control={form.control}
-                    name="costPrice"
-                    label="Cost Price"
-                    placeholder="Original Price"
+                    name="endDate"
+                    label="End Date / Time"
+                    container={container || undefined}
                   />
 
-                  <FormPriceInput
+                  <FormDiscountInput
                     control={form.control}
-                    name="salesPrice"
-                    label="Sale Price"
-                    placeholder="Sale Price"
-                  />
-
-                  <FormTextInput
-                    control={form.control}
-                    name="stock"
-                    label="Product Quantity"
-                    placeholder="Product Quantity"
-                    type="number"
-                  />
-
-                  <FormTextInput
-                    control={form.control}
-                    name="minStockThreshold"
-                    label="Min Stock Threshold"
-                    placeholder="Minimum Stock Threshold"
-                    type="number"
-                  />
-
-                  <FormSlugInput
+                    name="discountValue"
+                    label="Discount"
+                    placeholder="Discount"
+                    isPercentageField="isPercentageDiscount"
                     form={form}
-                    control={form.control}
-                    name="slug"
-                    label="Product Slug"
-                    placeholder="Product Slug"
-                    generateSlugFrom="name"
                   />
                 </div>
               </FormSheetBody>

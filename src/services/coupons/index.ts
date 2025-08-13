@@ -14,7 +14,7 @@ export async function fetchCoupons(
     query = query.or(`campaign_name.ilike.%${search}%,code.ilike.%${search}%`);
   }
 
-  query = query.order("start_date", { ascending: false });
+  query = query.order("created_at", { ascending: false });
 
   const paginatedCoupons = await queryPaginatedTable<Coupon, "coupons">({
     name: "coupons",

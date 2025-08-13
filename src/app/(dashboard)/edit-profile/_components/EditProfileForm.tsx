@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import ImageDropzone from "@/components/shared/ImageDropzone";
+import { ImageDropzone } from "@/components/shared/ImageDropzone";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
 import { editProfileFields } from "./fields";

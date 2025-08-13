@@ -7,7 +7,7 @@ import { XCircle, UploadCloud } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const ImageDropzone = forwardRef<
+export const ImageDropzone = forwardRef<
   HTMLDivElement,
   {
     previewImage?: string;
@@ -48,15 +48,16 @@ const ImageDropzone = forwardRef<
   });
 
   return (
-    <div className="w-full" ref={ref}>
+    <div className="w-full">
       <div
         {...getRootProps({
           className: cn(
-            "border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-300 cursor-pointer",
+            "border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-4 ring-offset-background",
             isDragActive
               ? "border-primary/80 bg-black/10 dark:bg-white/10"
               : "border-input"
           ),
+          ref: ref,
         })}
       >
         <input {...getInputProps()} />
@@ -95,5 +96,3 @@ const ImageDropzone = forwardRef<
     </div>
   );
 });
-
-export default ImageDropzone;

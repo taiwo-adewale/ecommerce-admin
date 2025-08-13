@@ -39,3 +39,5 @@ export const categoryFormSchema = z.object({
         "Slug must be lowercase, alphanumeric, and use hyphens for spaces",
     }),
 });
+
+export type CategoryFormData = z.infer<typeof categoryFormSchema>;

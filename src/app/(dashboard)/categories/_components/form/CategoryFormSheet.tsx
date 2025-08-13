@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, FieldErrors } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -20,11 +20,15 @@ import {
   FormSheetHeader,
   FormSheetFooter,
 } from "@/components/shared/form/FormSheet";
-import { FormField } from "@/components/shared/form/FormField";
+import {
+  FormTextInput,
+  FormImageInput,
+  FormSlugInput,
+  FormTextarea,
+} from "@/components/shared/form";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
-import { categoryFormSchema } from "./schema";
-import { categoryFormFields, CategoryFormData } from "./fields";
+import { categoryFormSchema, CategoryFormData } from "./schema";
 import { objectToFormData } from "@/helpers/objectToFormData";
 import { CategoryServerActionResponse } from "@/types/server-action";
 
@@ -62,6 +66,7 @@ export default function CategoryFormSheet({
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const imageDropzoneRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<CategoryFormData>({
     resolver: zodResolver(categoryFormSchema),
@@ -100,13 +105,22 @@ export default function CategoryFormSheet({
     });
   };
 
+  const onInvalid = (errors: FieldErrors<CategoryFormData>) => {
+    if (errors.image) {
+      imageDropzoneRef.current?.focus();
+    }
+  };
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       {children}
 
       <SheetContent className="w-[90%] max-w-5xl">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="size-full">
+          <form
+            onSubmit={form.handleSubmit(onSubmit, onInvalid)}
+            className="size-full"
+          >
             <FormSheetContent>
               <FormSheetHeader>
                 <div className="flex flex-col">
@@ -117,18 +131,36 @@ export default function CategoryFormSheet({
 
               <FormSheetBody>
                 <div className="space-y-6">
-                  {categoryFormFields.map((formField) => (
-                    <FormField
-                      key={formField.name}
-                      form={form}
-                      formField={formField}
-                      previewImage={
-                        previewImage && formField.inputType === "file"
-                          ? previewImage
-                          : undefined
-                      }
-                    />
-                  ))}
+                  <FormTextInput
+                    control={form.control}
+                    name="name"
+                    label="Category Name"
+                    placeholder="Category Name / Title"
+                  />
+
+                  <FormTextarea
+                    control={form.control}
+                    name="description"
+                    label="Category Description"
+                    placeholder="Category Description"
+                  />
+
+                  <FormImageInput
+                    control={form.control}
+                    name="image"
+                    label="Category Image"
+                    previewImage={previewImage}
+                    ref={imageDropzoneRef}
+                  />
+
+                  <FormSlugInput
+                    form={form}
+                    control={form.control}
+                    name="slug"
+                    label="Category Slug"
+                    placeholder="Category Slug"
+                    generateSlugFrom="name"
+                  />
                 </div>
               </FormSheetBody>
 
