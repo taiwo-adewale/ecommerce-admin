@@ -2,6 +2,7 @@ import { SBProduct } from "@/services/products/types";
 import { SBCategory } from "@/services/categories/types";
 import { SBCoupon } from "@/services/coupons/types";
 import { SBCustomer } from "@/services/customers/types";
+import { SBStaff } from "@/services/staff/types";
 
 type ValidationErrorsResponse = {
   validationErrors: Record<string, string>;
@@ -43,4 +44,11 @@ export type CustomerServerActionResponse =
   | DbErrorResponse
   | (SuccessResponse & {
       customer: SBCustomer;
+    });
+
+export type StaffServerActionResponse =
+  | ValidationErrorsResponse
+  | DbErrorResponse
+  | (SuccessResponse & {
+      staff: SBStaff;
     });

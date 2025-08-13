@@ -9,40 +9,20 @@ import Typography from "@/components/ui/typography";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
+import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
+import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
+import StaffFormSheet from "../form/CustomerFormSheet";
 import { StaffBadgeVariants } from "@/constants/badge";
 import { SkeletonColumn } from "@/types/skeleton";
 import { Staff } from "@/services/staff/types";
 import { format } from "date-fns";
 
-const handleSwitchChange = () => {};
+import { editStaff } from "@/actions/staff/editStaff";
+import { deleteStaff } from "@/actions/staff/deleteStaff";
+import { toggleStaffPublishedStatus } from "@/actions/staff/toggleStaffStatus";
 
 export const columns: ColumnDef<Staff>[] = [
   {
@@ -110,9 +90,13 @@ export const columns: ColumnDef<Staff>[] = [
     header: "published",
     cell: ({ row }) => (
       <div className="pl-5">
-        <Switch
-          checked={row.original.published === true}
-          onCheckedChange={(value) => handleSwitchChange()}
+        <TableSwitch
+          checked={row.original.published}
+          toastSuccessMessage="Staff status updated successfully."
+          queryKey="staff"
+          onCheckedChange={() =>
+            toggleStaffPublishedStatus(row.original.id, row.original.published)
+          }
         />
       </div>
     ),
@@ -122,96 +106,37 @@ export const columns: ColumnDef<Staff>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <Sheet>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <PenSquare className="size-5" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
+          <StaffFormSheet
+            key={row.original.id}
+            title="Update Staff"
+            description="Update necessary staff information here"
+            submitButtonText="Update Staff"
+            actionVerb="updated"
+            initialData={{
+              name: row.original.name,
+              email: row.original.email,
+              phone: row.original.phone ?? "",
+              image: row.original.image_url,
+            }}
+            action={(formData) => editStaff(row.original.id, formData)}
+            previewImage={row.original.image_url}
+          >
+            <SheetTooltip content="Edit Staff">
+              <PenSquare className="size-5" />
+            </SheetTooltip>
+          </StaffFormSheet>
 
-              <TooltipContent>
-                <p>Edit Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-
-          <AlertDialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <Trash2 className="size-5" />
-                  </Button>
-                </AlertDialogTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Delete Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <TableActionAlertDialog
+            title={`Delete ${row.original.name}?`}
+            description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
+            tooltipContent="Delete Staff"
+            actionButtonText="Delete Staff"
+            toastSuccessMessage={`Staff "${row.original.name}" deleted successfully!`}
+            queryKey="staff"
+            action={() => deleteStaff(row.original.id)}
+          >
+            <Trash2 className="size-5" />
+          </TableActionAlertDialog>
         </div>
       );
     },

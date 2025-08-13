@@ -24,5 +24,5 @@ export const CouponBadgeVariants: Record<CouponStatus, BadgeVariantProps> = {
 
 export const StaffBadgeVariants: Record<StaffStatus, BadgeVariantProps> = {
   active: "success",
-  inactive: "warning",
+  inactive: "destructive",
 };

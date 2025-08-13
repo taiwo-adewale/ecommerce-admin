@@ -21,7 +21,6 @@ import { SkeletonColumn } from "@/types/skeleton";
 
 import { changeOrderStatus } from "@/actions/orders/changeOrderStatus";
 
-const changeStatus = (value: OrderStatus, invoiceNo: string) => {};
 const printInvoice = (invoiceNo: string) => {};
 
 export const columns: ColumnDef<Order>[] = [

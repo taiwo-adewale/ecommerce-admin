@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -12,20 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import FetchDropdownContainer from "@/components/shared/FetchDropdownContainer";
 
 import { createBrowserClient } from "@/lib/supabase/client";
@@ -110,44 +98,7 @@ export default function StaffFilters() {
           </SelectContent>
         </Select>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button type="button" size="lg" className="h-12 md:basis-1/3">
-              <Plus className="mr-2 size-4" /> Add Staff
-            </Button>
-          </SheetTrigger>
-
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Edit profile</SheetTitle>
-              <SheetDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input id="name" value="Pedro Duarte" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
-                </Label>
-                <Input id="username" value="@peduarte" className="col-span-3" />
-              </div>
-            </div>
-            <SheetFooter>
-              <SheetClose asChild>
-                <Button type="submit">Save changes</Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-
-        <div className="flex flex-wrap sm:flex-nowrap gap-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-4 md:basis-1/3">
           <Button type="submit" size="lg" className="flex-grow">
             Filter
           </Button>

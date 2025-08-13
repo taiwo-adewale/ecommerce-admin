@@ -3,7 +3,7 @@ import { Pagination } from "@/types/pagination";
 
 export type StaffStatus = "active" | "inactive";
 
-type SBStaff = Database["public"]["Tables"]["staff"]["Row"];
+export type SBStaff = Database["public"]["Tables"]["staff"]["Row"];
 type SBStaffRole = Database["public"]["Tables"]["staff_roles"]["Row"];
 
 export type Staff = SBStaff & {
