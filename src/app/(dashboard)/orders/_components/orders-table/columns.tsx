@@ -6,13 +6,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SelectItem } from "@/components/ui/select";
 import {
   Tooltip,
   TooltipContent,
@@ -20,9 +14,12 @@ import {
 } from "@/components/ui/tooltip";
 import { formatAmount } from "@/helpers/formatAmount";
 
+import { TableSelect } from "@/components/shared/table/TableSelect";
 import { OrderBadgeVariants } from "@/constants/badge";
 import { Order, OrderStatus } from "@/services/orders/types";
 import { SkeletonColumn } from "@/types/skeleton";
+
+import { changeOrderStatus } from "@/actions/orders/changeOrderStatus";
 
 const changeStatus = (value: OrderStatus, invoiceNo: string) => {};
 const printInvoice = (invoiceNo: string) => {};
@@ -76,24 +73,20 @@ export const columns: ColumnDef<Order>[] = [
   {
     header: "action",
     cell: ({ row }) => {
-      const invoiceNo = row.original.invoice_no;
-
       return (
-        <Select
+        <TableSelect
           value={row.original.status}
-          onValueChange={(value: OrderStatus) => changeStatus(value, invoiceNo)}
+          toastSuccessMessage="Order status updated successfully."
+          queryKey="orders"
+          onValueChange={(value) =>
+            changeOrderStatus(row.original.id, value as OrderStatus)
+          }
         >
-          <SelectTrigger className="capitalize min-w-32">
-            <SelectValue placeholder={row.original.status} />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="processing">Processing</SelectItem>
-            <SelectItem value="delivered">Delivered</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
-          </SelectContent>
-        </Select>
+          <SelectItem value="pending">Pending</SelectItem>
+          <SelectItem value="processing">Processing</SelectItem>
+          <SelectItem value="delivered">Delivered</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
+        </TableSelect>
       );
     },
   },
