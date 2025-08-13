@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useTransition, useRef, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FieldErrors } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -20,61 +20,51 @@ import {
   FormSheetHeader,
   FormSheetFooter,
 } from "@/components/shared/form/FormSheet";
-import {
-  FormTextInput,
-  FormImageInput,
-  FormSlugInput,
-  FormTextarea,
-} from "@/components/shared/form";
+import { FormTextInput } from "@/components/shared/form";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
-import { categoryFormSchema, CategoryFormData } from "./schema";
+import { customerFormSchema, CustomerFormData } from "./schema";
 import { objectToFormData } from "@/helpers/objectToFormData";
-import { CategoryServerActionResponse } from "@/types/server-action";
+import { CustomerServerActionResponse } from "@/types/server-action";
 
-type BaseCategoryFormProps = {
+type BaseCustomerFormProps = {
   title: string;
   description: string;
   submitButtonText: string;
   actionVerb: string;
   children: React.ReactNode;
-  action: (formData: FormData) => Promise<CategoryServerActionResponse>;
+  action: (formData: FormData) => Promise<CustomerServerActionResponse>;
 };
 
-type AddCategoryFormProps = BaseCategoryFormProps & {
+type AddCustomerFormProps = BaseCustomerFormProps & {
   initialData?: never;
-  previewImage?: never;
 };
 
-type EditCategoryFormProps = BaseCategoryFormProps & {
-  initialData: Partial<CategoryFormData>;
-  previewImage: string;
+type EditCustomerFormProps = BaseCustomerFormProps & {
+  initialData: Partial<CustomerFormData>;
 };
 
-type CategoryFormProps = AddCategoryFormProps | EditCategoryFormProps;
+type CustomerFormProps = AddCustomerFormProps | EditCustomerFormProps;
 
-export default function CategoryFormSheet({
+export default function CustomerFormSheet({
   title,
   description,
   submitButtonText,
   actionVerb,
   initialData,
-  previewImage,
   children,
   action,
-}: CategoryFormProps) {
+}: CustomerFormProps) {
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const imageDropzoneRef = useRef<HTMLDivElement>(null);
 
-  const form = useForm<CategoryFormData>({
-    resolver: zodResolver(categoryFormSchema),
+  const form = useForm<CustomerFormData>({
+    resolver: zodResolver(customerFormSchema),
     defaultValues: {
       name: "",
-      description: "",
-      image: undefined,
-      slug: "",
+      email: "",
+      phone: "",
       ...initialData,
     },
   });
@@ -83,7 +73,7 @@ export default function CategoryFormSheet({
     form.reset(initialData);
   }, [form, initialData]);
 
-  const onSubmit = (data: CategoryFormData) => {
+  const onSubmit = (data: CustomerFormData) => {
     const formData = objectToFormData(data);
 
     startTransition(async () => {
@@ -91,7 +81,7 @@ export default function CategoryFormSheet({
 
       if ("validationErrors" in result) {
         Object.keys(result.validationErrors).forEach((key) => {
-          form.setError(key as keyof CategoryFormData, {
+          form.setError(key as keyof CustomerFormData, {
             message: result.validationErrors![key],
           });
         });
@@ -100,19 +90,13 @@ export default function CategoryFormSheet({
       } else {
         form.reset();
         toast.success(
-          `Category "${result.category.name}" ${actionVerb} successfully!`,
+          `Customer "${result.customer.name}" ${actionVerb} successfully!`,
           { position: "top-center" }
         );
-        queryClient.invalidateQueries({ queryKey: ["categories"] });
+        queryClient.invalidateQueries({ queryKey: ["customers"] });
         setIsSheetOpen(false);
       }
     });
-  };
-
-  const onInvalid = (errors: FieldErrors<CategoryFormData>) => {
-    if (errors.image) {
-      imageDropzoneRef.current?.focus();
-    }
   };
 
   return (
@@ -121,10 +105,7 @@ export default function CategoryFormSheet({
 
       <SheetContent className="w-[90%] max-w-5xl">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onInvalid)}
-            className="size-full"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="size-full">
             <FormSheetContent>
               <FormSheetHeader>
                 <div className="flex flex-col">
@@ -138,32 +119,22 @@ export default function CategoryFormSheet({
                   <FormTextInput
                     control={form.control}
                     name="name"
-                    label="Category Name"
-                    placeholder="Category Name / Title"
+                    label="Customer Name"
+                    placeholder="Customer Name"
                   />
 
-                  <FormTextarea
+                  <FormTextInput
                     control={form.control}
-                    name="description"
-                    label="Category Description"
-                    placeholder="Category Description"
+                    name="email"
+                    label="Customer Email"
+                    placeholder="Customer Email"
                   />
 
-                  <FormImageInput
+                  <FormTextInput
                     control={form.control}
-                    name="image"
-                    label="Category Image"
-                    previewImage={previewImage}
-                    ref={imageDropzoneRef}
-                  />
-
-                  <FormSlugInput
-                    form={form}
-                    control={form.control}
-                    name="slug"
-                    label="Category Slug"
-                    placeholder="Category Slug"
-                    generateSlugFrom="name"
+                    name="phone"
+                    label="Customer Phone"
+                    placeholder="Customer Phone"
                   />
                 </div>
               </FormSheetBody>

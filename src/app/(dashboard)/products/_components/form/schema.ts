@@ -56,7 +56,7 @@ export const productFormSchema = z
         invalid_type_error: "Stock must be a number",
       })
       .int({ message: "Stock must be a whole number" })
-      .min(1, { message: "Stock must be greater than zero" }),
+      .min(0, { message: "Stock cannot be negative" }),
     minStockThreshold: z.coerce
       .number({
         invalid_type_error: "Min stock must be a number",

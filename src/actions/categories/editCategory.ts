@@ -91,7 +91,6 @@ export async function editCategory(
   }
 
   revalidatePath("/categories");
-  revalidatePath(`/categories/${updatedCategory.slug}`);
 
   return { success: true, category: updatedCategory };
 }

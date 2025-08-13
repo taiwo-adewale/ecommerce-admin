@@ -1,6 +1,7 @@
 import { SBProduct } from "@/services/products/types";
 import { SBCategory } from "@/services/categories/types";
 import { SBCoupon } from "@/services/coupons/types";
+import { SBCustomer } from "@/services/customers/types";
 
 type ValidationErrorsResponse = {
   validationErrors: Record<string, string>;
@@ -35,4 +36,11 @@ export type CouponServerActionResponse =
   | DbErrorResponse
   | (SuccessResponse & {
       coupon: SBCoupon;
+    });
+
+export type CustomerServerActionResponse =
+  | ValidationErrorsResponse
+  | DbErrorResponse
+  | (SuccessResponse & {
+      customer: SBCustomer;
     });

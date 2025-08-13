@@ -3,40 +3,19 @@ import { ZoomIn, PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import Typography from "@/components/ui/typography";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
-import { SkeletonColumn } from "@/types/skeleton";
+import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
+import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
+import CustomerFormSheet from "../form/CustomerFormSheet";
 import { Customer } from "@/services/customers/types";
+import { SkeletonColumn } from "@/types/skeleton";
+
+import { editCustomer } from "@/actions/customers/editCustomer";
+import { deleteCustomer } from "@/actions/customers/deleteCustomer";
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -63,7 +42,11 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     header: "phone",
-    cell: ({ row }) => row.original.phone,
+    cell: ({ row }) => (
+      <Typography className={cn(!row.original.phone && "pl-6")}>
+        {row.original.phone || "—"}
+      </Typography>
+    ),
   },
   {
     header: "actions",
@@ -81,96 +64,35 @@ export const columns: ColumnDef<Customer>[] = [
             </Link>
           </Button>
 
-          <Sheet>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <PenSquare className="size-5" />
-                  </Button>
-                </SheetTrigger>
-              </TooltipTrigger>
+          <CustomerFormSheet
+            key={row.original.id}
+            title="Update Customers"
+            description="Update necessary customer information here"
+            submitButtonText="Update Customer"
+            actionVerb="updated"
+            initialData={{
+              name: row.original.name,
+              email: row.original.email,
+              phone: row.original.phone ?? "",
+            }}
+            action={(formData) => editCustomer(row.original.id, formData)}
+          >
+            <SheetTooltip content="Edit Customer">
+              <PenSquare className="size-5" />
+            </SheetTooltip>
+          </CustomerFormSheet>
 
-              <TooltipContent>
-                <p>Edit Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-
-          <AlertDialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground"
-                  >
-                    <Trash2 className="size-5" />
-                  </Button>
-                </AlertDialogTrigger>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <p>Delete Product</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <TableActionAlertDialog
+            title={`Delete ${row.original.name}?`}
+            description="This action cannot be undone. This will permanently delete this customer and associated data from the database."
+            tooltipContent="Delete Customer"
+            actionButtonText="Delete Customer"
+            toastSuccessMessage={`Customer "${row.original.name}" deleted successfully!`}
+            queryKey="customers"
+            action={() => deleteCustomer(row.original.id)}
+          >
+            <Trash2 className="size-5" />
+          </TableActionAlertDialog>
         </div>
       );
     },

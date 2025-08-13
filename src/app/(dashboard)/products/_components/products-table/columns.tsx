@@ -111,7 +111,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "view",
     cell: ({ row }) => (
       <Button size="icon" asChild variant="ghost" className="text-foreground">
-        <Link href={`/product/${row.original.slug}`}>
+        <Link href={`/products/${row.original.slug}`}>
           <ZoomIn className="size-5" />
         </Link>
       </Button>

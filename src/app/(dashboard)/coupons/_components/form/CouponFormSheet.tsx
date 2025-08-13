@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, LegacyRef, useState, useTransition } from "react";
+import { useRef, LegacyRef, useState, useTransition, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FieldErrors } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -82,6 +82,10 @@ export default function CouponFormSheet({
       ...initialData,
     },
   });
+
+  useEffect(() => {
+    form.reset(initialData);
+  }, [form, initialData]);
 
   const onSubmit = (data: CouponFormData) => {
     const formData = objectToFormData(data);

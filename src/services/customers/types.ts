@@ -1,7 +1,7 @@
 import { Database } from "@/types/supabase";
 import { Pagination } from "@/types/pagination";
 
-type SBCustomer = Database["public"]["Tables"]["customers"]["Row"];
+export type SBCustomer = Database["public"]["Tables"]["customers"]["Row"];
 
 export type Customer = SBCustomer;
 
