@@ -1,4 +1,4 @@
-import { InputField } from "@/types/input";
+import { InputField } from "@/types/auth-input";
 
 interface LoginField extends InputField {
   name: "email" | "password";
@@ -10,11 +10,13 @@ export const loginFields: LoginField[] = [
     label: "Email",
     placeholder: "john@doe.com",
     inputType: "email",
+    autoComplete: "email",
   },
   {
     name: "password",
     label: "Password",
     placeholder: "**********",
     inputType: "password",
+    autoComplete: "current-password",
   },
 ];

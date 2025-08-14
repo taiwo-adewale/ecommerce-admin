@@ -1,4 +1,4 @@
-import { InputField, SelectField, FileField } from "@/types/input";
+import { InputField, SelectField, FileField } from "@/types/auth-input";
 
 export type EditProfileField = {
   name: "name" | "email" | "number" | "profilePicture";
@@ -15,17 +15,20 @@ export const editProfileFields: EditProfileField[] = [
     label: "Name",
     placeholder: "John Doe",
     inputType: "text",
+    autoComplete: "name",
   },
   {
     name: "email",
     label: "Email",
     placeholder: "john@doe.com",
     inputType: "email",
+    autoComplete: "email",
   },
   {
     name: "number",
     label: "Contact Number",
     placeholder: "+55 555 555",
     inputType: "text",
+    autoComplete: "tel",
   },
 ];

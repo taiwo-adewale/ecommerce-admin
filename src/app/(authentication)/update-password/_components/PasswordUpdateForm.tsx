@@ -106,6 +106,7 @@ export default function PasswordUpdateForm() {
                     <Input
                       type={formField.inputType}
                       placeholder={formField.placeholder}
+                      autoComplete={formField.autoComplete}
                       {...field}
                     />
                   </FormControl>

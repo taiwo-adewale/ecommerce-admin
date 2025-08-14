@@ -4,7 +4,8 @@ interface BaseField {
 }
 
 export interface InputField extends BaseField {
-  inputType: Exclude<React.HTMLInputTypeAttribute, "file">;
+  inputType: Exclude<React.HTMLInputTypeAttribute, "password" | "file">;
+  autoComplete: string;
 }
 
 export interface SelectField extends BaseField {

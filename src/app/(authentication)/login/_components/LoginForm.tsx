@@ -96,6 +96,7 @@ export default function LoginForm() {
                     <Input
                       type={formField.inputType}
                       placeholder={formField.placeholder}
+                      autoComplete={formField.autoComplete}
                       {...field}
                     />
                   </FormControl>
