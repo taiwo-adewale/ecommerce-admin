@@ -6,12 +6,3 @@ export interface Pagination {
   next: number | null;
   prev: number | null;
 }
-
-export interface PaginationQueryProps {
-  page: number;
-  perPage?: number;
-}
-
-export interface PaginationData<Data> extends Pagination {
-  data: Data[];
-}
