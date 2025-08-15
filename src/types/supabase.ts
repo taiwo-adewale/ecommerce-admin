@@ -7,7 +7,7 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.0.2 (a4e00ff)";
@@ -93,30 +93,6 @@ export type Database = {
             referencedColumns: ["id"];
           }
         ];
-      };
-      "**settings": {
-        Row: {
-          created_at: string;
-          id: string;
-          key: string;
-          updated_at: string;
-          value: Json | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          key: string;
-          updated_at?: string;
-          value?: Json | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          key?: string;
-          updated_at?: string;
-          value?: Json | null;
-        };
-        Relationships: [];
       };
       categories: {
         Row: {
@@ -226,24 +202,24 @@ export type Database = {
       order_items: {
         Row: {
           id: string;
-          order_id: string | null;
-          product_id: string | null;
-          quantity: number | null;
-          unit_price: number | null;
+          order_id: string;
+          product_id: string;
+          quantity: number;
+          unit_price: number;
         };
         Insert: {
           id?: string;
-          order_id?: string | null;
-          product_id?: string | null;
-          quantity?: number | null;
-          unit_price?: number | null;
+          order_id: string;
+          product_id: string;
+          quantity: number;
+          unit_price: number;
         };
         Update: {
           id?: string;
-          order_id?: string | null;
-          product_id?: string | null;
-          quantity?: number | null;
-          unit_price?: number | null;
+          order_id?: string;
+          product_id?: string;
+          quantity?: number;
+          unit_price?: number;
         };
         Relationships: [
           {
@@ -271,6 +247,7 @@ export type Database = {
           invoice_no: string;
           order_time: string;
           payment_method: Database["public"]["Enums"]["payment_method_enum"];
+          shipping_cost: number;
           status: Database["public"]["Enums"]["order_status_enum"];
           total_amount: number;
           updated_at: string;
@@ -283,6 +260,7 @@ export type Database = {
           invoice_no: string;
           order_time?: string;
           payment_method?: Database["public"]["Enums"]["payment_method_enum"];
+          shipping_cost: number;
           status?: Database["public"]["Enums"]["order_status_enum"];
           total_amount: number;
           updated_at?: string;
@@ -295,6 +273,7 @@ export type Database = {
           invoice_no?: string;
           order_time?: string;
           payment_method?: Database["public"]["Enums"]["payment_method_enum"];
+          shipping_cost?: number;
           status?: Database["public"]["Enums"]["order_status_enum"];
           total_amount?: number;
           updated_at?: string;
@@ -380,7 +359,7 @@ export type Database = {
           created_at: string;
           email: string;
           id: string;
-          image_url: string;
+          image_url: string | null;
           joining_date: string;
           name: string;
           phone: string | null;
@@ -392,8 +371,8 @@ export type Database = {
           created_at?: string;
           email: string;
           id?: string;
-          image_url: string;
-          joining_date: string;
+          image_url?: string | null;
+          joining_date?: string;
           name: string;
           phone?: string | null;
           published?: boolean;
@@ -404,7 +383,7 @@ export type Database = {
           created_at?: string;
           email?: string;
           id?: string;
-          image_url?: string;
+          image_url?: string | null;
           joining_date?: string;
           name?: string;
           phone?: string | null;

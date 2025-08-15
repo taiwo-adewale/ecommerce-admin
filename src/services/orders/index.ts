@@ -2,7 +2,12 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 import { Database } from "@/types/supabase";
 import { queryPaginatedTable } from "@/helpers/queryPaginatedTable";
-import { Order, FetchOrdersParams, FetchOrdersResponse } from "./types";
+import {
+  Order,
+  FetchOrdersParams,
+  FetchOrdersResponse,
+  OrderDetails,
+} from "./types";
 
 export async function fetchOrders(
   client: SupabaseClient<Database>,
@@ -59,4 +64,33 @@ export async function fetchOrders(
   });
 
   return paginatedOrders;
+}
+
+export async function fetchOrderDetails(
+  client: SupabaseClient<Database>,
+  { id }: { id: string }
+) {
+  const selectQuery = `
+    id,
+    invoice_no,
+    order_time,
+    total_amount,
+    shipping_cost,
+    payment_method,
+    status,
+    customers(name, email, phone, address),
+    order_items(quantity, unit_price, products(name)),
+    coupons(discount_type, discount_value)
+  `;
+
+  const { data, error } = await client
+    .from("orders")
+    .select(selectQuery)
+    .eq("id", id)
+    .single();
+
+  return {
+    order: (data as OrderDetails) || null,
+    error: error || null,
+  };
 }

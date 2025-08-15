@@ -1,5 +1,6 @@
 import { DownloadCloud, Printer } from "lucide-react";
 import { BsFillHandbagFill } from "react-icons/bs";
+import { format } from "date-fns";
 
 import PageTitle from "@/components/shared/PageTitle";
 import Typography from "@/components/ui/typography";
@@ -18,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 
 // import { fetchOrder } from "@/data/orders";
 import { OrderBadgeVariants } from "@/constants/badge";
+import { fetchOrderDetails } from "@/services/orders";
+import { createServerClient } from "@/lib/supabase/server";
 
 type PageParams = {
   params: {
@@ -26,7 +29,13 @@ type PageParams = {
 };
 
 export default async function Order({ params: { id } }: PageParams) {
-  // const order = await fetchOrder({ id });
+  const { order, error } = await fetchOrderDetails(createServerClient(), {
+    id,
+  });
+
+  if (error || !order) {
+    return <p>Nothing dey here</p>;
+  }
 
   return (
     <section>
@@ -47,12 +56,12 @@ export default async function Order({ params: { id } }: PageParams) {
                 status
               </Typography>
 
-              {/* <Badge
+              <Badge
                 variant={OrderBadgeVariants[order.status]}
                 className="flex-shrink-0 text-xs capitalize"
               >
                 {order.status}
-              </Badge> */}
+              </Badge>
             </div>
           </div>
 
@@ -93,7 +102,9 @@ export default async function Order({ params: { id } }: PageParams) {
               date
             </Typography>
 
-            <Typography className="text-sm">Mar 3, 2024</Typography>
+            <Typography className="text-sm">
+              {format(order.order_time, "PPP")}
+            </Typography>
           </div>
 
           <div>
@@ -105,7 +116,7 @@ export default async function Order({ params: { id } }: PageParams) {
               invoice no
             </Typography>
 
-            <Typography className="text-sm">#29392</Typography>
+            <Typography className="text-sm">#{order.invoice_no}</Typography>
           </div>
 
           <div className="md:text-right">
@@ -118,15 +129,18 @@ export default async function Order({ params: { id } }: PageParams) {
             </Typography>
 
             <div className="flex flex-col text-sm gap-y-0.5">
-              <Typography component="p">Lawson Brendan</Typography>
+              <Typography component="p">{order.customers.name}</Typography>
               <Typography component="p" className="break-words">
-                lawsonbrendan23@yahoo.com
+                {order.customers.email}
               </Typography>
-              <Typography component="p">+1 (796) 992-5853</Typography>
-              <Typography component="p">Sit butx eos nihil</Typography>
-              <Typography component="p">
-                Dolor ncidunt eos nihil quo quae amet
-              </Typography>
+              {order.customers.phone && (
+                <Typography component="p">{order.customers.phone}</Typography>
+              )}
+              {order.customers.address && (
+                <Typography component="p" className="max-w-80">
+                  {order.customers.address}
+                </Typography>
+              )}
             </div>
           </div>
         </div>
@@ -154,37 +168,26 @@ export default async function Order({ params: { id } }: PageParams) {
             </TableHeader>
 
             <TableBody>
-              <TableRow className="hover:bg-transparent">
-                <TableCell className="py-3">1</TableCell>
-                <TableCell className="font-semibold py-3 px-6 text-card-foreground">
-                  Lettuce
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-center">
-                  5
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-center">
-                  $193.26
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-primary text-right">
-                  $996.30
-                </TableCell>
-              </TableRow>
-
-              <TableRow className="hover:bg-transparent">
-                <TableCell className="py-3">2</TableCell>
-                <TableCell className="font-semibold py-3 px-6 text-card-foreground">
-                  Mustard
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-center">
-                  12
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-center">
-                  $200.00
-                </TableCell>
-                <TableCell className="font-semibold py-3 text-primary text-right">
-                  $2400.00
-                </TableCell>
-              </TableRow>
+              {order.order_items.map((orderItem, index) => (
+                <TableRow
+                  key={`order-item-${index}`}
+                  className="hover:bg-transparent"
+                >
+                  <TableCell className="py-3">{index + 1}</TableCell>
+                  <TableCell className="font-medium py-3 px-6 text-card-foreground">
+                    {orderItem.products.name}
+                  </TableCell>
+                  <TableCell className="font-semibold py-3 text-center">
+                    {orderItem.quantity}
+                  </TableCell>
+                  <TableCell className="font-semibold py-3 text-center">
+                    ${orderItem.unit_price.toFixed(2)}
+                  </TableCell>
+                  <TableCell className="font-semibold py-3 text-primary text-right">
+                    ${(orderItem.quantity * orderItem.unit_price).toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
@@ -198,9 +201,9 @@ export default async function Order({ params: { id } }: PageParams) {
               payment method
             </Typography>
 
-            {/* <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
-              {order.method}
-            </Typography> */}
+            <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
+              {order.payment_method}
+            </Typography>
           </div>
 
           <div>
@@ -212,7 +215,7 @@ export default async function Order({ params: { id } }: PageParams) {
             </Typography>
 
             <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
-              $60.00
+              ${order.shipping_cost.toFixed(2)}
             </Typography>
           </div>
 
@@ -225,7 +228,16 @@ export default async function Order({ params: { id } }: PageParams) {
             </Typography>
 
             <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide">
-              $0.00
+              $
+              {order.coupons
+                ? order.coupons.discount_type === "fixed"
+                  ? order.coupons.discount_value.toFixed(2)
+                  : (
+                      ((order.total_amount - order.shipping_cost) * 100) /
+                        (100 - order.coupons.discount_value) -
+                      (order.total_amount - order.shipping_cost)
+                    ).toFixed(2)
+                : "0.00"}
             </Typography>
           </div>
 
@@ -238,7 +250,7 @@ export default async function Order({ params: { id } }: PageParams) {
             </Typography>
 
             <Typography className="text-xl capitalize font-semibold tracking-wide text-primary">
-              $1056.30
+              ${order.total_amount.toFixed(2)}
             </Typography>
           </div>
         </div>
