@@ -19,12 +19,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
           error:
             "group-[.toaster]:!bg-destructive group-[.toaster]:!text-destructive-foreground group-[.toaster]:!border-background/40",
           success: "success",
-          description: "group-[.toast]:text-muted-foreground",
+          title: "text-sm",
+          description: "group-[.toast]:text-muted-foreground text-sm",
           actionButton:
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
-          icon: "group-[.success]:text-primary",
+          icon: "group-[.success]:text-primary !size-6 [&>svg]:size-6",
         },
       }}
       {...props}

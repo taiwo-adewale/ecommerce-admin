@@ -39,11 +39,13 @@ export default function PasswordResetForm() {
       await axios.post("/auth/forgot-password", formData);
     },
     onSuccess: () => {
-      toast.success(null, {
-        description:
-          "We've sent you an email with instructions to reset your password. Please check your inbox and follow the instructions.",
-        position: "top-center",
-      });
+      toast.success(
+        "We've sent you an email with instructions to reset your password. Please check your inbox and follow the instructions.",
+        {
+          position: "top-center",
+          duration: 7000,
+        }
+      );
 
       form.reset();
     },
