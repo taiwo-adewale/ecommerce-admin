@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     password,
     options: {
       data: {
-        full_name: name,
+        name: name,
       },
     },
   });

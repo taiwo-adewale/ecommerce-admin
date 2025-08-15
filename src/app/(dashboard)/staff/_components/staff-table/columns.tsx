@@ -3,12 +3,9 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import Typography from "@/components/ui/typography";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import noProfilePicture from "public/assets/no-profile-picture.jpg";
 
 import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
@@ -30,7 +27,7 @@ export const columns: ColumnDef<Staff>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2 items-center">
         <ImagePlaceholder
-          src={row.original.image_url}
+          src={row.original.image_url || noProfilePicture}
           alt={row.original.name}
           width={32}
           height={32}
