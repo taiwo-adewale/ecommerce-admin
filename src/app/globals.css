@@ -23,6 +23,7 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
+    --print-border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
     --radius: 0.5rem;
@@ -54,6 +55,7 @@
     --destructive: 0 61.6% 38.8%;
     --destructive-foreground: 0 85.7% 97.3%;
     --border: 240 3.7% 15.9%;
+    --print-border: 240 5.9% 90%;
     --input: 240 3.7% 15.9%;
     --ring: 142.4 71.8% 29.2%;
     --sidebar-background: 0 0% 9%;
@@ -74,7 +76,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground print:bg-white print:text-black;
   }
 
   input[type="number"] {
@@ -87,5 +89,19 @@
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 0;
+    padding: 2cm 1cm;
+    background: white;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 }

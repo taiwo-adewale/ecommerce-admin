@@ -50,7 +50,7 @@ type AddStaffFormProps = BaseStaffFormProps & {
 
 type EditStaffFormProps = BaseStaffFormProps & {
   initialData: Partial<StaffFormData>;
-  previewImage: string;
+  previewImage?: string;
 };
 
 type StaffFormProps = AddStaffFormProps | EditStaffFormProps;

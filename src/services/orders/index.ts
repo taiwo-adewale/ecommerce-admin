@@ -89,6 +89,10 @@ export async function fetchOrderDetails(
     .eq("id", id)
     .single();
 
+  if (error) {
+    console.error(error.message);
+  }
+
   return {
     order: (data as OrderDetails) || null,
     error: error || null,

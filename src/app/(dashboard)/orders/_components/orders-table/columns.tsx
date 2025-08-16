@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Printer, ZoomIn } from "lucide-react";
+import { ZoomIn } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
@@ -20,8 +20,7 @@ import { Order, OrderStatus } from "@/services/orders/types";
 import { SkeletonColumn } from "@/types/skeleton";
 
 import { changeOrderStatus } from "@/actions/orders/changeOrderStatus";
-
-const printInvoice = (invoiceNo: string) => {};
+import { PrintInvoiceButton } from "./PrintInvoiceButton";
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -94,22 +93,7 @@ export const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => printInvoice(row.original.invoice_no)}
-                className="text-foreground"
-              >
-                <Printer className="size-5" />
-              </Button>
-            </TooltipTrigger>
-
-            <TooltipContent>
-              <p>Print Invoice</p>
-            </TooltipContent>
-          </Tooltip>
+          <PrintInvoiceButton orderId={row.original.id} />
 
           <Tooltip>
             <TooltipTrigger asChild>

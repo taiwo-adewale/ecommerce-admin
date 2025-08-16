@@ -113,10 +113,10 @@ export const columns: ColumnDef<Staff>[] = [
               name: row.original.name,
               email: row.original.email,
               phone: row.original.phone ?? "",
-              image: row.original.image_url,
+              image: row.original.image_url ?? undefined,
             }}
             action={(formData) => editStaff(row.original.id, formData)}
-            previewImage={row.original.image_url}
+            previewImage={row.original.image_url ?? undefined}
           >
             <SheetTooltip content="Edit Staff">
               <PenSquare className="size-5" />

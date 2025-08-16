@@ -6,7 +6,7 @@ import Notifications from "@/components/shared/notifications/Notifications";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 left-0 w-full bg-popover py-4 shadow-sm z-40">
+    <header className="sticky top-0 left-0 w-full bg-popover py-4 shadow-sm z-40 print:hidden">
       <Container>
         <div className="flex justify-between">
           <NavMenuToggle />
