@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { ThemeProvider } from "@/lib/theme-provider";
 import TanstackQueryProvider from "@/lib/tanstack-query-provider";
 
@@ -7,6 +8,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 // pages have to be rendered dynamically because supabase server component client uses cookies
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s - Zorvex",
+    default: "Zorvex",
+  },
+};
 
 export default function RootLayout({
   children,

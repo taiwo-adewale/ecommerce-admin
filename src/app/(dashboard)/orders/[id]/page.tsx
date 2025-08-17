@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { format } from "date-fns";
@@ -26,6 +27,20 @@ type PageParams = {
     id: string;
   };
 };
+
+export async function generateMetadata({ params: { id } }: PageParams) {
+  const { order, error } = await fetchOrderDetails(createServerClient(), {
+    id,
+  });
+
+  if (error || !order) {
+    return { title: "Order not found" } as Metadata;
+  }
+
+  return {
+    title: `Order #${order.invoice_no}`,
+  };
+}
 
 export default async function Order({ params: { id } }: PageParams) {
   const { order, error } = await fetchOrderDetails(createServerClient(), {
