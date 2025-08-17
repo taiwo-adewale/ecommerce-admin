@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import useGetMountStatus from "@/hooks/useGetMountStatus";
+import useGetMountStatus from "@/hooks/use-get-mount-status";
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();

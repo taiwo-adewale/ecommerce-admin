@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import Typography from "@/components/ui/typography";
 import { Pagination as PaginationType } from "@/types/pagination";
-import { useUpdateQueryString } from "@/hooks/useUpdateQueryString";
+import { useUpdateQueryString } from "@/hooks/use-update-query-string";
 import { getPaginationButtons } from "@/helpers/getPaginationButtons";
 
 interface DataTableProps<TData> {

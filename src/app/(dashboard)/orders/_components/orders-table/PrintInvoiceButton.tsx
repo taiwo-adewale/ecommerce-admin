@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { usePagePrint } from "@/hooks/usePagePrint";
+import { usePagePrint } from "@/hooks/use-page-print";
 
 export function PrintInvoiceButton({ orderId }: { orderId: string }) {
   const { isLoading, printPage } = usePagePrint();

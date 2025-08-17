@@ -257,7 +257,7 @@ export default async function Order({ params: { id } }: PageParams) {
         </div>
       </Card>
 
-      <InvoiceActions />
+      <InvoiceActions order={order} />
     </section>
   );
 }

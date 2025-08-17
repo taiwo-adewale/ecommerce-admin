@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Typography from "@/components/ui/typography";
 import { getPastDates } from "@/helpers/getPastDates";
-import useGetMountStatus from "@/hooks/useGetMountStatus";
+import useGetMountStatus from "@/hooks/use-get-mount-status";
 
 export default function WeeklySales() {
   const labels = getPastDates(7);

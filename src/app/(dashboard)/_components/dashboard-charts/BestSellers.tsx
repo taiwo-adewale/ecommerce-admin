@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Typography from "@/components/ui/typography";
-import useGetMountStatus from "@/hooks/useGetMountStatus";
+import useGetMountStatus from "@/hooks/use-get-mount-status";
 
 export default function BestSellers() {
   const mounted = useGetMountStatus();
