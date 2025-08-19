@@ -7,14 +7,15 @@ import { Card } from "@/components/ui/card";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
-import { addCoupon } from "@/actions/coupons/addCoupon";
 import CouponFormSheet from "./form/CouponFormSheet";
+import { addCoupon } from "@/actions/coupons/addCoupon";
+import { exportCoupons } from "@/actions/coupons/exportCoupons";
 
 export default function CouponActions() {
   return (
     <Card className="mb-5">
       <form className="flex flex-col xl:flex-row xl:justify-between gap-4">
-        <ExportDataButtons tableName="coupons" fileName="Coupons" />
+        <ExportDataButtons action={exportCoupons} tableName="coupons" />
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button

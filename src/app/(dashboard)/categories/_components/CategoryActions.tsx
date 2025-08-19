@@ -7,14 +7,15 @@ import { Card } from "@/components/ui/card";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
-import { addCategory } from "@/actions/categories/addCategory";
 import CategoryFormSheet from "./form/CategoryFormSheet";
+import { addCategory } from "@/actions/categories/addCategory";
+import { exportCategories } from "@/actions/categories/exportCategories";
 
 export default function CategoryActions() {
   return (
     <Card className="mb-5">
       <form className="flex flex-col xl:flex-row xl:justify-between gap-4">
-        <ExportDataButtons tableName="categories" fileName="Categories" />
+        <ExportDataButtons action={exportCategories} tableName="categories" />
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
+import { getDiscount } from "@/helpers/getDiscount";
 import { OrderBadgeVariants } from "@/constants/badge";
 import { fetchOrderDetails } from "@/services/orders";
 import { createServerClient } from "@/lib/supabase/server";
@@ -245,15 +246,11 @@ export default async function Order({ params: { id } }: PageParams) {
 
             <Typography className="text-base capitalize font-semibold text-card-foreground tracking-wide print:text-black">
               $
-              {order.coupons
-                ? order.coupons.discount_type === "fixed"
-                  ? order.coupons.discount_value.toFixed(2)
-                  : (
-                      ((order.total_amount - order.shipping_cost) * 100) /
-                        (100 - order.coupons.discount_value) -
-                      (order.total_amount - order.shipping_cost)
-                    ).toFixed(2)
-                : "0.00"}
+              {getDiscount({
+                totalAmount: order.total_amount,
+                shippingCost: order.shipping_cost,
+                coupon: order.coupons,
+              })}
             </Typography>
           </div>
 

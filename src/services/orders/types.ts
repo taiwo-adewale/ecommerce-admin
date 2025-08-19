@@ -8,7 +8,7 @@ import { SBCoupon } from "../coupons/types";
 export type OrderStatus = Database["public"]["Enums"]["order_status_enum"];
 export type OrderMethod = Database["public"]["Enums"]["payment_method_enum"];
 
-type SBOrder = Database["public"]["Tables"]["orders"]["Row"];
+export type SBOrder = Database["public"]["Tables"]["orders"]["Row"];
 type SBOrderItems = Database["public"]["Tables"]["order_items"]["Row"];
 
 export type Order = SBOrder & {
@@ -47,4 +47,22 @@ export type OrderDetails = Pick<
   })[];
 } & {
   coupons: Pick<SBCoupon, "discount_type" | "discount_value"> | null;
+};
+
+export type OrdersExport = Pick<
+  SBOrder,
+  | "id"
+  | "invoice_no"
+  | "order_time"
+  | "total_amount"
+  | "shipping_cost"
+  | "payment_method"
+  | "order_time"
+  | "status"
+  | "created_at"
+  | "updated_at"
+> & {
+  discount: string;
+  customer_name: SBCustomer["name"];
+  customer_email: SBCustomer["email"];
 };

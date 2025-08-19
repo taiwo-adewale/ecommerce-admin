@@ -7,30 +7,33 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 import { Database } from "@/types/supabase";
-import { fetchAllData } from "@/actions/fetchAllData";
 import { exportAsCSV, exportAsJSON } from "@/helpers/exportData";
+
+type SuccessResponse = { data: any[] };
+type ErrorResponse = { error: string };
+type ActionResponse = SuccessResponse | ErrorResponse;
 
 type Props = {
   tableName: keyof Database["public"]["Tables"];
-  fileName: string;
+  action: () => Promise<ActionResponse>;
 };
 
-export function ExportDataButtons({ tableName, fileName }: Props) {
+export function ExportDataButtons({ tableName, action }: Props) {
   const [isPending, startTransition] = useTransition();
 
   const handleExport = (format: "json" | "csv") => {
     toast.info(`Exporting ${tableName} as ${format.toUpperCase()}...`);
 
     startTransition(async () => {
-      const result = await fetchAllData(tableName);
+      const result = await action();
 
-      if (result.error) {
+      if ("error" in result) {
         toast.error(result.error);
-      } else if (result.data) {
+      } else if ("data" in result) {
         if (format === "json") {
-          exportAsJSON(result.data, fileName);
+          exportAsJSON(result.data, tableName);
         } else if (format === "csv") {
-          exportAsCSV(result.data, fileName);
+          exportAsCSV(result.data, tableName);
         }
       }
     });
