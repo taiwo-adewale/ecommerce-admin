@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, LegacyRef, useState, useTransition, useEffect } from "react";
+import { useRef, useState, useTransition, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FieldErrors } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,11 +22,8 @@ import {
 } from "@/components/shared/form/FormSheet";
 import {
   FormTextInput,
-  FormCategoryInput,
   FormImageInput,
-  FormPriceInput,
-  FormSlugInput,
-  FormTextarea,
+  FormReadonly,
 } from "@/components/shared/form";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 
@@ -43,17 +40,13 @@ type BaseStaffFormProps = {
   action: (formData: FormData) => Promise<StaffServerActionResponse>;
 };
 
-type AddStaffFormProps = BaseStaffFormProps & {
-  initialData?: never;
-  previewImage?: never;
-};
-
 type EditStaffFormProps = BaseStaffFormProps & {
   initialData: Partial<StaffFormData>;
   previewImage?: string;
+  staffEmail: string;
 };
 
-type StaffFormProps = AddStaffFormProps | EditStaffFormProps;
+type StaffFormProps = EditStaffFormProps;
 
 export default function StaffFormSheet({
   title,
@@ -62,6 +55,7 @@ export default function StaffFormSheet({
   actionVerb,
   initialData,
   previewImage,
+  staffEmail,
   children,
   action,
 }: StaffFormProps) {
@@ -74,7 +68,6 @@ export default function StaffFormSheet({
     resolver: zodResolver(staffFormSchema),
     defaultValues: {
       name: "",
-      email: "",
       phone: "",
       image: undefined,
       ...initialData,
@@ -144,12 +137,7 @@ export default function StaffFormSheet({
                     placeholder="Staff Name"
                   />
 
-                  <FormTextInput
-                    control={form.control}
-                    name="email"
-                    label="Staff Email"
-                    placeholder="Staff Email"
-                  />
+                  <FormReadonly label="Staff Email" value={staffEmail} />
 
                   <FormImageInput
                     control={form.control}

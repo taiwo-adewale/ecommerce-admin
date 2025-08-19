@@ -1,6 +1,7 @@
 export { default as FormCategoryInput } from "./FormCategoryInput";
 export { default as FormDatetimeInput } from "./FormDatetimeInput";
 export { default as FormDiscountInput } from "./FormDiscountInput";
+export { default as FormReadonly } from "./FormReadonly";
 export { default as FormImageInput } from "./FormImageInput";
 export { default as FormPriceInput } from "./FormPriceInput";
 export { default as FormSlugInput } from "./FormSlugInput";

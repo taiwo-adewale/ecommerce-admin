@@ -3,17 +3,17 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerActionClient } from "@/lib/supabase/server-action";
-import { staffFormSchema } from "@/app/(dashboard)/staff/_components/form/schema";
+import { profileFormSchema } from "@/app/(dashboard)/edit-profile/_components/schema";
 import { formatValidationErrors } from "@/helpers/formatValidationErrors";
-import { StaffServerActionResponse } from "@/types/server-action";
+import { ProfileServerActionResponse } from "@/types/server-action";
 
-export async function editStaff(
-  staffId: string,
+export async function editProfile(
+  userId: string,
   formData: FormData
-): Promise<StaffServerActionResponse> {
+): Promise<ProfileServerActionResponse> {
   const supabase = createServerActionClient();
 
-  const parsedData = staffFormSchema.safeParse({
+  const parsedData = profileFormSchema.safeParse({
     name: formData.get("name"),
     phone: formData.get("phone"),
     image: formData.get("image"),
@@ -27,26 +27,26 @@ export async function editStaff(
     };
   }
 
-  const { image, ...staffData } = parsedData.data;
+  const { image, ...profileData } = parsedData.data;
 
   let imageUrl: string | undefined;
 
   if (image instanceof File && image.size > 0) {
-    const { data: oldStaffData, error: fetchError } = await supabase
+    const { data: oldProfileData, error: fetchError } = await supabase
       .from("staff")
       .select("image_url")
-      .eq("id", staffId)
+      .eq("id", userId)
       .single();
 
     if (fetchError) {
-      console.error("Failed to fetch old staff data:", fetchError);
-      return { dbError: "Could not find the staff to update." };
+      console.error("Failed to fetch profile details:", fetchError);
+      return { dbError: "Could not fetch your profile details." };
     }
 
-    const oldImageUrl = oldStaffData.image_url;
+    const oldImageUrl = oldProfileData.image_url;
 
     const fileExt = image.name.split(".").pop();
-    const fileName = `staff/${staffData.name}-${Date.now()}.${fileExt}`;
+    const fileName = `staff/${profileData.name}-${Date.now()}.${fileExt}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("assets")
@@ -72,14 +72,14 @@ export async function editStaff(
     }
   }
 
-  const { data: updatedStaff, error: dbError } = await supabase
+  const { error: dbError } = await supabase
     .from("staff")
     .update({
-      name: staffData.name,
-      phone: staffData.phone,
+      name: profileData.name,
+      phone: profileData.phone,
       ...(imageUrl && { image_url: imageUrl }),
     })
-    .eq("id", staffId)
+    .eq("id", userId)
     .select()
     .single();
 
@@ -88,7 +88,7 @@ export async function editStaff(
     return { dbError: "Something went wrong. Please try again later." };
   }
 
-  revalidatePath("/staff");
+  revalidatePath("/edit-profile");
 
-  return { success: true, staff: updatedStaff };
+  return { success: true };
 }

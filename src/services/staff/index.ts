@@ -6,6 +6,7 @@ import {
   StaffRolesDropdown,
   FetchStaffParams,
   FetchStaffResponse,
+  SBStaff,
 } from "./types";
 import { queryPaginatedTable } from "@/helpers/queryPaginatedTable";
 
@@ -58,4 +59,27 @@ export async function fetchStaffRolesDropdown(
   }
 
   return data ?? [];
+}
+
+export async function fetchStaffDetails(
+  client: SupabaseClient<Database>
+): Promise<SBStaff | null> {
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (!user) return null;
+
+  const { data: profile, error } = await client
+    .from("staff")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching staff profile:", error);
+    return null;
+  }
+
+  return profile;
 }

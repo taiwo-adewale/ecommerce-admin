@@ -52,3 +52,8 @@ export type StaffServerActionResponse =
   | (SuccessResponse & {
       staff: SBStaff;
     });
+
+export type ProfileServerActionResponse =
+  | ValidationErrorsResponse
+  | DbErrorResponse
+  | SuccessResponse;

@@ -11,7 +11,7 @@ import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
 import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
 import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
-import StaffFormSheet from "../form/CustomerFormSheet";
+import StaffFormSheet from "../form/StaffFormSheet";
 import { StaffBadgeVariants } from "@/constants/badge";
 import { SkeletonColumn } from "@/types/skeleton";
 import { Staff } from "@/services/staff/types";
@@ -111,12 +111,12 @@ export const columns: ColumnDef<Staff>[] = [
             actionVerb="updated"
             initialData={{
               name: row.original.name,
-              email: row.original.email,
               phone: row.original.phone ?? "",
               image: row.original.image_url ?? undefined,
             }}
             action={(formData) => editStaff(row.original.id, formData)}
             previewImage={row.original.image_url ?? undefined}
+            staffEmail={row.original.email}
           >
             <SheetTooltip content="Edit Staff">
               <PenSquare className="size-5" />

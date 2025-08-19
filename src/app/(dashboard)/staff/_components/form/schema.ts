@@ -25,10 +25,6 @@ export const staffFormSchema = z.object({
     .string()
     .min(1, { message: "Staff name is required" })
     .max(100, "Staff name must be 100 characters or less"),
-  email: z
-    .string()
-    .min(1, { message: "Staff email is required" })
-    .email({ message: "Invalid email address" }),
   phone: z
     .string()
     .regex(/^\+?[0-9]\d{1,14}$/, { message: "Invalid phone number format" })

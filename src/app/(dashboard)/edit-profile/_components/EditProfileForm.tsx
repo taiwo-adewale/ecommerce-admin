@@ -1,104 +1,99 @@
 "use client";
 
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useTransition, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { useForm, FieldErrors } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ImageDropzone } from "@/components/shared/ImageDropzone";
 import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
+import {
+  FormTextInput,
+  FormImageInput,
+  FormReadonly,
+} from "@/components/shared/form";
 
-import { editProfileFields } from "./fields";
-import { editProfileFormSchema } from "./schema";
+import { profileFormSchema, ProfileFormData } from "./schema";
+import { objectToFormData } from "@/helpers/objectToFormData";
+import { SBStaff } from "@/services/staff/types";
+import { editProfile } from "@/actions/profile/editProfile";
 
-type FormData = z.infer<typeof editProfileFormSchema>;
+export default function EditProfileForm({ profile }: { profile: SBStaff }) {
+  const queryClient = useQueryClient();
+  const [isPending, startTransition] = useTransition();
+  const imageDropzoneRef = useRef<HTMLDivElement>(null);
 
-export default function EditProfileForm() {
-  const profileData = {
-    name: "Joseph Roagan",
-    email: "test@admin.com",
-    number: "+12 345 6789",
-    profilePicture: "/temp/avatar.jpg",
+  const form = useForm<ProfileFormData>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: profile.name,
+      phone: profile.phone ?? "",
+      image: profile.image_url ?? undefined,
+    },
+  });
+
+  const onSubmit = (data: ProfileFormData) => {
+    const formData = objectToFormData(data);
+
+    startTransition(async () => {
+      const result = await editProfile(profile.id, formData);
+
+      if ("validationErrors" in result) {
+        Object.keys(result.validationErrors).forEach((key) => {
+          form.setError(key as keyof ProfileFormData, {
+            message: result.validationErrors![key],
+          });
+        });
+      } else if ("dbError" in result) {
+        toast.error(result.dbError);
+      } else {
+        toast.success("Profile updated successfully!", {
+          position: "top-center",
+        });
+        queryClient.invalidateQueries({ queryKey: ["staff"] });
+      }
+    });
   };
 
-  const form = useForm<FormData>({
-    resolver: zodResolver(editProfileFormSchema),
-    defaultValues: {
-      name: profileData.name,
-      email: profileData.email,
-      number: profileData.number,
-      profilePicture: undefined,
-    },
-  });
-
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (formData: FormData) => {
-      // await axios.post("/auth/sign-in", formData);
-    },
-    onSuccess: () => {
-      form.reset();
-    },
-    onError: (error) => {},
-  });
-
-  const onSubmit = (formData: FormData) => {
-    // mutate(formData);
-    console.log(formData);
+  const onInvalid = (errors: FieldErrors<ProfileFormData>) => {
+    if (errors.image) {
+      imageDropzoneRef.current?.focus();
+    }
   };
 
   return (
     <Card className="mb-5 p-6 md:px-8 md:py-10">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {editProfileFields.map((formField) => (
-            <FormField
-              key={`form-field-${formField.name}`}
+        <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
+          <div className="space-y-6">
+            <FormImageInput
               control={form.control}
-              name={formField.name}
-              render={({ field }) => (
-                <FormItem className="flex flex-col md:flex-row md:gap-x-4 md:space-y-0">
-                  <FormLabel className="md:flex-shrink-0 md:w-1/4 md:mt-2">
-                    {formField.label}
-                  </FormLabel>
-
-                  <div className="flex flex-col space-y-2 w-full">
-                    <FormControl>
-                      {formField.inputType === "file" ? (
-                        <ImageDropzone
-                          previewImage={profileData.profilePicture}
-                          onFileAccepted={(file) => field.onChange(file)}
-                          onFileRemoved={() => field.onChange(null)}
-                        />
-                      ) : (
-                        <Input
-                          type={formField.inputType}
-                          placeholder={formField.placeholder}
-                          className="h-12"
-                          {...field}
-                          value={field.value as string}
-                        />
-                      )}
-                    </FormControl>
-
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
+              name="image"
+              label="Profile Picture"
+              previewImage={profile.image_url ?? undefined}
+              ref={imageDropzoneRef}
             />
-          ))}
 
-          <div className="flex justify-end !mt-10">
+            <FormTextInput
+              control={form.control}
+              name="name"
+              label="Name"
+              placeholder="Your name"
+            />
+
+            <FormReadonly label="Email" value={profile.email} />
+
+            <FormTextInput
+              control={form.control}
+              name="phone"
+              label="Contact Number"
+              placeholder="Your number"
+            />
+          </div>
+
+          <div className="flex justify-end mt-10">
             <FormSubmitButton isPending={isPending}>
               Update Profile
             </FormSubmitButton>
