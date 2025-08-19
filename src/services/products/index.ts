@@ -2,7 +2,12 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 import { Database } from "@/types/supabase";
 import { queryPaginatedTable } from "@/helpers/queryPaginatedTable";
-import { Product, FetchProductsParams, FetchProductsResponse } from "./types";
+import {
+  Product,
+  FetchProductsParams,
+  FetchProductsResponse,
+  ProductDetails,
+} from "./types";
 
 export async function fetchProducts(
   client: SupabaseClient<Database>,
@@ -68,4 +73,39 @@ export async function fetchProducts(
   });
 
   return paginatedProducts;
+}
+
+export async function fetchProductDetails(
+  client: SupabaseClient<Database>,
+  { slug }: { slug: string }
+) {
+  const selectQuery = `
+    id,
+    name,
+    description,
+    cost_price,
+    selling_price,
+    stock,
+    min_stock_threshold,
+    category_id,
+    image_url,
+    slug,
+    sku,
+    categories(name)
+  `;
+
+  const { data, error } = await client
+    .from("products")
+    .select(selectQuery)
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+  }
+
+  return {
+    product: (data as ProductDetails) || null,
+    error: error || null,
+  };
 }
