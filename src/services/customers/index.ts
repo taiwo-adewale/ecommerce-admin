@@ -5,6 +5,7 @@ import {
   Customer,
   FetchCustomersParams,
   FetchCustomersResponse,
+  CustomerOrder,
 } from "./types";
 import { queryPaginatedTable } from "@/helpers/queryPaginatedTable";
 
@@ -30,4 +31,33 @@ export async function fetchCustomers(
   });
 
   return paginatedCustomers;
+}
+
+export async function fetchCustomerOrders(
+  client: SupabaseClient<Database>,
+  { id }: { id: string }
+) {
+  const selectQuery = `
+    id,
+    invoice_no,
+    order_time,
+    payment_method,
+    total_amount,
+    status,
+    customers(name, address, phone)
+  `;
+
+  const { data, error } = await client
+    .from("orders")
+    .select(selectQuery)
+    .eq("customer_id", id);
+
+  if (error) {
+    console.error(error.message);
+  }
+
+  return {
+    customerOrders: (data as CustomerOrder[]) || [],
+    error: error || null,
+  };
 }
