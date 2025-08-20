@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { BsFillHandbagFill } from "react-icons/bs";
+import { FaBagShopping } from "react-icons/fa6";
 
 import { cn } from "@/lib/utils";
 import { navItems } from "@/components/shared/sidebar/navItems";
@@ -28,7 +28,7 @@ export default function AppSidebar() {
                 "font-bold text-2xl px-6 gap-2 justify-start min-h-fit hover:bg-transparent"
               )}
             >
-              <BsFillHandbagFill className="size-6 text-primary mb-1.5 flex-shrink-0" />
+              <FaBagShopping className="size-6 text-primary mb-1 flex-shrink-0" />
               <Typography component="span">Zorvex</Typography>
             </Link>
 

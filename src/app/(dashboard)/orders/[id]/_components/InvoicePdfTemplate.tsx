@@ -1,4 +1,4 @@
-import { BsFillHandbagFill } from "react-icons/bs";
+import { FaBagShopping } from "react-icons/fa6";
 import { format } from "date-fns";
 
 import Typography from "@/components/ui/typography";
@@ -53,7 +53,7 @@ export default function InvoicePdfTemplate({ order }: { order: OrderDetails }) {
 
         <div className="flex flex-col text-sm gap-y-0.5 text-right text-black">
           <div className="flex items-end justify-end gap-x-1">
-            <BsFillHandbagFill className="size-6 text-primary flex-shrink-0" />
+            <FaBagShopping className="size-6 text-primary flex-shrink-0" />
 
             {/* margin bottom style is to rectify html2canvas incorrect rendering */}
             <Typography component="span" variant="h2" className="mb-1.5">

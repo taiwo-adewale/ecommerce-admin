@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BsFillHandbagFill } from "react-icons/bs";
+import { FaBagShopping } from "react-icons/fa6";
 import { format } from "date-fns";
 
 import PageTitle from "@/components/shared/PageTitle";
@@ -82,7 +82,7 @@ export default async function Order({ params: { id } }: PageParams) {
 
           <div className="flex flex-col text-sm gap-y-0.5 md:text-right print:text-right print:text-black">
             <div className="flex items-center md:justify-end gap-x-1 print:justify-end">
-              <BsFillHandbagFill className="size-6 text-primary mb-1.5 flex-shrink-0" />
+              <FaBagShopping className="size-6 text-primary mb-1 flex-shrink-0" />
               <Typography
                 component="span"
                 variant="h2"
