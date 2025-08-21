@@ -50,7 +50,8 @@ export async function fetchCustomerOrders(
   const { data, error } = await client
     .from("orders")
     .select(selectQuery)
-    .eq("customer_id", id);
+    .eq("customer_id", id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);

@@ -103,12 +103,12 @@ export default async function ProductDetails({ params: { slug } }: PageParams) {
 
           <Typography
             component="p"
-            className="mb-6 text-foreground/60 text-justify"
+            className="mb-4 text-foreground/60 text-justify"
           >
             {product.description}
           </Typography>
 
-          <Typography component="p" className="mb-8">
+          <Typography component="p" className="mb-6">
             <Typography className="font-semibold">Category:</Typography>{" "}
             <Typography className="text-foreground/60">
               {product.categories.name}

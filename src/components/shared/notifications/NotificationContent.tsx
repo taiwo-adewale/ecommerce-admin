@@ -5,16 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import Typography from "@/components/ui/typography";
 import NotificationItem from "./NotificationItem";
 import NotificationItemSkeleton from "./NotificationItemSkeleton";
-import { fetchNotifications } from "@/components/shared/notifications/data/notifications";
+import { fetchNotifications } from "@/services/notifications";
+import { createBrowserClient } from "@/lib/supabase/client";
 
-export default function NotificationContent() {
+export default function NotificationContent({ staffId }: { staffId: string }) {
   const {
     data: notifications,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["notifications"],
-    queryFn: fetchNotifications,
+    queryFn: () => fetchNotifications(createBrowserClient(), { staffId }),
   });
 
   if (isLoading) {
