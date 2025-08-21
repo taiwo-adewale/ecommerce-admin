@@ -102,10 +102,15 @@ export async function fetchProductDetails(
 
   if (error) {
     console.error(error.message);
+    throw new Error(`Failed to fetch product details: ${error.message}`);
+  }
+
+  if (!data) {
+    console.error("Failed to fetch product details");
+    throw new Error("Failed to fetch product details");
   }
 
   return {
-    product: (data as ProductDetails) || null,
-    error: error || null,
+    product: data as ProductDetails,
   };
 }

@@ -55,10 +55,15 @@ export async function fetchCustomerOrders(
 
   if (error) {
     console.error(error.message);
+    throw new Error(`Failed to fetch customer orders: ${error.message}`);
+  }
+
+  if (!data) {
+    console.error("Failed to fetch customer orders");
+    throw new Error("Failed to fetch customer orders");
   }
 
   return {
-    customerOrders: (data as CustomerOrder[]) || [],
-    error: error || null,
+    customerOrders: data as CustomerOrder[],
   };
 }

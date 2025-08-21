@@ -91,10 +91,15 @@ export async function fetchOrderDetails(
 
   if (error) {
     console.error(error.message);
+    throw new Error(`Failed to fetch order details: ${error.message}`);
+  }
+
+  if (!data) {
+    console.error("Failed to fetch order details");
+    throw new Error("Failed to fetch order details");
   }
 
   return {
-    order: (data as OrderDetails) || null,
-    error: error || null,
+    order: data as OrderDetails,
   };
 }

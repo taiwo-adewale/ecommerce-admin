@@ -16,51 +16,45 @@ type PageParams = {
   };
 };
 
-export async function generateMetadata({ params: { id } }: PageParams) {
-  const { customerOrders, error } = await fetchCustomerOrders(
-    createServerClient(),
-    {
+export async function generateMetadata({
+  params: { id },
+}: PageParams): Promise<Metadata> {
+  try {
+    const { customerOrders } = await fetchCustomerOrders(createServerClient(), {
       id,
+    });
+
+    if (customerOrders.length === 0) {
+      return { title: "No customer orders" };
     }
-  );
 
-  if (error) {
-    return { title: "Customer not found" } as Metadata;
+    return { title: customerOrders[0].customers.name };
+  } catch (e) {
+    return { title: "Customer not found" };
   }
-
-  if (customerOrders.length === 0) {
-    return { title: "No orders" } as Metadata;
-  }
-
-  return {
-    title: customerOrders[0].customers.name,
-  };
 }
 
 export default async function CustomerOrders({ params: { id } }: PageParams) {
-  const { customerOrders, error } = await fetchCustomerOrders(
-    createServerClient(),
-    {
+  try {
+    const { customerOrders } = await fetchCustomerOrders(createServerClient(), {
       id,
-    }
-  );
+    });
 
-  if (error) {
+    return (
+      <section>
+        <PageTitle>Customer Order List</PageTitle>
+
+        {customerOrders.length === 0 ? (
+          <Card className="w-full flex flex-col text-center items-center py-8">
+            <IoBagHandle className="text-red-500 size-20 mb-4" />
+            <Typography>This customer has no order yet!</Typography>
+          </Card>
+        ) : (
+          <CustomerOrdersTable data={customerOrders} />
+        )}
+      </section>
+    );
+  } catch (e) {
     return notFound();
   }
-
-  return (
-    <section>
-      <PageTitle>Customer Order List</PageTitle>
-
-      {customerOrders.length === 0 ? (
-        <Card className="w-full flex flex-col text-center items-center py-8">
-          <IoBagHandle className="text-red-500 size-20 mb-4" />
-          <Typography>This customer has no order yet!</Typography>
-        </Card>
-      ) : (
-        <CustomerOrdersTable data={customerOrders} />
-      )}
-    </section>
-  );
 }
