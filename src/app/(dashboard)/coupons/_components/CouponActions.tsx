@@ -5,13 +5,21 @@ import { PenSquare, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetTrigger } from "@/components/ui/sheet";
+import { ActionAlertDialog } from "@/components/shared/ActionAlertDialog";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
 import CouponFormSheet from "./form/CouponFormSheet";
 import { addCoupon } from "@/actions/coupons/addCoupon";
+import { deleteCoupons } from "@/actions/coupons/deleteCoupons";
 import { exportCoupons } from "@/actions/coupons/exportCoupons";
+import { RowSelectionProps } from "@/types/data-table";
 
-export default function CouponActions() {
+export default function CouponActions({
+  rowSelection,
+  setRowSelection,
+}: RowSelectionProps) {
+  const handleBulkUpdate = () => {};
+
   return (
     <Card className="mb-5">
       <form className="flex flex-col xl:flex-row xl:justify-between gap-4">
@@ -21,18 +29,34 @@ export default function CouponActions() {
           <Button
             variant="secondary"
             size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+            type="button"
+            disabled={!Boolean(Object.keys(rowSelection).length)}
+            className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+            onClick={handleBulkUpdate}
           >
             <PenSquare className="mr-2 size-4" /> Bulk Action
           </Button>
 
-          <Button
-            variant="destructive"
-            size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+          <ActionAlertDialog
+            title={`Delete ${Object.keys(rowSelection).length} coupons?`}
+            description="This action cannot be undone. This will permanently delete the coupons and their associated data from the database."
+            actionButtonText="Delete Coupons"
+            toastSuccessMessage="Coupons deleted successfully"
+            queryKey="coupons"
+            action={() => deleteCoupons(Object.keys(rowSelection))}
+            onSuccess={() => setRowSelection({})}
           >
-            <Trash2 className="mr-2 size-4" /> Delete
-          </Button>
+            <Button
+              variant="destructive"
+              size="lg"
+              type="button"
+              disabled={!Boolean(Object.keys(rowSelection).length)}
+              className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+            >
+              <Trash2 className="mr-2 size-4" />
+              Delete
+            </Button>
+          </ActionAlertDialog>
 
           <CouponFormSheet
             title="Add Coupon"

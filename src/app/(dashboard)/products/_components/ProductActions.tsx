@@ -5,13 +5,21 @@ import { PenSquare, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetTrigger } from "@/components/ui/sheet";
+import { ActionAlertDialog } from "@/components/shared/ActionAlertDialog";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
 import ProductFormSheet from "./form/ProductFormSheet";
 import { addProduct } from "@/actions/products/addProduct";
+import { deleteProducts } from "@/actions/products/deleteProducts";
 import { exportProducts } from "@/actions/products/exportProducts";
+import { RowSelectionProps } from "@/types/data-table";
 
-export default function ProductActions() {
+export default function ProductActions({
+  rowSelection,
+  setRowSelection,
+}: RowSelectionProps) {
+  const handleBulkUpdate = () => {};
+
   return (
     <Card className="mb-5">
       <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
@@ -21,18 +29,34 @@ export default function ProductActions() {
           <Button
             variant="secondary"
             size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+            type="button"
+            disabled={!Boolean(Object.keys(rowSelection).length)}
+            className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+            onClick={handleBulkUpdate}
           >
             <PenSquare className="mr-2 size-4" /> Bulk Action
           </Button>
 
-          <Button
-            variant="destructive"
-            size="lg"
-            className="sm:flex-grow xl:flex-grow-0"
+          <ActionAlertDialog
+            title={`Delete ${Object.keys(rowSelection).length} products?`}
+            description="This action cannot be undone. This will permanently delete the products and their associated data from the database."
+            actionButtonText="Delete Products"
+            toastSuccessMessage="Products deleted successfully"
+            queryKey="products"
+            action={() => deleteProducts(Object.keys(rowSelection))}
+            onSuccess={() => setRowSelection({})}
           >
-            <Trash2 className="mr-2 size-4" /> Delete
-          </Button>
+            <Button
+              variant="destructive"
+              size="lg"
+              type="button"
+              disabled={!Boolean(Object.keys(rowSelection).length)}
+              className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+            >
+              <Trash2 className="mr-2 size-4" />
+              Delete
+            </Button>
+          </ActionAlertDialog>
 
           <ProductFormSheet
             title="Add Product"

@@ -11,8 +11,12 @@ import TableError from "@/components/shared/table/TableError";
 import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchCoupons } from "@/services/coupons";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { RowSelectionProps } from "@/types/data-table";
 
-export default function AllCoupons() {
+export default function AllCoupons({
+  rowSelection,
+  setRowSelection,
+}: RowSelectionProps) {
   const { page, limit, search } = getSearchParams(useSearchParams());
 
   const {
@@ -42,6 +46,8 @@ export default function AllCoupons() {
       columns={columns}
       data={coupons.data}
       pagination={coupons.pagination}
+      rowSelection={rowSelection}
+      setRowSelection={setRowSelection}
     />
   );
 }

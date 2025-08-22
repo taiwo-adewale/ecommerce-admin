@@ -1,26 +1,31 @@
 "use client";
 
-import * as React from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 import DataTable from "@/components/shared/table/DataTable";
-import { DataTableProps } from "@/types/data-table";
+import { DataTableWithRowSelectionProps } from "@/types/data-table";
 import { Coupon } from "@/services/coupons/types";
 
 export default function CouponTable({
   data,
   columns,
   pagination,
-}: DataTableProps<Coupon>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-
+  rowSelection,
+  setRowSelection,
+}: DataTableWithRowSelectionProps<Coupon>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    onRowSelectionChange: setRowSelection,
+    getRowId: (row) => row.id,
     state: {
       rowSelection,
+    },
+    onRowSelectionChange: (updater) => {
+      const newSelectionState =
+        typeof updater === "function" ? updater(rowSelection) : updater;
+
+      setRowSelection(newSelectionState);
     },
   });
 

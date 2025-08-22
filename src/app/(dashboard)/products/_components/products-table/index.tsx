@@ -11,8 +11,12 @@ import TableError from "@/components/shared/table/TableError";
 import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchProducts } from "@/services/products";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { RowSelectionProps } from "@/types/data-table";
 
-export default function AllProducts() {
+export default function AllProducts({
+  rowSelection,
+  setRowSelection,
+}: RowSelectionProps) {
   const { page, limit, search, category, price, published, status, date } =
     getSearchParams(useSearchParams());
 
@@ -63,6 +67,8 @@ export default function AllProducts() {
       columns={columns}
       data={products.data}
       pagination={products.pagination}
+      rowSelection={rowSelection}
+      setRowSelection={setRowSelection}
     />
   );
 }
