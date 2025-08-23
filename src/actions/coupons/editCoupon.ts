@@ -92,6 +92,19 @@ export async function editCoupon(
     .single();
 
   if (dbError) {
+    if (dbError.code === "23505") {
+      const match = dbError.details.match(/\(([^)]+)\)/);
+      const uniqueColumn = match ? match[1] : null;
+
+      if (uniqueColumn === "code") {
+        return {
+          validationErrors: {
+            code: "This coupon code is already in use. Please create a unique code for your new coupon.",
+          },
+        };
+      }
+    }
+
     console.error("Database update failed:", dbError);
     return { dbError: "Something went wrong. Please try again later." };
   }

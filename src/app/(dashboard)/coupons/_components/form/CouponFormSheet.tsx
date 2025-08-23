@@ -99,6 +99,10 @@ export default function CouponFormSheet({
             message: result.validationErrors![key],
           });
         });
+
+        form.setFocus(
+          Object.keys(result.validationErrors)[0] as keyof CouponFormData
+        );
       } else if ("dbError" in result) {
         toast.error(result.dbError);
       } else {

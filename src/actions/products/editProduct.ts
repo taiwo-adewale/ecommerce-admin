@@ -98,6 +98,25 @@ export async function editProduct(
     .single();
 
   if (dbError) {
+    if (dbError.code === "23505") {
+      const match = dbError.details.match(/\(([^)]+)\)/);
+      const uniqueColumn = match ? match[1] : null;
+
+      if (uniqueColumn === "slug") {
+        return {
+          validationErrors: {
+            slug: "This product slug is already in use. Please choose a different one.",
+          },
+        };
+      } else if (uniqueColumn === "sku") {
+        return {
+          validationErrors: {
+            sku: "This product SKU is already assigned to an existing item. Please enter a different SKU.",
+          },
+        };
+      }
+    }
+
     console.error("Database update failed:", dbError);
     return { dbError: "Something went wrong. Please try again later." };
   }

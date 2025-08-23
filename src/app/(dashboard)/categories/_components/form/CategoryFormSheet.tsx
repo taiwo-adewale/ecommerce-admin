@@ -95,6 +95,10 @@ export default function CategoryFormSheet({
             message: result.validationErrors![key],
           });
         });
+
+        form.setFocus(
+          Object.keys(result.validationErrors)[0] as keyof CategoryFormData
+        );
       } else if ("dbError" in result) {
         toast.error(result.dbError);
       } else {

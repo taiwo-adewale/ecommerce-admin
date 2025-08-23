@@ -66,6 +66,25 @@ export async function addCategory(
     .single();
 
   if (dbError) {
+    if (dbError.code === "23505") {
+      const match = dbError.details.match(/\(([^)]+)\)/);
+      const uniqueColumn = match ? match[1] : null;
+
+      if (uniqueColumn === "slug") {
+        return {
+          validationErrors: {
+            slug: "This category slug is already in use. Please choose a different one.",
+          },
+        };
+      } else if (uniqueColumn === "name") {
+        return {
+          validationErrors: {
+            name: "A category with this name already exists. Please enter a unique name for this category.",
+          },
+        };
+      }
+    }
+
     console.error("Database insert failed:", dbError);
     return { dbError: "Something went wrong. Please try again later." };
   }
