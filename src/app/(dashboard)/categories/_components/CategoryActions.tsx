@@ -9,33 +9,41 @@ import { ActionAlertDialog } from "@/components/shared/ActionAlertDialog";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
 import CategoryFormSheet from "./form/CategoryFormSheet";
+import CategoryBulkActionSheet from "./form/CategoryBulkActionSheet";
 import { addCategory } from "@/actions/categories/addCategory";
 import { deleteCategories } from "@/actions/categories/deleteCategories";
 import { exportCategories } from "@/actions/categories/exportCategories";
+import { editCategories } from "@/actions/categories/editCategories";
 import { RowSelectionProps } from "@/types/data-table";
 
 export default function CategoryActions({
   rowSelection,
   setRowSelection,
 }: RowSelectionProps) {
-  const handleBulkUpdate = () => {};
-
   return (
     <Card className="mb-5">
       <form className="flex flex-col xl:flex-row xl:justify-between gap-4">
         <ExportDataButtons action={exportCategories} tableName="categories" />
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            variant="secondary"
-            size="lg"
-            type="button"
-            disabled={!Boolean(Object.keys(rowSelection).length)}
-            className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
-            onClick={handleBulkUpdate}
+          <CategoryBulkActionSheet
+            action={(formData) =>
+              editCategories(Object.keys(rowSelection), formData)
+            }
+            onSuccess={() => setRowSelection({})}
           >
-            <PenSquare className="mr-2 size-4" /> Bulk Action
-          </Button>
+            <SheetTrigger asChild>
+              <Button
+                variant="secondary"
+                size="lg"
+                type="button"
+                disabled={!Boolean(Object.keys(rowSelection).length)}
+                className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+              >
+                <PenSquare className="mr-2 size-4" /> Bulk Action
+              </Button>
+            </SheetTrigger>
+          </CategoryBulkActionSheet>
 
           <ActionAlertDialog
             title={`Delete ${Object.keys(rowSelection).length} categories?`}

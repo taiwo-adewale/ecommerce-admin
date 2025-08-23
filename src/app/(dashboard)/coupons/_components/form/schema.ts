@@ -65,4 +65,9 @@ export const couponFormSchema = z
     }
   });
 
+export const couponBulkFormSchema = z.object({
+  published: z.coerce.boolean(),
+});
+
 export type CouponFormData = z.infer<typeof couponFormSchema>;
+export type CouponBulkFormData = z.infer<typeof couponBulkFormSchema>;

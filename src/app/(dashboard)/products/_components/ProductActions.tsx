@@ -9,7 +9,9 @@ import { ActionAlertDialog } from "@/components/shared/ActionAlertDialog";
 import { ExportDataButtons } from "@/components/shared/ExportDataButtons";
 
 import ProductFormSheet from "./form/ProductFormSheet";
+import ProductBulkActionSheet from "./form/ProductBulkActionSheet";
 import { addProduct } from "@/actions/products/addProduct";
+import { editProducts } from "@/actions/products/editProducts";
 import { deleteProducts } from "@/actions/products/deleteProducts";
 import { exportProducts } from "@/actions/products/exportProducts";
 import { RowSelectionProps } from "@/types/data-table";
@@ -26,16 +28,25 @@ export default function ProductActions({
         <ExportDataButtons action={exportProducts} tableName="products" />
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            variant="secondary"
-            size="lg"
-            type="button"
-            disabled={!Boolean(Object.keys(rowSelection).length)}
-            className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
-            onClick={handleBulkUpdate}
+          <ProductBulkActionSheet
+            action={(formData) =>
+              editProducts(Object.keys(rowSelection), formData)
+            }
+            onSuccess={() => setRowSelection({})}
           >
-            <PenSquare className="mr-2 size-4" /> Bulk Action
-          </Button>
+            <SheetTrigger asChild>
+              <Button
+                variant="secondary"
+                size="lg"
+                type="button"
+                disabled={!Boolean(Object.keys(rowSelection).length)}
+                className="sm:flex-grow xl:flex-grow-0 transition-opacity duration-300"
+                onClick={handleBulkUpdate}
+              >
+                <PenSquare className="mr-2 size-4" /> Bulk Action
+              </Button>
+            </SheetTrigger>
+          </ProductBulkActionSheet>
 
           <ActionAlertDialog
             title={`Delete ${Object.keys(rowSelection).length} products?`}

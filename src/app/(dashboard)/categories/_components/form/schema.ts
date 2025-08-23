@@ -40,4 +40,9 @@ export const categoryFormSchema = z.object({
     }),
 });
 
+export const categoryBulkFormSchema = z.object({
+  published: z.coerce.boolean(),
+});
+
 export type CategoryFormData = z.infer<typeof categoryFormSchema>;
+export type CategoryBulkFormData = z.infer<typeof categoryBulkFormSchema>;

@@ -18,6 +18,10 @@ type SuccessResponse = {
 
 export type ServerActionResponse = DbErrorResponse | SuccessResponse;
 
+export type VServerActionResponse =
+  | ValidationErrorsResponse
+  | ServerActionResponse;
+
 export type ProductServerActionResponse =
   | ValidationErrorsResponse
   | DbErrorResponse

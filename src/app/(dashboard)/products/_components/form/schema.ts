@@ -91,4 +91,20 @@ export const productFormSchema = z
     }
   });
 
+export const productBulkFormSchema = z
+  .object({
+    published: z.coerce.boolean().optional(),
+    category: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (typeof data.published === "undefined" && data.category === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least one of the fields must be filled.",
+        path: ["published"],
+      });
+    }
+  });
+
 export type ProductFormData = z.infer<typeof productFormSchema>;
+export type ProductBulkFormData = z.infer<typeof productBulkFormSchema>;

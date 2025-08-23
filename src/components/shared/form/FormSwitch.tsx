@@ -7,21 +7,19 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 
-type FormTextareaProps<TFormData extends FieldValues> = {
+type FormSwitchProps<TFormData extends FieldValues> = {
   control: Control<TFormData>;
   name: Path<TFormData>;
   label: string;
-  placeholder: string;
 };
 
-function FormTextarea<TFormData extends FieldValues>({
+function FormSwitch<TFormData extends FieldValues>({
   control,
   name,
   label,
-  placeholder,
-}: FormTextareaProps<TFormData>) {
+}: FormSwitchProps<TFormData>) {
   return (
     <FormField
       control={control}
@@ -32,9 +30,9 @@ function FormTextarea<TFormData extends FieldValues>({
             {label}
           </FormLabel>
 
-          <div className="space-y-2 w-full">
+          <div className="space-y-2 w-full !mt-2">
             <FormControl>
-              <Textarea className="h-32" placeholder={placeholder} {...field} />
+              <Switch checked={field.value} onCheckedChange={field.onChange} />
             </FormControl>
 
             <FormMessage />
@@ -45,4 +43,4 @@ function FormTextarea<TFormData extends FieldValues>({
   );
 }
 
-export default FormTextarea;
+export default FormSwitch;
