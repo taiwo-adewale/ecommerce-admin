@@ -5,12 +5,18 @@ import { editProduct } from "@/actions/products/editProduct";
 import { ProductDetails } from "@/services/products/types";
 import ProductFormSheet from "../../_components/form/ProductFormSheet";
 
+import { useAuthorization } from "@/hooks/use-authorization";
+
 type Props = {
   product: ProductDetails;
   children: React.ReactNode;
 };
 
 export async function EditProductSheet({ product, children }: Props) {
+  const { hasPermission } = useAuthorization();
+
+  if (!hasPermission("products", "canEdit")) return null;
+
   return (
     <ProductFormSheet
       title="Update Products"
