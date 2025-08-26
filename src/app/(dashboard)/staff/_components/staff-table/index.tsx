@@ -4,15 +4,18 @@ import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import StaffTable from "./Table";
-import { columns, skeletonColumns } from "./columns";
+import { getColumns, skeletonColumns } from "./columns";
 import TableError from "@/components/shared/table/TableError";
 import TableSkeleton from "@/components/shared/table/TableSkeleton";
 
 import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchStaff } from "@/services/staff";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { useAuthorization } from "@/hooks/use-authorization";
 
 export default function AllStaff() {
+  const { hasPermission, isSelf } = useAuthorization();
+  const columns = getColumns({ hasPermission, isSelf });
   const { page, limit, search, role } = getSearchParams(useSearchParams());
 
   const {

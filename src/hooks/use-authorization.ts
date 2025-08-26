@@ -60,3 +60,4 @@ export function useAuthorization() {
 export type HasPermission = ReturnType<
   typeof useAuthorization
 >["hasPermission"];
+export type IsSelf = ReturnType<typeof useAuthorization>["isSelf"];

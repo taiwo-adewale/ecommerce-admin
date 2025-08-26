@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -10,6 +11,7 @@ import {
 type Props = {
   content: string;
   children: React.ReactNode;
+  buttonClassName?: string;
 };
 
 export const TooltipWrapper = ({ content, children }: Props) => (
@@ -22,10 +24,14 @@ export const TooltipWrapper = ({ content, children }: Props) => (
   </Tooltip>
 );
 
-export const SheetTooltip = ({ content, children }: Props) => (
+export const SheetTooltip = ({ content, children, buttonClassName }: Props) => (
   <TooltipWrapper content={content}>
     <SheetTrigger asChild>
-      <Button variant="ghost" size="icon" className="text-foreground">
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn("text-foreground", buttonClassName)}
+      >
         {children}
       </Button>
     </SheetTrigger>

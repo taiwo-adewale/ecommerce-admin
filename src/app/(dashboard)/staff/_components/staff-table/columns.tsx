@@ -20,125 +20,152 @@ import { format } from "date-fns";
 import { editStaff } from "@/actions/staff/editStaff";
 import { deleteStaff } from "@/actions/staff/deleteStaff";
 import { toggleStaffPublishedStatus } from "@/actions/staff/toggleStaffStatus";
+import { HasPermission, IsSelf } from "@/hooks/use-authorization";
 
-export const columns: ColumnDef<Staff>[] = [
-  {
-    header: "name",
-    cell: ({ row }) => (
-      <div className="flex gap-2 items-center">
-        <ImagePlaceholder
-          src={row.original.image_url || noProfilePicture}
-          alt={row.original.name}
-          width={32}
-          height={32}
-          className="size-8 rounded-full"
-        />
+export const getColumns = ({
+  hasPermission,
+  isSelf,
+}: {
+  hasPermission: HasPermission;
+  isSelf: IsSelf;
+}) => {
+  const columns: ColumnDef<Staff>[] = [
+    {
+      header: "name",
+      cell: ({ row }) => (
+        <div className="flex gap-2 items-center">
+          <ImagePlaceholder
+            src={row.original.image_url || noProfilePicture}
+            alt={row.original.name}
+            width={32}
+            height={32}
+            className="size-8 rounded-full"
+          />
 
-        <Typography className="capitalize block truncate">
-          {row.original.name}
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    header: "email",
-    cell: ({ row }) => (
-      <Typography className="block max-w-52 truncate">
-        {row.original.email}
-      </Typography>
-    ),
-  },
-  {
-    header: "phone",
-    cell: ({ row }) => (
-      <Typography className={cn(!row.original.phone && "pl-4")}>
-        {row.original.phone || "—"}
-      </Typography>
-    ),
-  },
-  {
-    header: "joining date",
-    cell: ({ row }) => format(row.original.created_at, "PP"),
-  },
-  {
-    header: "role",
-    cell: ({ row }) => (
-      <Typography className="capitalize font-medium">
-        {row.original.staff_roles?.display_name}
-      </Typography>
-    ),
-  },
-  {
-    header: "status",
-    cell: ({ row }) => {
-      const status = row.original.published ? "active" : "inactive";
-
-      return (
-        <Badge
-          variant={StaffBadgeVariants[status]}
-          className="flex-shrink-0 text-xs capitalize"
-        >
-          {status}
-        </Badge>
-      );
+          <Typography className="capitalize block truncate">
+            {row.original.name}
+          </Typography>
+        </div>
+      ),
     },
-  },
-  {
-    header: "published",
-    cell: ({ row }) => (
-      <div className="pl-5">
-        <TableSwitch
-          checked={row.original.published}
-          toastSuccessMessage="Staff status updated successfully."
-          queryKey="staff"
-          onCheckedChange={() =>
-            toggleStaffPublishedStatus(row.original.id, row.original.published)
-          }
-        />
-      </div>
-    ),
-  },
-  {
+    {
+      header: "email",
+      cell: ({ row }) => (
+        <Typography className="block max-w-52 truncate">
+          {row.original.email}
+        </Typography>
+      ),
+    },
+    {
+      header: "phone",
+      cell: ({ row }) => (
+        <Typography className={cn(!row.original.phone && "pl-4")}>
+          {row.original.phone || "—"}
+        </Typography>
+      ),
+    },
+    {
+      header: "joining date",
+      cell: ({ row }) => format(row.original.created_at, "PP"),
+    },
+    {
+      header: "role",
+      cell: ({ row }) => (
+        <Typography className="capitalize font-medium">
+          {row.original.staff_roles?.display_name}
+        </Typography>
+      ),
+    },
+    {
+      header: "status",
+      cell: ({ row }) => {
+        const status = row.original.published ? "active" : "inactive";
+
+        return (
+          <Badge
+            variant={StaffBadgeVariants[status]}
+            className="flex-shrink-0 text-xs capitalize"
+          >
+            {status}
+          </Badge>
+        );
+      },
+    },
+  ];
+
+  if (hasPermission("staff", "canTogglePublished")) {
+    columns.splice(6, 0, {
+      header: "published",
+      cell: ({ row }) => (
+        <div className="pl-5">
+          <TableSwitch
+            checked={row.original.published}
+            toastSuccessMessage="Staff status updated successfully."
+            queryKey="staff"
+            onCheckedChange={() =>
+              toggleStaffPublishedStatus(
+                row.original.id,
+                row.original.published
+              )
+            }
+          />
+        </div>
+      ),
+    });
+  }
+
+  columns.splice(7, 0, {
     header: "actions",
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <StaffFormSheet
-            key={row.original.id}
-            title="Update Staff"
-            description="Update necessary staff information here"
-            submitButtonText="Update Staff"
-            actionVerb="updated"
-            initialData={{
-              name: row.original.name,
-              phone: row.original.phone ?? "",
-              image: row.original.image_url ?? undefined,
-            }}
-            action={(formData) => editStaff(row.original.id, formData)}
-            previewImage={row.original.image_url ?? undefined}
-            staffEmail={row.original.email}
-          >
-            <SheetTooltip content="Edit Staff">
-              <PenSquare className="size-5" />
-            </SheetTooltip>
-          </StaffFormSheet>
+          {(hasPermission("staff", "canEdit") || isSelf(row.original.id)) && (
+            <StaffFormSheet
+              key={row.original.id}
+              title="Update Staff"
+              description="Update necessary staff information here"
+              submitButtonText="Update Staff"
+              actionVerb="updated"
+              initialData={{
+                name: row.original.name,
+                phone: row.original.phone ?? "",
+                image: row.original.image_url ?? undefined,
+              }}
+              action={(formData) => editStaff(row.original.id, formData)}
+              previewImage={row.original.image_url ?? undefined}
+              staffEmail={row.original.email}
+            >
+              <SheetTooltip
+                buttonClassName={
+                  !hasPermission("staff", "canEdit") ? "ml-5" : undefined
+                }
+                content="Edit Staff"
+              >
+                <PenSquare className="size-5" />
+              </SheetTooltip>
+            </StaffFormSheet>
+          )}
 
-          <TableActionAlertDialog
-            title={`Delete ${row.original.name}?`}
-            description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
-            tooltipContent="Delete Staff"
-            actionButtonText="Delete Staff"
-            toastSuccessMessage={`Staff "${row.original.name}" deleted successfully!`}
-            queryKey="staff"
-            action={() => deleteStaff(row.original.id)}
-          >
-            <Trash2 className="size-5" />
-          </TableActionAlertDialog>
+          {hasPermission("staff", "canDelete") && (
+            <TableActionAlertDialog
+              title={`Delete ${row.original.name}?`}
+              description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
+              tooltipContent="Delete Staff"
+              actionButtonText="Delete Staff"
+              toastSuccessMessage={`Staff "${row.original.name}" deleted successfully!`}
+              queryKey="staff"
+              action={() => deleteStaff(row.original.id)}
+            >
+              <Trash2 className="size-5" />
+            </TableActionAlertDialog>
+          )}
         </div>
       );
     },
-  },
-];
+  });
+
+  return columns;
+};
 
 export const skeletonColumns: SkeletonColumn[] = [
   {
