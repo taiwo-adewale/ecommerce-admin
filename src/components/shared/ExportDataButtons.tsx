@@ -43,6 +43,7 @@ export function ExportDataButtons({ tableName, action }: Props) {
     <div className="flex flex-wrap gap-3">
       <Button
         variant="outline"
+        className="h-12"
         disabled={isPending}
         onClick={() => handleExport("csv")}
       >
@@ -52,6 +53,7 @@ export function ExportDataButtons({ tableName, action }: Props) {
 
       <Button
         variant="outline"
+        className="h-12"
         disabled={isPending}
         onClick={() => handleExport("json")}
       >
