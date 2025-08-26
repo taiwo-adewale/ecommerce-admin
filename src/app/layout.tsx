@@ -5,6 +5,7 @@ import TanstackQueryProvider from "@/lib/tanstack-query-provider";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { UserProvider } from "@/contexts/UserContext";
 
 // pages have to be rendered dynamically because supabase server component client uses cookies
 export const dynamic = "force-dynamic";
@@ -26,9 +27,11 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <TanstackQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TooltipProvider>{children}</TooltipProvider>
+            <UserProvider>
+              <TooltipProvider>{children}</TooltipProvider>
 
-            <Toaster />
+              <Toaster />
+            </UserProvider>
           </ThemeProvider>
         </TanstackQueryProvider>
       </body>
