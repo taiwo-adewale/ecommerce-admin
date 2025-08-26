@@ -51,7 +51,7 @@ export const getColumns = ({
   ];
 
   if (hasPermission("categories", "canTogglePublished")) {
-    columns.splice(5, 0, {
+    columns.splice(4, 0, {
       header: "published",
       cell: ({ row }) => (
         <div className="pl-5">
@@ -96,7 +96,7 @@ export const getColumns = ({
       ),
     });
 
-    columns.splice(6, 0, {
+    columns.splice(5, 0, {
       header: "actions",
       cell: ({ row }) => {
         return (
