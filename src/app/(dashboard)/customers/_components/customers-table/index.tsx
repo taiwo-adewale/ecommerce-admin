@@ -4,15 +4,18 @@ import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import CustomersTable from "./Table";
-import { columns, skeletonColumns } from "./columns";
+import { getColumns, skeletonColumns } from "./columns";
 import TableSkeleton from "@/components/shared/table/TableSkeleton";
 import TableError from "@/components/shared/table/TableError";
 
 import { getSearchParams } from "@/helpers/getSearchParams";
 import { fetchCustomers } from "@/services/customers";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { useAuthorization } from "@/hooks/use-authorization";
 
 export default function AllCustomers() {
+  const { hasPermission } = useAuthorization();
+  const columns = getColumns({ hasPermission });
   const { page, limit, search } = getSearchParams(useSearchParams());
 
   const {

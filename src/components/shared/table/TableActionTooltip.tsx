@@ -12,7 +12,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const TooltipWrapper = ({ content, children }: Props) => (
+export const TooltipWrapper = ({ content, children }: Props) => (
   <Tooltip>
     <TooltipTrigger asChild>{children}</TooltipTrigger>
 
