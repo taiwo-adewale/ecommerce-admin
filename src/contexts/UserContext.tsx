@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { createContext, useContext, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@supabase/supabase-js";
 
 import { Tables } from "@/types/supabase";
@@ -23,6 +23,19 @@ const UserContext = createContext<UserContextType>({
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const supabase = createBrowserClient();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase, queryClient]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["user-profile"],
