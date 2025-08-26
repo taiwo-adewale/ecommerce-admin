@@ -23,7 +23,7 @@ const permissions = {
   },
   products: {
     canCreate: ["super_admin", "admin"],
-    canDelete: ["super_admin"],
+    canDelete: ["super_admin", "admin"],
     canEdit: ["super_admin", "admin"],
     canTogglePublished: ["super_admin", "admin"],
   },
