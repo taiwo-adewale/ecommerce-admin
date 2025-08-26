@@ -19,149 +19,177 @@ import { Coupon, CouponStatus } from "@/services/coupons/types";
 import { editCoupon } from "@/actions/coupons/editCoupon";
 import { deleteCoupon } from "@/actions/coupons/deleteCoupon";
 import { toggleCouponPublishedStatus } from "@/actions/coupons/toggleCouponStatus";
+import { HasPermission } from "@/hooks/use-authorization";
 
-export const columns: ColumnDef<Coupon>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-  },
-  {
-    header: "campaign name",
-    cell: ({ row }) => (
-      <div className="flex gap-2 items-center">
-        <ImagePlaceholder
-          src={row.original.image_url}
-          alt={row.original.campaign_name}
-          width={32}
-          height={32}
-          className="size-8 rounded-full"
-        />
+export const getColumns = ({
+  hasPermission,
+}: {
+  hasPermission: HasPermission;
+}) => {
+  const columns: ColumnDef<Coupon>[] = [
+    {
+      header: "campaign name",
+      cell: ({ row }) => (
+        <div className="flex gap-2 items-center">
+          <ImagePlaceholder
+            src={row.original.image_url}
+            alt={row.original.campaign_name}
+            width={32}
+            height={32}
+            className="size-8 rounded-full"
+          />
 
-        <Typography className="capitalize block truncate">
-          {row.original.campaign_name}
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    header: "code",
-    cell: ({ row }) => (
-      <Typography className="uppercase">{row.original.code}</Typography>
-    ),
-  },
-  {
-    header: "discount",
-    cell: ({ row }) => {
-      const discountType = row.original.discount_type;
-
-      if (discountType === "fixed") {
-        return `$${row.original.discount_value}`;
-      }
-
-      return `${row.original.discount_value}%`;
-    },
-  },
-  {
-    header: "published",
-    cell: ({ row }) => (
-      <div className="pl-5">
-        <TableSwitch
-          checked={row.original.published}
-          toastSuccessMessage="Coupon status updated successfully."
-          queryKey="coupons"
-          onCheckedChange={() =>
-            toggleCouponPublishedStatus(row.original.id, row.original.published)
-          }
-        />
-      </div>
-    ),
-  },
-  {
-    header: "start date",
-    cell: ({ row }) => format(row.original.start_date, "PP"),
-  },
-  {
-    header: "end date",
-    cell: ({ row }) => format(row.original.end_date, "PP"),
-  },
-  {
-    header: "status",
-    cell: ({ row }) => {
-      const currentTime = new Date();
-      const endTime = new Date(row.original.end_date);
-
-      const status: CouponStatus = currentTime > endTime ? "expired" : "active";
-
-      return (
-        <Badge
-          variant={CouponBadgeVariants[status]}
-          className="flex-shrink-0 text-xs capitalize"
-        >
-          {status}
-        </Badge>
-      );
-    },
-  },
-  {
-    header: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-1">
-          <CouponFormSheet
-            key={row.original.id}
-            title="Update Coupon"
-            description="Update necessary coupon information here"
-            submitButtonText="Update Coupon"
-            actionVerb="updated"
-            initialData={{
-              name: row.original.campaign_name,
-              code: row.original.code,
-              image: row.original.image_url,
-              startDate: new Date(row.original.start_date),
-              endDate: new Date(row.original.end_date),
-              isPercentageDiscount: row.original.discount_type === "percentage",
-              discountValue: row.original.discount_value,
-            }}
-            action={(formData) => editCoupon(row.original.id, formData)}
-            previewImage={row.original.image_url}
-          >
-            <SheetTooltip content="Edit Coupon">
-              <PenSquare className="size-5" />
-            </SheetTooltip>
-          </CouponFormSheet>
-
-          <TableActionAlertDialog
-            title={`Delete ${row.original.campaign_name}?`}
-            description="This action cannot be undone. This will permanently delete the coupon and its associated data from the database."
-            tooltipContent="Delete Coupon"
-            actionButtonText="Delete Coupon"
-            toastSuccessMessage={`Coupon "${row.original.campaign_name}" deleted successfully!`}
-            queryKey="coupons"
-            action={() => deleteCoupon(row.original.id)}
-          >
-            <Trash2 className="size-5" />
-          </TableActionAlertDialog>
+          <Typography className="capitalize block truncate">
+            {row.original.campaign_name}
+          </Typography>
         </div>
-      );
+      ),
     },
-  },
-];
+    {
+      header: "code",
+      cell: ({ row }) => (
+        <Typography className="uppercase">{row.original.code}</Typography>
+      ),
+    },
+    {
+      header: "discount",
+      cell: ({ row }) => {
+        const discountType = row.original.discount_type;
+
+        if (discountType === "fixed") {
+          return `$${row.original.discount_value}`;
+        }
+
+        return `${row.original.discount_value}%`;
+      },
+    },
+    {
+      header: "start date",
+      cell: ({ row }) => format(row.original.start_date, "PP"),
+    },
+    {
+      header: "end date",
+      cell: ({ row }) => format(row.original.end_date, "PP"),
+    },
+    {
+      header: "status",
+      cell: ({ row }) => {
+        const currentTime = new Date();
+        const endTime = new Date(row.original.end_date);
+
+        const status: CouponStatus =
+          currentTime > endTime ? "expired" : "active";
+
+        return (
+          <Badge
+            variant={CouponBadgeVariants[status]}
+            className="flex-shrink-0 text-xs capitalize"
+          >
+            {status}
+          </Badge>
+        );
+      },
+    },
+  ];
+
+  if (hasPermission("coupons", "canTogglePublished")) {
+    columns.splice(3, 0, {
+      header: "published",
+      cell: ({ row }) => (
+        <div className="pl-5">
+          <TableSwitch
+            checked={row.original.published}
+            toastSuccessMessage="Coupon status updated successfully."
+            queryKey="coupons"
+            onCheckedChange={() =>
+              toggleCouponPublishedStatus(
+                row.original.id,
+                row.original.published
+              )
+            }
+          />
+        </div>
+      ),
+    });
+  }
+
+  if (
+    hasPermission("coupons", "canDelete") ||
+    hasPermission("coupons", "canEdit")
+  ) {
+    columns.splice(0, 0, {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+    });
+
+    columns.splice(8, 0, {
+      header: "actions",
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center gap-1">
+            {hasPermission("coupons", "canEdit") && (
+              <CouponFormSheet
+                key={row.original.id}
+                title="Update Coupon"
+                description="Update necessary coupon information here"
+                submitButtonText="Update Coupon"
+                actionVerb="updated"
+                initialData={{
+                  name: row.original.campaign_name,
+                  code: row.original.code,
+                  image: row.original.image_url,
+                  startDate: new Date(row.original.start_date),
+                  endDate: new Date(row.original.end_date),
+                  isPercentageDiscount:
+                    row.original.discount_type === "percentage",
+                  discountValue: row.original.discount_value,
+                }}
+                action={(formData) => editCoupon(row.original.id, formData)}
+                previewImage={row.original.image_url}
+              >
+                <SheetTooltip content="Edit Coupon">
+                  <PenSquare className="size-5" />
+                </SheetTooltip>
+              </CouponFormSheet>
+            )}
+
+            {hasPermission("coupons", "canDelete") && (
+              <TableActionAlertDialog
+                title={`Delete ${row.original.campaign_name}?`}
+                description="This action cannot be undone. This will permanently delete the coupon and its associated data from the database."
+                tooltipContent="Delete Coupon"
+                actionButtonText="Delete Coupon"
+                toastSuccessMessage={`Coupon "${row.original.campaign_name}" deleted successfully!`}
+                queryKey="coupons"
+                action={() => deleteCoupon(row.original.id)}
+              >
+                <Trash2 className="size-5" />
+              </TableActionAlertDialog>
+            )}
+          </div>
+        );
+      },
+    });
+  }
+
+  return columns;
+};
 
 export const skeletonColumns: SkeletonColumn[] = [
   {
