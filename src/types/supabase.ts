@@ -438,9 +438,9 @@ export type Database = {
         Args: { text_input: string };
         Returns: string;
       };
-      get_my_role: {
+      get_my_profile: {
         Args: Record<PropertyKey, never>;
-        Returns: string;
+        Returns: Json;
       };
       get_user_role: {
         Args: Record<PropertyKey, never>;

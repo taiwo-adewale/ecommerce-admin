@@ -53,6 +53,7 @@ export default function EditProfileForm({ profile }: { profile: SBStaff }) {
           position: "top-center",
         });
         queryClient.invalidateQueries({ queryKey: ["staff"] });
+        queryClient.invalidateQueries({ queryKey: ["user-profile"] });
       }
     });
   };

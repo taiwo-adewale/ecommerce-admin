@@ -30,6 +30,7 @@ import { FormSubmitButton } from "@/components/shared/form/FormSubmitButton";
 import { staffFormSchema, StaffFormData } from "./schema";
 import { objectToFormData } from "@/helpers/objectToFormData";
 import { StaffServerActionResponse } from "@/types/server-action";
+import { useUser } from "@/contexts/UserContext";
 
 type BaseStaffFormProps = {
   title: string;
@@ -63,6 +64,7 @@ export default function StaffFormSheet({
   const [isPending, startTransition] = useTransition();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const imageDropzoneRef = useRef<HTMLDivElement>(null);
+  const { user } = useUser();
 
   const form = useForm<StaffFormData>({
     resolver: zodResolver(staffFormSchema),
@@ -99,6 +101,10 @@ export default function StaffFormSheet({
           { position: "top-center" }
         );
         queryClient.invalidateQueries({ queryKey: ["staff"] });
+        if (user && user.id === result.staff.id) {
+          queryClient.invalidateQueries({ queryKey: ["user-profile"] });
+        }
+
         setIsSheetOpen(false);
       }
     });

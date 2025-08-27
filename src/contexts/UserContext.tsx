@@ -9,15 +9,21 @@ import { createBrowserClient } from "@/lib/supabase/client";
 
 export type UserRole = Tables<"staff_roles">["name"];
 
+type UserProfile = {
+  name: string | null;
+  image_url: string | null;
+  role: UserRole | null;
+};
+
 type UserContextType = {
   user: User | null;
-  role: UserRole | null;
+  profile: UserProfile | null;
   isLoading: boolean;
 };
 
 const UserContext = createContext<UserContextType>({
   user: null,
-  role: null,
+  profile: null,
   isLoading: true,
 });
 
@@ -46,19 +52,26 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (!session?.user) {
         return { user: null, role: null };
       }
-      const { data: role } = await supabase.rpc("get_my_role");
-      return { user: session.user, role: role as UserRole };
+
+      const { data: profile } = await supabase.rpc("get_my_profile");
+      return { user: session.user, profile: profile as UserProfile };
     },
     staleTime: Infinity,
   });
 
   const value = {
     user: data?.user ?? null,
-    role: data?.role ?? null,
+    profile: data?.profile ?? null,
     isLoading,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
-export const useUser = () => useContext(UserContext);
+export function useUser() {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
+}

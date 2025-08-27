@@ -38,23 +38,23 @@ type PermissionMap = typeof permissions;
 type Feature = keyof PermissionMap;
 
 export function useAuthorization() {
-  const { user, role, isLoading } = useUser();
+  const { user, profile, isLoading } = useUser();
 
   const hasPermission = <F extends Feature>(
     feature: F,
     action: keyof PermissionMap[F]
   ): boolean => {
-    if (isLoading || !role) return false;
+    if (isLoading || !profile || !profile.role) return false;
 
     const allowedRoles = permissions[feature][action];
-    return (allowedRoles as UserRole[]).includes(role);
+    return (allowedRoles as UserRole[]).includes(profile.role);
   };
 
   const isSelf = (staffId: string) => {
     return user?.id === staffId;
   };
 
-  return { hasPermission, isSelf, role, isLoading };
+  return { hasPermission, isSelf, isLoading };
 }
 
 export type HasPermission = ReturnType<
