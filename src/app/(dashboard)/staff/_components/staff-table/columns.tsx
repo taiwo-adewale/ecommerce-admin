@@ -1,8 +1,10 @@
 import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { Skeleton } from "@/components/ui/skeleton";
 import noProfilePicture from "public/assets/no-profile-picture.jpg";
@@ -21,6 +23,12 @@ import { editStaff } from "@/actions/staff/editStaff";
 import { deleteStaff } from "@/actions/staff/deleteStaff";
 import { toggleStaffPublishedStatus } from "@/actions/staff/toggleStaffStatus";
 import { HasPermission, IsSelf } from "@/hooks/use-authorization";
+
+const handleDemoDelete = () => {
+  toast.error("Sorry, this feature is not allowed in demo mode", {
+    position: "top-center",
+  });
+};
 
 export const getColumns = ({
   hasPermission,
@@ -147,17 +155,25 @@ export const getColumns = ({
           )}
 
           {hasPermission("staff", "canDelete") && (
-            <TableActionAlertDialog
-              title={`Delete ${row.original.name}?`}
-              description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
-              tooltipContent="Delete Staff"
-              actionButtonText="Delete Staff"
-              toastSuccessMessage={`Staff "${row.original.name}" deleted successfully!`}
-              queryKey="staff"
-              action={() => deleteStaff(row.original.id)}
+            <Button
+              onClick={handleDemoDelete}
+              variant="ghost"
+              size="icon"
+              className="text-foreground"
             >
               <Trash2 className="size-5" />
-            </TableActionAlertDialog>
+            </Button>
+            // <TableActionAlertDialog
+            //   title={`Delete ${row.original.name}?`}
+            //   description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
+            //   tooltipContent="Delete Staff"
+            //   actionButtonText="Delete Staff"
+            //   toastSuccessMessage={`Staff "${row.original.name}" deleted successfully!`}
+            //   queryKey="staff"
+            //   action={() => deleteStaff(row.original.id)}
+            // >
+            //   <Trash2 className="size-5" />
+            // </TableActionAlertDialog>
           )}
         </div>
       );
