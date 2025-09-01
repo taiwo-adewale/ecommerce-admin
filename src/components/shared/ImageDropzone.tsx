@@ -52,7 +52,7 @@ export const ImageDropzone = forwardRef<
       <div
         {...getRootProps({
           className: cn(
-            "border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-4 ring-offset-background",
+            "border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 ring-offset-background",
             isDragActive
               ? "border-primary/80 bg-black/10 dark:bg-white/10"
               : "border-input"
@@ -62,7 +62,7 @@ export const ImageDropzone = forwardRef<
       >
         <input {...getInputProps()} />
 
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center space-y-2 pointer-events-none">
           <UploadCloud className="size-10 text-primary" />
 
           <p className="text-sm text-foreground/80">
