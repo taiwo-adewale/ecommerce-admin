@@ -2,7 +2,6 @@ import { PenSquare, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "sonner";
 
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
@@ -11,6 +10,7 @@ import noProfilePicture from "public/assets/no-profile-picture.jpg";
 
 import { TableSwitch } from "@/components/shared/table/TableSwitch";
 import { ImagePlaceholder } from "@/components/shared/ImagePlaceholder";
+import { TooltipWrapper } from "@/components/shared/table/TableActionTooltip";
 import { SheetTooltip } from "@/components/shared/table/TableActionTooltip";
 import { TableActionAlertDialog } from "@/components/shared/table/TableActionAlertDialog";
 import StaffFormSheet from "../form/StaffFormSheet";
@@ -65,9 +65,10 @@ export const getColumns = ({
       ),
     },
     {
-      header: "phone",
+      header: () => <span className="block text-center">phone</span>,
+      id: "phone",
       cell: ({ row }) => (
-        <Typography className={cn(!row.original.phone && "pl-4")}>
+        <Typography className="block text-center">
           {row.original.phone || "—"}
         </Typography>
       ),
@@ -123,11 +124,12 @@ export const getColumns = ({
   }
 
   columns.splice(7, 0, {
-    header: "actions",
+    header: () => <span className="block text-center">actions</span>,
+    id: "actions",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-1">
-          {(hasPermission("staff", "canEdit") || isSelf(row.original.id)) && (
+        <div className="flex items-center justify-center gap-1">
+          {isSelf(row.original.id) && (
             <StaffFormSheet
               key={row.original.id}
               title="Update Staff"
@@ -147,7 +149,7 @@ export const getColumns = ({
                 buttonClassName={
                   !hasPermission("staff", "canEdit") ? "ml-5" : undefined
                 }
-                content="Edit Staff"
+                content="Edit Profile"
               >
                 <PenSquare className="size-5" />
               </SheetTooltip>
@@ -155,14 +157,17 @@ export const getColumns = ({
           )}
 
           {hasPermission("staff", "canDelete") && (
-            <Button
-              onClick={handleDemoDelete}
-              variant="ghost"
-              size="icon"
-              className="text-foreground"
-            >
-              <Trash2 className="size-5" />
-            </Button>
+            <TooltipWrapper content="Delete Staff">
+              <Button
+                onClick={handleDemoDelete}
+                variant="ghost"
+                size="icon"
+                className="text-foreground"
+              >
+                <Trash2 className="size-5" />
+              </Button>
+            </TooltipWrapper>
+
             // <TableActionAlertDialog
             //   title={`Delete ${row.original.name}?`}
             //   description="This action cannot be undone. This will permanently delete the staff and associated data from the database."
