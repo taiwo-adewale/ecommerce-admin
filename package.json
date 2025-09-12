@@ -56,7 +56,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.3.1",
     "@tanstack/eslint-plugin-query": "^5.28.6",
     "@types/node": "latest",
     "@types/react": "latest",
