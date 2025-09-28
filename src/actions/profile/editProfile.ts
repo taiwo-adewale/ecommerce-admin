@@ -34,7 +34,7 @@ export async function editProfile(
   if (image instanceof File && image.size > 0) {
     const { data: oldProfileData, error: fetchError } = await supabase
       .from("staff")
-      .select("image_url")
+      .select("email, image_url")
       .eq("id", userId)
       .single();
 
@@ -46,7 +46,7 @@ export async function editProfile(
     const oldImageUrl = oldProfileData.image_url;
 
     const fileExt = image.name.split(".").pop();
-    const fileName = `staff/${profileData.name}-${Date.now()}.${fileExt}`;
+    const fileName = `staff/${oldProfileData.email}-${Date.now()}.${fileExt}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("assets")
@@ -64,7 +64,7 @@ export async function editProfile(
     imageUrl = publicUrlData.publicUrl;
 
     if (oldImageUrl) {
-      const oldImageFileName = oldImageUrl.split("/").pop();
+      const oldImageFileName = `staff/${oldImageUrl.split("/").pop()}`;
 
       if (oldImageFileName) {
         await supabase.storage.from("assets").remove([oldImageFileName]);

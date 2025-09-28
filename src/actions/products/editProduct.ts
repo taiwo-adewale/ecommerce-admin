@@ -71,8 +71,7 @@ export async function editProduct(
     imageUrl = publicUrlData.publicUrl;
 
     if (oldImageUrl) {
-      const oldImageFileName = oldImageUrl.split("/").pop();
-
+      const oldImageFileName = `products/${oldImageUrl.split("/").pop()}`;
       if (oldImageFileName) {
         await supabase.storage.from("assets").remove([oldImageFileName]);
       }
