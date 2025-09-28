@@ -33,6 +33,7 @@ export default function Profile() {
             <AvatarImage
               src={profile?.image_url ?? undefined}
               alt={profile?.name ?? "User avatar"}
+              className="object-cover object-center"
             />
             <AvatarFallback>{getInitials(profile?.name)}</AvatarFallback>
           </Avatar>
