@@ -25,7 +25,7 @@ export function ImagePlaceholder({
       <Image
         {...imageProps}
         alt={alt}
-        className={cn(!isLoaded && "opacity-0", className)}
+        className={cn("object-cover", !isLoaded && "opacity-0", className)}
         onLoad={() => setIsLoaded(true)}
       />
 

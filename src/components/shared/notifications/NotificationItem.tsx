@@ -54,7 +54,7 @@ export default function NotificationItem({ notification }: Props) {
           alt={notification.title}
           width={30}
           height={30}
-          className="size-[1.875rem] rounded-full flex-shrink-0 self-start mt-1.5 sm:mt-0 sm:self-center"
+          className="size-[1.875rem] rounded-full flex-shrink-0 self-start mt-1.5 sm:mt-0 sm:self-center object-cover"
         />
 
         <div className="flex flex-col">
