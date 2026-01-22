@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Login",
 };
 
-export default async function Page() {
+export default function Page() {
   return (
     <AuthFormTemplate image={loginImg}>
       <LoginForm />
